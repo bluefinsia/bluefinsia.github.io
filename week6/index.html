@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM handling</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Grotesk&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>My Cat Page</h1>
+    </header>
+    <section class="outer">
+      <p id="hello">Hello world! This is my cat!.</p>
+      <img
+        src="cat.png"
+        alt="my cute cat"
+        id="myImage"
+        data-catname="garfield"
+      />
+      <button id="my-button" onclick="updateCatName()">Toggle me</button>
+      <div class="inner">
+        <p><a href="#">my address</a><a href="#">more about me</a></p>
+      </div>
+      <div class="inner" id="status">
+        <p>I love taking a nap!</p>
+      </div>
+    </section>
+  </body>
+</html>
