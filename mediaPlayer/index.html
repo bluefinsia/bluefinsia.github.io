@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link rel="stylesheet" href="reset.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="main.js" defer></script>
+
+  <title>Media Player Baseline</title>
+</head>
+<body>
+  
+  <!-- this is my page heading -->
+  <header>
+    <h1>My Media Player</h1>
+  </header>
+
+  <!-- this is my nav bar -->
+  <nav>
+    <a>Home</a>
+    <a>Media Player</a>
+    <a>About</a>
+    <a>Contact</a>
+  </nav>
+
+  <!-- this is my main -->
+  <main>
+    <!-- this is my media player section -->
+    <section class="mediaPlayerSection">
+      <!-- media player source -->
+      <video id="mediaPlayer" controls>
+        <source src="https://thelongesthumstore.sgp1.cdn.digitaloceanspaces.com/IM-2250/miac.mp4" type="video/mp4">
+        This browser doesn't support the video element.
+      </video>
+      <!-- media player controls -->
+      <div class="mediaPlayerControlContainer">
+        <button id="playPauseButton">
+          ▶
+          <!-- ⏸ -->
+        </button>
+        <progress id="timelineProgress" max="100" value="0"></progress>
+      </div>
+    </section>
+  </main>
+
+  <!-- our footer contains our attributions -->
+  <footer>
+    <p>&copy; 2025 Media Player Website. All rights reserved.</p>
+    <a href="https://icons8.com/icon/59862/play">Play</a> icon by
+    <a href="https://icons8.com">Icons8</a>
+    <a href="https://icons8.com/icon/61012/pause">Pause</a> icon by
+    <a href="https://icons8.com">Icons8</a>
+
+  </footer>
+
+</body>
+</html>
