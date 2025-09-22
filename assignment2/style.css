@@ -1,0 +1,390 @@
+/* store my custom variables */
+:root {
+  /* New color palette for a sleek and modern dark theme */
+  --background-dark: #121212; /* Very dark background for a premium, immersive feel */
+  --text-light: #ffffff; /* White text for maximum readability against the dark background */
+  --text-muted: #b3b3b3; /* Lighter grey for secondary text elements, creating visual hierarchy */
+  --accent-color: #f12c75; /* A vibrant pink/magenta for highlights and interactive elements, adding a dynamic touch */
+  --border-color: #282828; /* Subtle border color, providing definition without being distracting */
+
+  --border: solid var(--border-color) 2px; /* Standard border definition using the chosen border color for consistency */
+}
+
+/* Style guides applied to the entire document body */
+body {
+  display: flex; /* Uses flexbox to arrange major layout sections (header, main, footer) */
+  flex-direction: column; /* Stacks content vertically */
+  align-items: center; /* Centers content horizontally within the viewport */
+  justify-content: space-between; /* Distributes vertical space, pushing header and footer to edges, main to center */
+  gap: 1.5rem; /* Provides consistent vertical spacing between major block elements */
+  line-height: 1.6; /* Enhances text readability by increasing the space between lines */
+  background-color: var(--background-dark);
+  color: var(--text-light);
+  font-family: "Open Sans", "Lato", sans-serif; /* Specifies a clean, modern sans-serif font stack */
+  margin: 0; /* Resets default browser margin for full control over spacing */
+  padding: 1.5rem; /* Adds overall padding to prevent content from touching viewport edges */
+}
+
+/* Styles for primary and secondary headings */
+h1,
+h2 {
+  font-size: 2.5rem; /* Sets a larger font size for prominent headings */
+  color: var(--text-light); /* Ensures headings are bright and stand out */
+  margin-bottom: 0.5rem; /* Adds a small space below headings for visual separation from following content */
+}
+
+/* Styles for the main navigation bar */
+nav {
+  border: var(--border);
+  padding: 0.8rem 1.5rem; /* Provides internal spacing for navigation links */
+  border-radius: 8px; /* Gently rounds the corners of the navigation bar */
+  background-color: var(
+    --border-color
+  ); /* Uses the border color for a slightly differentiated background, adding depth */
+  width: 100%; /* Ensures the navigation spans the full available width */
+  text-align: center; /* Centers the navigation links horizontally */
+}
+
+nav a {
+  color: var(--text-light); /* Sets link text color to light for visibility */
+  text-decoration: none; /* Removes the default underline from links */
+  margin: 0 15px; /* Provides ample horizontal spacing between navigation items */
+  padding: 8px 15px; /* Increases the clickable area of each link */
+  border-radius: 5px; /* Lightly rounds the corners of the link background on hover */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for interactive hover effects */
+  font-weight: 600; /* Makes navigation links slightly bolder for emphasis */
+}
+
+/* Hover effects for navigation links */
+nav a:hover {
+  background-color: var(
+    --accent-color
+  ); /* Changes background to the vibrant accent color on hover */
+  color: var(
+    --background-dark
+  ); /* Changes text color to dark for strong contrast against the accent background */
+}
+
+/* Styles for the page footer */
+footer {
+  display: flex; /* Uses flexbox to control layout of footer content */
+  flex-direction: row; /* Arranges footer items horizontally */
+  align-items: center; /* Vertically aligns items within the footer */
+  justify-content: center; /* Centers footer content horizontally */
+  width: 100%; /* Ensures the footer spans the full width */
+  border: var(--border); /* Applies the consistent border style */
+  padding: 1rem; /* Provides internal padding within the footer */
+  box-sizing: border-box; /* Includes padding in the element's total width/height calculation */
+  border-radius: 8px; /* Rounds the corners of the footer, matching other elements */
+  background-color: var(
+    --border-color
+  ); /* Uses the border color for the footer's background, consistent with navigation */
+  margin-top: 2rem; /* Adds significant space above the footer, separating it from the main content */
+}
+
+/* Styles for links within the footer */
+footer a {
+  color: var(
+    --text-muted
+  ); /* Sets link text to muted grey, indicating secondary content */
+  text-decoration: none; /* Removes default link underline */
+  margin: 0 10px; /* Provides horizontal spacing between footer links */
+  transition: color 0.3s ease; /* Smooth transition for hover effects */
+}
+
+/* Hover effects for footer links */
+footer a:hover {
+  color: var(
+    --accent-color
+  ); /* Changes link color to the accent on hover for visual feedback */
+}
+
+/* Styles for the main content area */
+main {
+  max-width: 1200px; /* Limits the maximum width of the main content for optimal readability and layout */
+  width: 100%; /* Ensures responsiveness on smaller screens */
+  padding: 0 1rem; /* Adds horizontal padding to prevent content from touching viewport edges on small screens */
+  box-sizing: border-box; /* Ensures padding is included in the width calculation */
+}
+
+/* Container for the media player and its controls */
+.mediaPlayerSection {
+  width: 100%; /* Ensures the section fills its parent container */
+  margin: 0 auto; /* Centers the media player section horizontally */
+  padding: 30px; /* Generous internal padding for a spacious look */
+  background-color: #1a1a1a; /* A slightly lighter dark background to differentiate it from the main body */
+  border-radius: 12px; /* More pronounced rounded corners for a modern, soft aesthetic */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Creates a distinct shadow for a floating, elevated appearance */
+}
+
+/* Styles for the actual media player element (e.g., <video> or <audio>) */
+#mediaPlayer {
+  max-width: 100%; /* Ensures the media player scales down on smaller screens */
+  border-radius: 10px; /* Rounds the corners of the video/audio display */
+  display: block; /* Removes any default inline-block spacing issues */
+}
+
+/* Container for all media player control buttons and timeline */
+.mediaPlayerControlContainer {
+  display: flex; /* Uses flexbox for horizontal arrangement of controls */
+  align-items: center; /* Vertically aligns all control elements */
+  justify-content: space-between; /* Distributes space between play button, timeline, and time display */
+  gap: 1.5rem; /* Provides consistent spacing between individual control elements */
+  margin-top: 1.5rem; /* Adds space above the control bar, separating it from the media display */
+  background-color: var(
+    --background-dark
+  ); /* Uses the primary dark background for the control bar */
+  padding: 15px 20px; /* Internal padding for the control bar */
+  border-radius: 8px; /* Rounds the corners of the control bar */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3); /* Adds a subtle inner shadow for a recessed, physical button feel */
+}
+
+/* Styles for the play/pause button */
+#playPauseButton {
+  padding: 12px; /* Ample padding to make the button easy to tap/click */
+  cursor: pointer; /* Changes cursor to a pointer, indicating interactivity */
+  background-color: var(
+    --accent-color
+  ); /* Uses the vibrant accent color for a prominent call to action */
+  border: none; /* Removes any default button borders */
+  border-radius: 50%; /* Creates a perfectly circular button */
+  display: flex; /* Uses flexbox to center the icon within the button */
+  align-items: center; /* Vertically centers the icon */
+  justify-content: center; /* Horizontally centers the icon */
+  width: 50px; /* Defines a fixed width for the circular button */
+  height: 50px; /* Defines a fixed height for the circular button */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions for hover and active states */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Adds a subtle shadow for a lifted appearance */
+}
+
+/* Hover effect for the play/pause button */
+#playPauseButton:hover {
+  background-color: #d12260; /* Slightly darker shade of the accent color on hover for visual feedback */
+  transform: translateY(
+    -2px
+  ); /* Lifts the button slightly on hover, indicating interactivity */
+}
+
+/* Styles for the icon inside the play/pause button */
+#playPauseIcon {
+  width: 24px; /* Sets a clear width for the icon */
+  height: 24px; /* Sets a clear height for the icon */
+  filter: invert(
+    100%
+  ); /* Inverts colors, typically turning a black icon white for dark backgrounds */
+}
+
+/* Wrapper for the media timeline, enabling relative positioning for markers */
+#timelineWrapper {
+  flex: 1; /* Allows the timeline to expand and fill available horizontal space */
+  position: relative; /* Establishes a positioning context for absolutely positioned comment markers */
+  height: 25px; /* Provides sufficient vertical space for the progress bar and markers */
+  display: flex; /* Uses flexbox for internal alignment of timeline elements */
+  align-items: center; /* Vertically centers the progress bar within its wrapper */
+}
+
+/* Styles for the actual timeline progress bar (e.g., <progress> or <input type="range">) */
+#timelineProgress {
+  width: 100%; /* Ensures the progress bar spans the entire width of its wrapper */
+  -webkit-appearance: none; /* Removes default browser styling for Webkit-based browsers */
+  appearance: none; /* Removes default browser styling for consistency across browsers */
+  height: 6px; /* Sets a slender height for the progress bar track */
+  background: var(
+    --border-color
+  ); /* Uses the border color for the progress track's background */
+  border-radius: 3px; /* Rounds the ends of the progress bar track */
+  cursor: pointer; /* Changes cursor to a pointer, indicating the ability to scrub */
+  outline: none; /* Removes the default focus outline */
+}
+
+/* Styles for the filled portion of the progress bar (Webkit-specific) */
+#timelineProgress::-webkit-progress-value {
+  background-color: var(
+    --accent-color
+  ); /* Uses the accent color to indicate progress */
+  border-radius: 3px; /* Rounds the end of the filled progress bar */
+}
+
+/* Styles for the filled portion of the progress bar (Firefox-specific) */
+#timelineProgress::-moz-progress-bar {
+  background-color: var(
+    --accent-color
+  ); /* Uses the accent color to indicate progress */
+  border-radius: 3px; /* Rounds the end of the filled progress bar */
+}
+
+/* Styles for the draggable thumb/handle of a range input (Webkit-specific) */
+#timelineProgress::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Removes default browser styling for the thumb */
+  appearance: none; /* Ensures consistency */
+  width: 16px; /* Sets the width of the circular thumb */
+  height: 16px; /* Sets the height of the circular thumb */
+  background: var(--accent-color); /* Fills the thumb with the accent color */
+  border: 2px solid var(--text-light); /* Adds a white border around the thumb for prominence */
+  border-radius: 50%; /* Makes the thumb perfectly circular */
+  cursor: grab; /* Indicates the thumb can be dragged */
+  margin-top: -5px; /* Adjusts vertical position to center the thumb precisely on the track */
+}
+
+/* Styles for the draggable thumb/handle of a range input (Firefox-specific) */
+#timelineProgress::-moz-range-thumb {
+  width: 16px; /* Sets the width of the circular thumb */
+  height: 16px; /* Sets the height of the circular thumb */
+  background: var(--accent-color); /* Fills the thumb with the accent color */
+  border: 2px solid var(--text-light); /* Adds a white border around the thumb for prominence */
+  border-radius: 50%; /* Makes the thumb perfectly circular */
+  cursor: grab; /* Indicates the thumb can be dragged */
+}
+
+/* Styles for the time display (e.g., current time, duration) */
+.timeContainer {
+  font-size: 1rem; /* Sets a clear, readable font size for the time display */
+  white-space: nowrap; /* Prevents the time text from wrapping to a new line */
+  color: var(
+    --text-muted
+  ); /* Uses muted text color for secondary information */
+  margin-left: 1rem; /* Adds space between the timeline and the time display */
+}
+
+/* Styles for the overall comment section container */
+.commentSection {
+  margin-top: 3rem; /* Provides significant vertical spacing, clearly separating it from the media player */
+  background-color: #1a1a1a; /* Uses a slightly lighter dark background, consistent with the media player section */
+  padding: 25px; /* Internal padding for the comment section */
+  border-radius: 12px; /* Rounds the corners of the comment section */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Adds a shadow for depth and separation */
+}
+
+/* Styles for the heading within the comment section */
+.commentSection h2 {
+  margin-bottom: 1.2rem; /* Adds space below the heading */
+  color: var(--text-light); /* Ensures the heading is prominent */
+  font-size: 1.8rem; /* Sets a slightly smaller font size than main page headings */
+}
+
+/* Styles for the comment submission form */
+#commentForm {
+  display: flex; /* Uses flexbox to arrange the input field and submit button horizontally */
+  gap: 15px; /* Provides spacing between the input and button */
+  margin-bottom: 2rem; /* Adds space below the form before the comment display */
+}
+
+/* Styles for the comment input field */
+#commentInput {
+  flex: 1; /* Allows the input field to take up most of the available horizontal space */
+  padding: 12px 15px; /* Internal padding for the input field */
+  border: 1px solid var(--border-color); /* Adds a subtle border to define the input area */
+  border-radius: 8px; /* Rounds the corners of the input field */
+  background-color: var(
+    --background-dark
+  ); /* Uses the primary dark background for the input field */
+  color: var(--text-light); /* Sets the text color within the input to light */
+  font-size: 1.1rem; /* Slightly larger font size for better input readability */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2); /* Adds an inner shadow for a recessed, interactive look */
+}
+
+/* Styles for the placeholder text within the comment input field */
+#commentInput::placeholder {
+  color: var(--text-muted); /* Uses muted text color for the placeholder */
+}
+
+/* Styles for the comment submission button */
+#submitCommentButton {
+  padding: 12px 20px; /* Ample padding for a well-sized, clickable button */
+  background-color: var(
+    --accent-color
+  ); /* Uses the accent color for a prominent call to action */
+  color: var(
+    --background-dark
+  ); /* Sets the text color to dark for strong contrast */
+  border: none; /* Removes any default button borders */
+  border-radius: 8px; /* Rounds the corners of the button */
+  cursor: pointer; /* Indicates interactivity */
+  font-size: 1.1rem; /* Consistent font size with the input field */
+  font-weight: 600; /* Makes the button text bolder for emphasis */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions for hover and active states */
+}
+
+/* Hover effect for the submit comment button */
+#submitCommentButton:hover {
+  background-color: #d12260; /* Slightly darker shade of the accent color on hover */
+  transform: translateY(-1px); /* Lifts the button slightly on hover */
+}
+
+/* Container for displaying all submitted comments */
+#commentDisplayContainer {
+  background-color: var(
+    --background-dark
+  ); /* Uses the primary dark background for the comment display area */
+  border: 1px solid var(--border-color); /* Adds a subtle border */
+  border-radius: 8px; /* Rounds the corners of the display area */
+  padding: 20px; /* Internal padding for comment content */
+  min-height: 120px; /* Ensures a minimum height even if no comments are present */
+  max-height: 350px; /* Sets a maximum height, enabling scrolling for a large number of comments */
+  overflow-y: auto; /* Adds a vertical scrollbar when content exceeds max-height */
+  color: var(
+    --text-light
+  ); /* Sets the default text color for comments to light */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2); /* Adds an inner shadow for a recessed look */
+}
+
+/* Styles for an individual comment entry */
+.comment {
+  margin-bottom: 12px; /* Provides vertical spacing between comments */
+  padding-bottom: 8px; /* Adds space below the comment content before its divider */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* A subtle, semi-transparent divider between comments */
+  font-size: 1rem; /* Standard font size for comment text */
+  color: var(
+    --text-muted
+  ); /* Uses muted text color for the main comment content */
+}
+
+/* Removes the bottom border and margin from the last comment to prevent extraneous lines */
+.comment:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+/* Styles for the timestamp within a comment */
+.comment-time {
+  font-weight: 700; /* Makes the timestamp bolder for better visibility */
+  color: var(
+    --accent-color
+  ); /* Uses the accent color to highlight the timestamp */
+  margin-right: 10px; /* Adds space between the timestamp and the comment text */
+  font-size: 0.9rem; /* Slightly smaller font size for the timestamp */
+}
+
+/* Container for comment markers displayed on the timeline */
+#commentMarkers {
+  position: absolute; /* Positions the markers relative to the #timelineWrapper */
+  top: 0; /* Aligns to the top of the timeline wrapper */
+  left: 0; /* Aligns to the left of the timeline wrapper */
+  width: 100%; /* Ensures markers span the full width of the timeline */
+  height: 100%; /* Ensures markers span the full height of the timeline */
+  pointer-events: none; /* Allows mouse events to pass through to the underlying timeline progress bar */
+}
+
+/* Styles for an individual comment marker on the timeline */
+.comment-marker {
+  position: absolute; /* Allows precise positioning of each marker based on comment time */
+  width: 3px; /* Sets a thin width for the marker, creating a subtle visual cue */
+  height: 100%; /* Ensures the marker spans the full height of the timeline */
+  background-color: var(
+    --text-light
+  ); /* Uses light text color for visibility against the dark timeline */
+  border-radius: 1.5px; /* Rounds the ends of the marker */
+  transform: translateX(
+    -50%
+  ); /* Centers the marker precisely at its calculated horizontal position */
+  opacity: 0.8; /* Makes markers slightly transparent to be less intrusive */
+  transition: opacity 0.2s ease; /* Smooth transition for hover effects */
+}
+
+/* Hover effect for comment markers on the timeline */
+.comment-marker:hover {
+  opacity: 1; /* Becomes fully opaque on hover for emphasis */
+  background-color: var(
+    --accent-color
+  ); /* Changes to the accent color on hover, drawing attention */
+}
