@@ -33,6 +33,7 @@ body {
 h1,
 h2 {
   font-size: 2.5rem; /* Sets a larger font size for prominent headings */
+  font-weight: 800;
   color: var(--text-light); /* Ensures headings are bright and stand out */
 }
 

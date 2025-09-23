@@ -103,7 +103,16 @@ function jumpToTime(ev) {
 }
 
 // Commenting functionality
+// this section for users to add time-stamped comments as markers on the video timeline
+// users can also click on markers to jump to specific points in the video
+
+// Event listener for submitting a new comment
 submitCommentButton.addEventListener("click", addComment);
+
+// adds a new comment to the internal comments array
+// the comment includes the current video time and the input text
+// after adding, it sorts the comments by time, clears the input
+// and re-renders both the displayed comments and the timeline markers
 
 function addComment() {
   const commentText = commentInput.value.trim();
@@ -121,6 +130,8 @@ function addComment() {
   renderComments(); // Re-render comments
   renderCommentMarkers(); // Re-render markers to include the new one
 }
+
+// comments are formatted with their time and auto-scroll to show the latest ones
 
 function renderComments() {
   commentDisplayContainer.innerHTML = ""; // Clear existing comments
