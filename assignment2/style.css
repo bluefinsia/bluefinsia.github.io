@@ -33,7 +33,7 @@ body {
 h1,
 h2 {
   font-size: 2.5rem; /* Sets a larger font size for prominent headings */
-  font-weight: 800;
+  font-weight: 650;
   color: var(--text-light); /* Ensures headings are bright and stand out */
 }
 
@@ -56,7 +56,7 @@ nav a {
   padding: 8px 15px; /* Increases the clickable area of each link */
   border-radius: 5px; /* Lightly rounds the corners of the link background on hover */
   transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for interactive hover effects */
-  font-weight: 600; /* Makes navigation links slightly bolder for emphasis */
+  font-weight: 650; /* Makes navigation links slightly bolder for emphasis */
 }
 
 /* This is my hover effects for navigation links */
@@ -306,7 +306,7 @@ main {
   border-radius: 8px; /* Rounds the corners of the button */
   cursor: pointer; /* Indicates interactivity */
   font-size: 1.1rem; /* Consistent font size with the input field */
-  font-weight: 600; /* Makes the button text bolder for emphasis */
+  font-weight: 650; /* Makes the button text bolder for emphasis */
   transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth transitions for hover and active states */
 }
 
