@@ -1,0 +1,105 @@
+body,
+html {
+  margin: 50;
+  height: 100vh;
+  background: #000000;
+  color: #fff;
+  overflow: hidden;
+  font-family: "SF Mono", "Segoe UI Mono", "Roboto Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+.ui-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+  box-sizing: border-box;
+  z-index: 10;
+}
+.ui-header,
+.ui-footer {
+  pointer-events: auto;
+  text-align: center;
+  width: 100%;
+}
+.ui-header h1 {
+  font-size: 2.5em;
+  margin: 0;
+  padding: 0;
+  color: #ffffff;
+  text-shadow: 0 0 15px rgba(100, 200, 255, 0.7),
+    0 0 5px rgba(255, 255, 255, 0.5);
+}
+.control-text {
+  font-size: 1.2em;
+  margin-top: 20px;
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.6),
+    0 0 3px rgba(255, 255, 255, 0.4);
+}
+.ui-footer {
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+  }
+  100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+}
+.control-text.pulsing {
+  animation: pulse 1.5s infinite alternate;
+}
+
+/* === Central Moon Glow (smaller version) === */
+.moon-glow {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 170px; /* smaller size */
+  height: 170px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(150, 200, 255, 0.35) 0%,
+    rgba(80, 150, 255, 0.2) 40%,
+    rgba(160, 60, 255, 0.05) 75%,
+    transparent 100%
+  );
+  filter: blur(50px); /* reduced for better proportion */
+  mix-blend-mode: screen;
+  animation: moonPulse 8s ease-in-out infinite alternate,
+    hueShift 25s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+  transition: transform 0.4s ease-out;
+}
