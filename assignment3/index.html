@@ -5,29 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="reset.css" />
     <link rel="stylesheet" href="style.css" />
-    <!-- Tone.js for audio synthesis and interactivity -->
+    <!-- Tone.js library for audio synthesis and interactivity in the browser -->
     <script src="https://unpkg.com/tone"></script>
     <title>Flower Dance</title>
   </head>
   <body>
-    <!-- Background music -->
+    <!-- Audio element for background music. It loops continuously. The copyright free guitar song was downloaded from https://freesound.org/people/gertraut_hecher/sounds/563446/ -->
     <audio
       id="bgMusic"
       src="563446__gertraut_hecher__guitar-duo-canzonetta-piccola.wav"
       loop
     ></audio>
-    <!-- Canvas for animations -->
+    <!-- Canvas element for drawing graphics and animations -->
     <canvas id="c"></canvas>
     <!-- Main script -->
     <script src="script.js"></script>
-    <!-- UI overlay -->
+    <!-- Overlay for user interface elements -->
     <div class="ui-overlay">
+      <!-- Header section of the UI overlay -->
       <header class="ui-header">
         <h1>Flower Dance</h1>
+        <!-- Div to display control instructions to the user -->
         <div class="control-text" id="controlText">
           Scroll to play • Click to start audio
         </div>
       </header>
+      <!-- Footer section of the UI overlay -->
       <footer class="ui-footer">
         <p>&copy; 2025 Flower Dance</p>
       </footer>
