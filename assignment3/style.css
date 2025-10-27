@@ -9,6 +9,7 @@ html {
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
+
 canvas {
   position: fixed;
   top: 0;
@@ -77,29 +78,4 @@ canvas {
 }
 .control-text.pulsing {
   animation: pulse 1.5s infinite alternate;
-}
-
-/* === Central Moon Glow (smaller version) === */
-.moon-glow {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 170px; /* smaller size */
-  height: 170px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(150, 200, 255, 0.35) 0%,
-    rgba(80, 150, 255, 0.2) 40%,
-    rgba(160, 60, 255, 0.05) 75%,
-    transparent 100%
-  );
-  filter: blur(50px); /* reduced for better proportion */
-  mix-blend-mode: screen;
-  animation: moonPulse 8s ease-in-out infinite alternate,
-    hueShift 25s linear infinite;
-  z-index: 0;
-  pointer-events: none;
-  transition: transform 0.4s ease-out;
 }
