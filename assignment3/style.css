@@ -1,0 +1,168 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..800&display=swap");
+
+/* store my custom variables */
+
+/* This is my Color Palette */
+:root {
+  --color-background: radial-gradient(
+    circle at 50% 50%,
+    /* Center the gradient origin */ #0e0a1b 0%,
+    /* Darkest point at the center */ #1a102e 50%,
+    /* Mid-tone purple-blue */ #090611 100% /* Darkest point at the edges */
+  );
+
+  /* Text + Accent Colors */
+  --color-text-primary: #fefbfb; /* Soft white for main text, providing good contrast on dark backgrounds */
+  --color-text-footer: rgba(
+    255,
+    255,
+    255,
+    0.7
+  ); /* Slightly transparent white for footer text */
+
+  /* Neon & Glow Accents */
+  --color-accent-pink: #ff7ad9; /* Bright pink accent */
+  --color-accent-blue: #7adfff; /* Bright blue accent */
+  --color-accent-orange: #ffb877; /* Bright orange accent */
+  --color-accent-purple: #b47aff; /* Bright purple accent */
+
+  /* Glow Variants */
+  --color-glow-strong: rgba(
+    255,
+    200,
+    255,
+    0.8
+  ); /* Strong, vibrant glow effect */
+  --color-glow-medium: rgba(255, 180, 255, 0.5); /* Medium intensity glow */
+  --color-glow-soft: rgba(255, 255, 255, 0.2); /* Subtle, soft glow */
+}
+
+/* This is my style guides applied to the entire document body */
+body,
+html {
+  margin: 0; /* Remove default margin */
+  height: 100vh; /* Ensure body and html take full viewport height */
+  background: var(
+    --color-background
+  ); /* Apply the defined radial background gradient */
+  background-size: 200% 200%; /* Enlarge background to allow for animation */
+  color: var(--color-text-primary); /* Set primary text color */
+  overflow: hidden; /* Hide any overflow, preventing scrollbars */
+  font-family: "Inter", "JetBrains Mono", sans-serif;
+  text-transform: uppercase; /* Convert all text to uppercase */
+  letter-spacing: 0.08em; /* Increase letter spacing for a stylistic effect */
+  line-height: 1.6; /* Improve readability with increased line height */
+  animation: bgFlow 30s ease-in-out infinite alternate; /* Apply background animation */
+}
+
+/* This is Animated dreamy background gradient */
+@keyframes bgFlow {
+  0% {
+    background-position: 0% 50%; /* Start background position */
+  }
+  100% {
+    background-position: 100% 50%; /* End background position, creating a subtle horizontal flow */
+  }
+}
+
+/* This is my style guides applied to Canvas */
+canvas {
+  position: fixed; /* Position the canvas relative to the viewport */
+  top: 0;
+  left: 0;
+  width: 100vw; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  pointer-events: none; /* Allow clicks/hovers to pass through the canvas */
+  z-index: 1; /* Place canvas behind UI elements */
+  filter: blur(1px) brightness(1.2); /* Apply a subtle blur and increase brightness for a dreamy effect */
+}
+
+/* This is my style guides applied to UI Overlay */
+.ui-overlay {
+  position: fixed; /* Position the UI overlay relative to the viewport */
+  top: 0;
+  left: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  pointer-events: none; /* Allow clicks/hovers to pass through the overlay itself, but not its children */
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column; /* Stack children vertically */
+  justify-content: space-between; /* Distribute space between header, main content, and footer */
+  align-items: center; /* Center items horizontally */
+  padding: 30px; /* Add padding around the overlay content */
+  box-sizing: border-box; /* Include padding in the element's total width and height */
+  z-index: 10; /* Place UI overlay above the canvas */
+}
+
+/* This is my style guides applied to Header */
+.ui-header h1 {
+  font-size: clamp(
+    2em,
+    5vw,
+    4em
+  ); /* Responsive font size for the main heading */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+  text-align: center; /* Center the text */
+  background: linear-gradient(
+    90deg,
+    var(--color-accent-pink),
+    var(--color-accent-purple),
+    var(--color-accent-blue)
+  ); /* Apply a vibrant gradient to the text */
+  -webkit-background-clip: text; /* Clip background to the shape of the text */
+  -webkit-text-fill-color: transparent; /* Make text transparent to reveal the background gradient */
+  filter: drop-shadow(
+    0 0 10px var(--color-glow-medium)
+  ); /* Add a glowing shadow effect to the text */
+}
+
+/* This is my style guides applied to Control Text */
+.control-text {
+  font-size: clamp(1em, 2vw, 1.4em); /* Responsive font size for control text */
+  margin-top: 20px; /* Add top margin for spacing */
+  text-align: center; /* Center the text */
+  color: var(--color-text-primary); /* Use primary text color */
+  text-shadow: 0 0 12px var(--color-accent-blue),
+    0 0 20px var(--color-accent-pink); /* Apply multiple glow shadows for a vibrant effect */
+  opacity: 0.9; /* Slightly reduce opacity */
+}
+
+/* This is my style guides applied to Footer */
+.ui-footer {
+  font-size: clamp(
+    0.7em,
+    1.5vw,
+    0.9em
+  ); /* Responsive font size for footer text */
+  color: var(
+    --color-text-footer
+  ); /* Use semi-transparent white for footer text */
+  text-shadow: 0 0 6px var(--color-glow-soft); /* Apply a subtle glow to the footer text */
+}
+
+/* This is my style guides applied to Pulsing Control Text Animation */
+@keyframes pulse {
+  0% {
+    opacity: 0.85; /* Start opacity */
+    transform: scale(1); /* Start scale */
+    text-shadow: 0 0 8px var(--color-accent-blue),
+      0 0 12px var(--color-accent-purple); /* Start text shadow */
+  }
+  50% {
+    opacity: 1; /* Peak opacity */
+    transform: scale(1.03); /* Slightly enlarge text */
+    text-shadow: 0 0 20px var(--color-accent-pink),
+      0 0 25px var(--color-accent-orange); /* Intensify text shadow with different colors */
+  }
+  100% {
+    opacity: 0.85; /* Return to start opacity */
+    transform: scale(1); /* Return to start scale */
+    text-shadow: 0 0 8px var(--color-accent-blue),
+      0 0 12px var(--color-accent-purple); /* Return to start text shadow */
+  }
+}
+
+.control-text.pulsing {
+  animation: pulse 2.5s ease-in-out infinite alternate; /* Apply the pulsing animation to elements with this class */
+}
