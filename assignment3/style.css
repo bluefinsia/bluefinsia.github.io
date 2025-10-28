@@ -51,7 +51,7 @@ html {
   font-family: "Merriweather Sans", sans-serif;
   text-transform: uppercase; /* Convert all text to uppercase */
   letter-spacing: 0.08em; /* Increase letter spacing for a stylistic effect */
-  line-height: 1.6; /* Improve readability with increased line height */
+  line-height: 1.2; /* Improve readability with increased line height */
   animation: bgFlow 30s ease-in-out infinite alternate; /* Apply background animation */
 }
 
