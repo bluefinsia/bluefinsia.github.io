@@ -48,7 +48,7 @@ html {
   background-size: 200% 200%; /* Enlarge background to allow for animation */
   color: var(--color-text-primary); /* Set primary text color */
   overflow: hidden; /* Hide any overflow, preventing scrollbars */
-  font-family: "Inter", "JetBrains Mono", sans-serif;
+  font-family: "Merriweather Sans", sans-serif;
   text-transform: uppercase; /* Convert all text to uppercase */
   letter-spacing: 0.08em; /* Increase letter spacing for a stylistic effect */
   line-height: 1.6; /* Improve readability with increased line height */
