@@ -1,151 +1,575 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>There Are Rivers in the Sky — A playable field study</title><style id="rivers-styles">
-:root{--ink:#e8ede4;--muted:#adbeb5;--gold:#c6d5a4;--line:#cdddc72b}*{box-sizing:border-box}body{margin:0;background:#123c3d;color:var(--ink);font:13px 'DM Sans',sans-serif;overflow:hidden}button,a{-webkit-tap-highlight-color:transparent}button{font:inherit;color:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:2px solid #d8efae;outline-offset:5px}#world{position:fixed;inset:0;width:100%;height:100%}.grain{position:fixed;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(7,29,29,.71),transparent 58%),linear-gradient(0deg,#092728b5,transparent 35%,transparent 75%,#17373835)}header{position:absolute;top:0;left:0;right:0;padding:30px 3.5%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);z-index:3}.brand{display:flex;gap:13px;align-items:center;text-decoration:none;color:var(--ink);font-size:12px;letter-spacing:2.3px;font-weight:600}.brand-icon{font-size:35px;font-weight:400;color:#d4dfbf}.brand small{display:block;font-size:7px;letter-spacing:2.2px;margin-top:8px;color:var(--muted)}.location{font-size:9px;letter-spacing:2px}.location i{display:inline-block;width:5px;height:5px;border-radius:50%;background:#b5ddb1;margin-right:10px;box-shadow:0 0 10px #a2e1a7}.location span{margin-left:25px;color:#b6cabc;font-size:8px}.icon-button{background:none;border:0;letter-spacing:1.5px;font-size:20px}.icon-button span{font-size:8px;margin-left:8px}.intro{position:absolute;top:23%;left:6%;transition:opacity .6s,transform .6s}.eyebrow{font-size:9px;letter-spacing:2.7px;font-weight:600;color:#c8d6bc}.eyebrow>span{margin:0 10px;color:#809b8e}h1{font:500 clamp(48px,5.2vw,85px)/1.1 'Playfair Display',Georgia,serif;letter-spacing:-2px;margin:25px 0}h1 em{font-weight:400;color:#d1dfba}p{color:#c2cfc5;line-height:1.9;font-size:12px}.intro p{font-size:13px;line-height:1.9;margin-bottom:30px}.primary{background:#d1ddbc;border:1px solid #d1ddbc;padding:15px 20px;color:#23433b;min-width:216px;text-align:left;font-size:11px;font-weight:600;display:flex;justify-content:space-between;gap:30px;transition:background .2s}.primary:hover{background:#eaf3d8}.primary span{font-size:17px;line-height:13px}.intro-note{font-size:7px;letter-spacing:2px;color:#9eafa4;margin-top:18px}.objective{position:absolute;right:3.5%;top:24%;width:265px;padding:23px 22px;background:linear-gradient(135deg,#163e39c9,#143f3a91);border:1px solid #c6d9bd35;backdrop-filter:blur(12px)}.objective .eyebrow{font-size:8px;letter-spacing:1.8px}.objective .eyebrow span{float:right;margin:0;color:#b2c6a9}.objective h2{font:400 25px 'Playfair Display',Georgia;margin:19px 0 8px}.objective p{font-size:10px;color:#adbbb0}.objective #tasks{margin-top:24px}.objective #tasks>div{display:flex;gap:11px;align-items:center;border-top:1px solid var(--line);padding:15px 0;font-size:9px}.objective b{font-size:8px;color:#92ab96;font-weight:400}.objective i{margin-left:auto;font-style:normal;color:#b0c3a2}.objective .done span{color:#dceac8}.objective .done i{color:#cce9b1}.note-footer{border-top:1px solid var(--line);padding-top:18px;font:italic 11px Georgia;color:#a8bfac}.note-footer span{margin-right:7px;color:#d4e6b6}footer{position:absolute;bottom:0;left:0;right:0;margin:0 3.5%;height:105px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.chapter{display:flex;align-items:center;gap:15px;font-size:8px;letter-spacing:1.3px}.chapter>span{font:30px Georgia;color:#bfd0ad;border-right:1px solid var(--line);padding-right:15px}.chapter small{display:block;font:italic 10px Georgia;letter-spacing:0;color:#9bb3a3;margin-top:9px}.tools{display:flex;background:#102f2ec4;border:1px solid #a8c1ac38;padding:5px;gap:3px;backdrop-filter:blur(8px)}.tool{position:relative;border:1px solid transparent;background:none;display:flex;align-items:center;gap:10px;padding:12px 16px;font-size:10px;color:#a5bdb0}.tool>span{font-size:23px}.tool.active{background:#aec7961c;border-color:#adca9b50;color:#dfebce}.tool small{display:block;text-align:left;font-size:8px;color:#819e8f;margin-top:3px}.tool i{position:absolute;width:5px;height:5px;background:#d5eaa3;border-radius:50%;right:8px;top:8px}.controls{display:flex;flex-direction:column;gap:9px;font-size:8px;color:#a9beb0}.controls span{display:flex;align-items:center;gap:5px}kbd{border:1px solid #a0ba9c66;border-radius:2px;padding:2px 4px;font:8px sans-serif;color:#cfddc9}.hint{position:absolute;bottom:145px;left:50%;transform:translateX(-50%);color:#d1dec4;font:italic 12px Georgia;white-space:nowrap;text-shadow:0 1px 6px #0a3432}.hint>span{margin-right:9px;color:#dcecbf}.crosshair{display:none;position:absolute;left:50%;top:50%;width:5px;height:5px;border-radius:50%;background:#f0f4d9;box-shadow:0 0 0 5px #ffffff15;pointer-events:none}body.playing .intro{opacity:0;pointer-events:none;transform:translateY(-15px)}body.playing .crosshair{display:block}body.playing .objective{top:18%;background:#153e388c}#toast{position:absolute;bottom:205px;left:50%;transform:translateX(-50%);background:#173d36e8;border:1px solid #a8c59d66;padding:14px 22px;opacity:0;transition:opacity .3s;pointer-events:none;text-align:center;max-width:80%;font-size:11px}#toast.show{opacity:1}.modal{position:absolute;z-index:8;left:50%;top:50%;transform:translate(-50%,-50%);width:460px;max-width:90vw;background:#e7e8d8;color:#24463e;padding:38px;box-shadow:0 25px 100px #082a2a99;border:1px solid #e2ebc9}.modal .eyebrow{color:#69816b;font-size:8px}.modal h2{font:35px/1.2 'Playfair Display',Georgia;margin:20px 0}.modal p{color:#587165;font-size:12px}.modal h3{font:italic 23px Georgia}.close{position:absolute;top:12px;right:16px;background:none;border:0;font:25px Georgia;color:#426451}.specimen{text-align:center;font-size:90px;line-height:110px;color:#60958a;text-shadow:0 0 35px #adc8ab}.journal-meta{border-top:1px solid #6c886844;padding-top:15px;font-size:7px;letter-spacing:1px}.journal-meta span{display:block;margin-top:10px;color:#4c8061}.signature{font-style:italic}.choice-label{font-size:7px;letter-spacing:1.5px;margin:28px 0 15px}.choice{width:100%;margin-top:10px}.secondary{padding:15px 20px;background:none;border:1px solid #7d957b66;color:#476a57;font-size:11px;display:flex;justify-content:space-between}#camera-frame{position:absolute;inset:19% 25% 24%;pointer-events:none}#camera-frame>span{position:absolute;bottom:-30px;left:0;font-size:8px;letter-spacing:2px;color:#dcf1c9;white-space:nowrap}#camera-frame b{margin-left:25px;font-weight:400;letter-spacing:.5px}.camera-corner{position:absolute;width:25px;height:25px;border-color:#d8e8c4;border-style:solid}.tl{top:0;left:0;border-width:1px 0 0 1px}.tr{top:0;right:0;border-width:1px 1px 0 0}.bl{bottom:0;left:0;border-width:0 0 1px 1px}.br{bottom:0;right:0;border-width:0 1px 1px 0}[hidden]{display:none!important}@media(max-width:1000px){.location{display:none}.chapter{display:none}.objective{width:235px;right:3%;padding:18px}.controls{font-size:7px}.tool{padding:10px 13px}footer{height:90px}.intro{left:5%}h1{font-size:60px}.hint{bottom:120px}}@media(max-width:650px){header{padding:20px}.brand{font-size:10px}.brand small{font-size:6px}.icon-button span{display:none}.intro{top:20%}h1{font-size:48px}.objective{top:auto!important;bottom:110px;width:200px;padding:14px;right:15px}.objective h2{font-size:20px;margin-top:12px}.objective p,.note-footer{display:none}.objective #tasks{margin-top:12px}.objective #tasks>div{padding:9px 0;font-size:8px;gap:6px}.objective .eyebrow{font-size:7px}.controls{display:none}footer{justify-content:center;margin:0 15px}.tool{padding:10px 12px;gap:6px}.tool>span{font-size:20px}.hint{left:20px;transform:none;bottom:330px;font-size:10px}.intro p{font-size:11px}.intro .primary{min-width:190px}.intro-note{display:none}.modal{padding:25px}.modal h2{font-size:30px}#camera-frame{inset:25% 12% 35%}}
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f5f1e6"><meta name="description" content="A quiet ecological journey. Follow the water, collect forgotten words, and help a changed world remember itself."><title>There Are Rivers in the Sky · A quiet journey</title><style id="rivers-styles">
+:root{--paper:#f5f1e6;--ink:#3e4d41;--soft:#7b846f;--accent:#a26848;--line:#59644a28;--glass:#f9f6ecdf}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}body{background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif;font-size:12px}button,a{-webkit-tap-highlight-color:transparent}button{font:inherit;color:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:2px solid #946e47;outline-offset:6px}button{touch-action:manipulation}button:disabled{cursor:default;opacity:.4}button,a{-webkit-user-select:none;user-select:none}#world{position:fixed;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}.paper{position:fixed;inset:0;pointer-events:none;box-shadow:inset 0 0 140px 35px #faf6eb7a;background:linear-gradient(180deg,#f5f1e655 0%,transparent 30%,transparent 78%,#f5f1e6a1 100%);z-index:1}header{position:fixed;z-index:7;inset:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding:30px 38px;pointer-events:none}.wordmark,.header-actions,.chapter-mark{pointer-events:auto}.wordmark{display:flex;align-items:center;gap:11px;color:var(--ink);text-decoration:none;font-size:9px;letter-spacing:2.3px;line-height:1.5}.wordmark svg{width:28px;height:31px}.wordmark span{max-width:110px}.chapter-mark{font-size:8px;letter-spacing:2.4px;color:#7f856f;position:absolute;left:50%;transform:translateX(-50%)}.header-actions{display:flex;align-items:center;gap:10px}.circle-button{display:grid;place-items:center;width:36px;height:36px;border:1px solid #68755b3d;background:#f7f5eb6b;border-radius:50%;transition:background .2s,transform .2s}.circle-button:hover{background:#fffdf4;transform:translateY(-2px)}.circle-button svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}.circle-button[aria-pressed=true]{background:#e1e7d5}.intro{position:fixed;z-index:3;left:50%;top:13%;transform:translateX(-50%);text-align:center;width:min(680px,90%);transition:opacity 1s,transform 1s}.eyebrow{font-size:8px;font-weight:400;letter-spacing:3.2px;text-transform:uppercase;color:#7f846c}h1{font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:clamp(52px,5.8vw,84px);line-height:1.03;letter-spacing:-3px;margin:23px 0 17px}h1 em{font-weight:400;color:#9b674d}h1 span{display:block}.intro>p{font-family:Georgia,serif;color:#6b7867;line-height:1.8;font-size:14px;margin:0}.entry{position:fixed;z-index:5;bottom:85px;left:50%;transform:translateX(-50%);text-align:center;transition:opacity .7s,transform .7s}.begin{border:1px solid #71806466;background:#f9f7edb8;border-radius:50px;padding:15px 25px;display:flex;align-items:center;gap:25px;min-width:220px;justify-content:space-between;font-size:10px;letter-spacing:1px;backdrop-filter:blur(8px);transition:background .2s,box-shadow .2s}.begin:hover{background:#fffdf5;box-shadow:0 5px 20px #6c6b4012}.begin span{font:20px Georgia;color:#9d7253}.entry>p{font-size:8px;letter-spacing:1px;color:#8b8e7b;margin-top:17px}.intro-rule{width:1px;height:25px;background:#85906c4d;margin:20px auto}.colophon{position:fixed;bottom:27px;left:38px;z-index:2;color:#858b75;font-size:8px;letter-spacing:1.3px}.colophon span{color:#a1a18a}.intro-side{position:fixed;left:38px;top:50%;writing-mode:vertical-rl;transform:rotate(180deg);font-size:8px;letter-spacing:3px;color:#91947e;z-index:2}.version{position:fixed;bottom:27px;right:38px;z-index:2;color:#91947e;font-size:8px;letter-spacing:1.5px}.play-ui{opacity:0;pointer-events:none;transition:opacity 1s}.is-playing .play-ui{opacity:1;pointer-events:auto}.is-playing .intro,.is-playing .entry,.is-playing .intro-side{opacity:0;pointer-events:none}.is-playing .intro{transform:translate(-50%,-15px)}.is-playing .entry{transform:translate(-50%,15px)}.is-playing .colophon,.is-playing .version{display:none}.field-note{position:fixed;left:38px;top:112px;z-index:3;max-width:240px;pointer-events:none}.field-note .eyebrow{font-size:7px;letter-spacing:2px}.field-note h2{font:400 22px/1.3 Georgia,serif;margin:12px 0 9px}.field-note p{font-size:10px;line-height:1.8;color:#7d856f;max-width:205px;margin:0}.steps{display:flex;align-items:center;gap:9px;margin-top:18px}.steps i{display:block;width:5px;height:5px;border:1px solid #8c967b;transform:rotate(45deg);transition:background .5s}.steps i.done{background:#9a6f4d;border-color:#9a6f4d}.steps span{width:22px;height:1px;background:#7e8b6538}.hud{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:6;display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:40px;border:1px solid #71806433;background:#faf8efb8;backdrop-filter:blur(10px)}.tool{display:flex;align-items:center;gap:9px;padding:10px 14px;border:1px solid transparent;border-radius:30px;background:none;font-size:10px;color:#7d856f;transition:background .2s,color .2s}.tool svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}.tool.active{color:#495c44;background:#e3e7d5;border-color:#a6b18c36}.tool small{font-size:7px;color:#9b9f8b;margin-left:3px}.walk-hint{position:fixed;bottom:37px;right:38px;font-size:8px;line-height:1.8;color:#8b917b;text-align:right;letter-spacing:.4px;z-index:3;pointer-events:none}.mini-poem{position:fixed;bottom:34px;left:38px;color:#818b73;font:italic 12px Georgia;z-index:3;max-width:220px}.mini-poem span{font-family:Arial,sans-serif;font-style:normal;font-size:7px;letter-spacing:2px;display:block;margin-top:8px;color:#9b9e88}.poem{position:fixed;left:50%;top:18%;transform:translate(-50%,12px);z-index:4;font:italic 25px/1.5 Georgia,serif;color:#6b795f;text-align:center;pointer-events:none;opacity:0;transition:opacity 1.3s,transform 1.3s;width:min(600px,80%);text-shadow:0 2px 16px #f8f6e8}.poem.visible{opacity:1;transform:translate(-50%,0)}.action-area{position:fixed;left:50%;bottom:107px;transform:translateX(-50%);z-index:6;text-align:center;pointer-events:none;min-width:230px}.context-action{pointer-events:auto;border:1px solid #89967766;border-radius:30px;padding:12px 20px;background:#f9f7edec;box-shadow:0 5px 35px #68785b12;display:flex;gap:20px;align-items:center;justify-content:space-between;width:100%;font-size:10px;backdrop-filter:blur(8px)}.context-action kbd{border:1px solid #7d8f6955;border-radius:4px;font:8px Arial;padding:3px 5px}.action-caption{font-size:8px;color:#8e957f;margin:9px 0 0;line-height:1.6;letter-spacing:.4px;max-width:300px}.landmark{position:fixed;z-index:2;width:36px;height:36px;margin:-18px 0 0 -18px;border:0;border-radius:50%;background:transparent;cursor:pointer;filter:drop-shadow(0 1px 5px #f5f0d5);padding:0}.landmark:before{content:'';position:absolute;inset:12px;border:1px solid #fefce8;transform:rotate(45deg);background:#c3b57366;box-shadow:0 0 20px 6px #fbf7d466}.landmark:after{content:attr(data-label);position:absolute;bottom:35px;left:50%;transform:translate(-50%,5px);color:#5f7054;background:#f8f6e9dd;border-radius:3px;font:italic 11px Georgia;white-space:nowrap;padding:7px 10px;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none}.landmark:hover:after,.landmark:focus-visible:after{opacity:1;transform:translate(-50%,0)}.landmark.visited:before{background:#8caa8266;box-shadow:0 0 12px 3px #a3cd9c55}.word-mote{position:fixed;z-index:2;border:0;background:transparent;font:italic 13px Georgia;color:#7c8963b3;padding:12px;transform:translate(-50%,-50%);text-shadow:0 1px 8px #fcf9e4;cursor:pointer;transition:opacity 1s}.word-mote:hover{color:#566b48}.word-mote.collected{opacity:0;pointer-events:none}.toast{position:fixed;z-index:14;top:96px;left:50%;transform:translate(-50%,-8px);max-width:min(420px,88%);width:max-content;padding:11px 20px;background:#fcf9f0eb;border:1px solid #85906c40;border-radius:4px;color:#788368;font-size:10px;line-height:1.6;text-align:center;opacity:0;pointer-events:none;transition:opacity .35s,transform .35s;box-shadow:0 5px 40px #6b735b0a}.toast.show{opacity:1;transform:translate(-50%,0)}.camera-vignette{position:fixed;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at center,transparent 35%,#3b534b20);opacity:0;transition:opacity .5s}.camera-vignette.visible{opacity:1}.viewfinder{position:fixed;inset:24% 31% 25%;border:1px solid #fefced80;pointer-events:none;z-index:3}.viewfinder:before,.viewfinder:after{content:'';position:absolute;width:9px;height:1px;background:#f7f4e4;left:calc(50% - 4px);top:50%}.viewfinder:after{transform:rotate(90deg)}.viewfinder span{position:absolute;bottom:-22px;left:0;font-size:7px;letter-spacing:2px;color:#7e8c70}.flash-layer{position:fixed;inset:0;z-index:20;background:#fffef0;pointer-events:none;opacity:0}.flash-layer.flash{animation:shutter .6s ease-out}@keyframes shutter{0%{opacity:.85}100%{opacity:0}}.overlay{position:fixed;inset:0;z-index:12;display:grid;place-items:center;background:#e8e8da65;backdrop-filter:blur(9px);padding:18px}.panel{position:relative;width:min(480px,100%);max-height:calc(100dvh - 36px);overflow:auto;padding:44px 42px;background:#f8f5eaf5;border:1px solid #858d6329;border-radius:3px;box-shadow:0 22px 90px #5c695620;color:#5e6c54}.panel-close{position:absolute;top:14px;right:16px;border:0;background:none;font:25px Georgia;color:#828a70;padding:0 5px}.panel h2{font:400 33px/1.2 Georgia;margin:23px 0 16px;letter-spacing:-.6px}.panel p{font:12px/1.9 Arial,sans-serif;color:#7a846d}.panel .italic{font:italic 15px/1.8 Georgia;color:#738363}.panel .eyebrow{font-size:7px;letter-spacing:2.4px}.lotus-study{display:block;width:160px;height:110px;margin:18px auto;stroke:#819c80;stroke-width:.8;fill:#d5dfc7}.panel h3{font:italic 20px Georgia;color:#70845e;text-align:center;margin:0 0 20px}.journal-divider{height:1px;background:var(--line);margin:23px 0}.specimen-label{font-size:7px;letter-spacing:1.5px;color:#9c9c82}.journal-words{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}.journal-words span{padding:5px 9px;border:1px solid #9aa48240;border-radius:20px;font:italic 12px Georgia;color:#879472}.choice-label{font-size:8px;letter-spacing:1.6px;color:#91947c;line-height:1.8;margin:25px 0 12px}.choice{display:block;text-align:left;border:1px solid #909b794a;background:#e7ead8aa;width:100%;padding:14px 16px;margin:9px 0;color:#6c7d58;font-size:11px;transition:background .2s}.choice:hover{background:#dce5c6}.choice span{float:right}.choice.secondary{background:none}.signature{font:italic 11px Georgia!important}.ending-poem{font:italic 22px/1.8 Georgia!important;color:#6e805a!important;margin:24px 0}.about-controls{display:grid;grid-template-columns:1fr 1fr;gap:12px;border-top:1px solid var(--line);padding-top:20px;margin-top:20px;font-size:10px;line-height:1.6;color:#7e896f}.about-controls b{display:block;font-size:8px;letter-spacing:1px;color:#5f7051;margin-bottom:3px}.about-credit{font-size:9px!important;color:#999e89!important;margin-top:25px}.load-status{position:fixed;z-index:30;top:110px;left:50%;transform:translateX(-50%);width:420px;max-width:90%;padding:20px;background:#faf7ec;border:1px solid #909b7955;font-size:12px;line-height:1.7;box-shadow:0 10px 40px #5c695620}.load-status p{font-size:11px;color:#7a846d}[hidden]{display:none!important}@media(max-width:1000px){.chapter-mark{display:none}.walk-hint{display:none}.field-note{max-width:185px}.field-note p{max-width:170px}.mini-poem{font-size:11px;max-width:160px}.hud{bottom:22px}.tool{padding:9px 12px}.wordmark{font-size:8px}h1{font-size:68px}}@media(max-width:650px){header{padding:22px 20px}.header-actions{gap:6px}.circle-button{width:32px;height:32px}.wordmark{gap:8px;font-size:7px;letter-spacing:1.8px}.wordmark svg{width:24px}.wordmark span{max-width:90px}.intro{top:16%}h1{font-size:53px;letter-spacing:-2px;margin:20px 0 18px}.intro>p{font-size:12px;max-width:270px;margin:auto}.eyebrow{font-size:7px;letter-spacing:2.5px}.entry{bottom:92px}.begin{min-width:210px;padding:14px 23px}.entry>p{font-size:7px}.intro-side{left:18px;font-size:7px}.colophon{left:20px;bottom:26px;font-size:7px;max-width:190px;line-height:1.7}.version{right:20px;bottom:26px;font-size:7px}.field-note{top:95px;left:20px;max-width:165px}.field-note h2{font-size:19px;margin:9px 0 7px}.field-note p{font-size:9px;line-height:1.7;max-width:160px}.steps{margin-top:13px}.mini-poem{display:none}.hud{bottom:20px;gap:3px;padding:5px 6px;width:max-content}.tool{padding:10px 12px;gap:6px;font-size:9px}.tool small{display:none}.tool svg{width:16px;height:16px}.action-area{bottom:95px;min-width:220px}.action-caption{font-size:7px}.poem{font-size:20px;top:29%;width:85%}.panel{padding:35px 26px}.panel h2{font-size:29px}.toast{top:79px;font-size:9px;padding:10px 15px}.viewfinder{inset:31% 12% 25%}.landmark:after{font-size:10px}.word-mote{font-size:12px}.header-actions #fullscreen{display:none}}@media(max-height:650px){header{padding-top:14px;padding-bottom:14px}.intro{top:18%}h1{font-size:48px;line-height:1; margin:15px 0 12px}.intro>p{font-size:11px}.intro-rule{display:none}.entry{bottom:60px}.entry>p{margin-top:10px}.colophon,.version{bottom:15px}.intro-side{display:none}.field-note{top:75px}.field-note h2{font-size:18px;margin:8px 0}.field-note p{display:none}.steps{margin-top:10px}.hud{bottom:14px}.action-area{bottom:87px}.poem{top:25%;font-size:20px}.panel h2{font-size:27px}.lotus-study{height:75px;margin:10px auto}.mini-poem{bottom:23px}.toast{top:67px}.tool{padding:8px 12px}}@media(max-width:360px){header{padding-left:15px;padding-right:15px}.header-actions{gap:5px}.circle-button{width:29px;height:29px}.wordmark{font-size:6px;gap:6px}.wordmark span{max-width:76px}.wordmark svg{width:21px}.intro{top:18%}h1{font-size:43px}.intro .eyebrow{font-size:6px}.intro>p{font-size:10px}.tool{font-size:8px;padding:9px 11px;gap:5px}.tool svg{width:14px}.panel{padding:34px 22px}.panel h2{font-size:26px}.poem{font-size:18px}.field-note{left:16px}.field-note p{max-width:135px;font-size:8px}}@media(max-height:450px){.intro{top:19%}h1{font-size:38px;margin:10px 0}.intro>p{font-size:10px}.intro>.eyebrow{font-size:6px}.entry{bottom:45px;left:auto;right:8%;transform:none}.begin{min-width:190px;padding:12px 20px}.entry>p{display:none}.is-playing .entry{transform:translateY(10px)}.colophon{display:none}.intro{left:29%;width:50%}.hud{left:auto;right:20px;transform:none}.action-area{left:28%;bottom:25px;min-width:210px}.action-caption{display:none}.poem{top:22%;left:65%;width:50%;font-size:18px}.field-note h2{font-size:16px}.field-note{top:70px}.field-note .eyebrow{font-size:6px}.panel{padding-top:30px;padding-bottom:25px}.viewfinder{inset:21% 22% 20%}.mini-poem{display:none}.toast{top:65px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 
-.load-status{position:fixed;z-index:20;top:110px;left:50%;transform:translateX(-50%);width:420px;max-width:90vw;padding:18px 22px;border:1px solid #c6d9bd60;background:#153e38;color:#e8ede4;line-height:1.7;font-size:12px;box-shadow:0 12px 40px #082a2a66}.load-status p{margin:6px 0 0;font-size:11px}
+.landmark.offscreen{background:#f8f6e8cc;border:1px solid #a8ad8c66;box-shadow:0 2px 15px #7d8b5910}.landmark.offscreen:before{inset:13px;border-width:1px 1px 0 0;border-color:#869170;background:none;box-shadow:none;transform:rotate(calc(var(--bearing) + 45deg))}.landmark.offscreen:after{opacity:1;font:italic 10px Georgia;background:#f8f6e8cc;pointer-events:none}.landmark.offscreen[data-edge=right]:after{left:auto;right:44px;top:50%;bottom:auto;transform:translateY(-50%)}.landmark.offscreen[data-edge=left]:after{left:44px;top:50%;bottom:auto;transform:translateY(-50%)}.landmark.offscreen[data-edge=top]:after{bottom:auto;top:42px;transform:translateX(-50%)}.landmark.offscreen[data-edge=bottom]:after{bottom:42px;transform:translateX(-50%)}
 
-/* Keep every interaction reachable in narrow and short embedded previews. */
-@media (max-width: 360px), (max-height: 650px) {
-  header { padding: 12px 4%; }
-  .brand { font-size: 9px; gap: 9px; }
-  .brand-icon { font-size: 27px; }
-  .brand small { font-size: 6px; margin-top: 5px; }
-  .location, .controls, .intro-note { display: none; }
-  .intro { top: 78px; left: 5%; }
-  .intro .eyebrow { font-size: 8px; }
-  .intro h1 { font-size: clamp(34px, 5vw, 42px); line-height: 1.08; margin: 14px 0; }
-  .intro p { font-size: 11px; line-height: 1.6; margin: 0 0 16px; }
-  .intro .primary { min-width: 190px; padding: 12px 16px; }
-  body:not(.playing) .objective { display: none; }
-  body.playing .objective { top: 70px !important; bottom: auto; right: 12px; width: 180px; padding: 11px 13px; pointer-events: none; }
-  body.playing .objective h2 { font-size: 18px; margin: 9px 0 0; }
-  body.playing .objective .eyebrow { font-size: 6px; letter-spacing: 1.4px; }
-  body.playing .objective p, body.playing .objective #tasks, body.playing .objective .note-footer { display: none; }
-  footer { height: 68px; margin: 0 4%; justify-content: center; }
-  .chapter { display: none; }
-  .hint { left: 5%; right: 5%; bottom: 84px; transform: none; white-space: normal; font-size: 10px; line-height: 1.5; }
-  #toast { bottom: 117px; padding: 10px 14px; font-size: 10px; }
-  .modal { max-height: calc(100dvh - 28px); overflow-y: auto; overscroll-behavior: contain; padding: 25px; }
-  .modal h2 { font-size: 28px; }
-  .specimen { font-size: 65px; line-height: 75px; }
-  #camera-frame { inset: 23% 13% 27%; }
-  #camera-frame > span { font-size: 7px; letter-spacing: 1px; }
-  #camera-frame b { margin-left: 10px; }
-  .load-status { top: 75px; }
-}
-@media (max-width: 360px) {
-  .icon-button span { display: none; }
-  .tools { width: 100%; padding: 4px; gap: 2px; }
-  .tool { flex: 1; min-width: 0; padding: 8px 6px; gap: 5px; font-size: 9px; }
-  .tool > span { font-size: 17px; }
-  .tool small { font-size: 7px; }
-}
-@media (max-height: 450px) {
-  .intro { top: 67px; }
-  .intro h1 { font-size: 35px; margin: 10px 0; }
-  .intro p { margin-bottom: 12px; font-size: 10px; }
-  .intro .primary { padding: 11px 16px; }
-  .modal h2 { font-size: 26px; margin: 15px 0; }
-}
-@media (min-width: 651px) and (max-height: 450px) {
-  footer { justify-content: flex-end; pointer-events: none; }
-  footer .tools { pointer-events: auto; }
-}
+.landmark{z-index:4}
 
 </style></head>
-<body><div id="load-status" class="load-status" role="status">Preparing the sanctuary…<p>If this message stays visible, open this page in a browser that allows JavaScript.</p><noscript>JavaScript is disabled. Enable it to play this game.</noscript></div><canvas id="world" aria-label="Interactive flooded temple landscape"></canvas><div class="grain"></div>
-<header><a class="brand" href="#world"><span class="brand-icon">◈</span><span>RIVERS IN THE SKY<small>A FIELD STUDY OF A WORLD REBORN</small></span></a><div class="location"><i></i> THE LOTUS SANCTUARY <span>23° N · 108° E</span></div><button id="sound" class="icon-button" aria-label="Toggle ambient sound">♪ <span>SOUND OFF</span></button></header>
-<main><section class="intro"><div class="eyebrow">CHAPTER 01 <span> / </span> THE RETURN</div><h1>There Are Rivers<br>in the <em>Sky.</em></h1><p>The oceans rose. The sky remembered.<br>And something here still remembers you.</p><button id="begin" class="primary">Begin your journey <span>↗</span></button><div class="intro-note">AN ECOLOGICAL PUZZLE ADVENTURE</div></section>
-<aside class="objective"><div class="eyebrow">YOUR FIELD NOTES <span id="progress">00 / 03</span></div><h2>Wake the sanctuary</h2><p>Follow the water. Let the living world<br>show you what was left behind.</p><div id="tasks"><div data-task="photo"><b>01</b><span>Photograph the luminous lotus</span><i>○</i></div><div data-task="water"><b>02</b><span>Restore the ancient waterway</span><i>○</i></div><div data-task="memory"><b>03</b><span>Listen to a forgotten memory</span><i>○</i></div></div><div class="note-footer"><span>✧</span> Observe first. Understand second.</div></aside>
-<div id="hint" class="hint"><span>✧</span> A world waiting to be rediscovered</div>
-<div id="toast" role="status"></div><div class="crosshair"></div>
-<section id="journal" class="modal" hidden><button class="close" aria-label="Close journal">×</button><div class="eyebrow">RESEARCH JOURNAL / ENTRY 001</div><h2>A light that learned<br>to live underwater.</h2><div class="specimen">✺</div><h3>Nymphaea luminosa</h3><p>The lotus shelters a colony of cyanobacteria. Its blue light strengthens near flowing water. The old channels may be more than architecture — they are a living circulatory system.</p><div class="journal-meta">HABITAT: FLOODED SANCTUARY <span>SPECIMEN DOCUMENTED ✓</span></div></section>
-<section id="memory" class="modal" hidden><div class="eyebrow">MEMORY FRAGMENT / 01</div><h2>We did not leave<br>an empty world.</h2><p>“We built these gardens to hold back the sea. But the water brought a new kind of life. If you come home someday… do not mistake what has changed for what has been lost.”</p><p class="signature">— Last transmission, sanctuary archive</p><div class="choice-label">WHAT WILL YOU LEAVE FOR THOSE WHO FOLLOW?</div><button class="primary choice" data-choice="Protect the new ecosystem">Let the new world flourish <span>↗</span></button><button class="secondary choice" data-choice="Study a path to coexistence">Seek a way to coexist <span>↗</span></button></section>
-<div id="camera-frame" hidden><div class="camera-corner tl"></div><div class="camera-corner tr"></div><div class="camera-corner bl"></div><div class="camera-corner br"></div><span>FIELD CAMERA <b id="camera-label">Find the luminous lotus</b></span></div>
-</main>
-<footer><div class="chapter"><span>01</span><div>THE LOTUS SANCTUARY<small>Some things grow from what we leave behind.</small></div></div><nav class="tools" aria-label="Exploration tools"><button class="tool active" id="explore"><span>✥</span><div>Explore<small>1</small></div></button><button class="tool" id="camera"><span>◎</span><div>Camera<small>2</small></div></button><button class="tool" id="staff"><span>♧</span><div>Water staff<small>3</small></div></button><button class="tool" id="notes"><span>▤</span><div>Journal<small>J</small></div><i id="journal-dot" hidden></i></button></nav><div class="controls"><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move</span><span><kbd>←</kbd><kbd>→</kbd> look · click to interact</span></div></footer><script id="rivers-game">
-(()=>{
-'use strict';
-const loadStatus=document.querySelector('#load-status');
-const canvas=document.querySelector('#world');
-let ctx;
-try { ctx=canvas.getContext('2d'); } catch {}
-if(!ctx){
-  loadStatus.textContent='This preview cannot draw the game. Open the page in a browser with Canvas support.';
-  return;
-}
-let W,H,dpr,t=0,mode='explore',playing=false,yaw=0,px=0,pz=0,flow=false,photo=false,remembered=false,ending=false;
-const keys={},targets=[],rand=(a,b)=>a+Math.random()*(b-a);
-let seed=91;function rng(){seed=(seed*16807)%2147483647;return(seed-1)/2147483646;}
-const mountains=Array.from({length:8},(_,i)=>({x:i/7,h:.12+rng()*.19,w:.10+rng()*.12}));
-const plants=Array.from({length:155},()=>({x:(rng()-.5)*42,z:4+rng()*65,s:.15+rng()*.4,kind:rng(),phase:rng()*6}));
-const motes=Array.from({length:45},()=>({x:rng(),y:rng(),s:rng()*1.8,phase:rng()*6}));
-function resize(){W=innerWidth;H=innerHeight;dpr=Math.min(devicePixelRatio||1,2);canvas.width=W*dpr;canvas.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}addEventListener('resize',resize);resize();
-function project(x,y,z){x-=px;z-=pz;let xx=x*Math.cos(yaw)-z*Math.sin(yaw),zz=x*Math.sin(yaw)+z*Math.cos(yaw);if(zz<.8)return null;const scale=W*.8/zz;return{x:W*.53+xx*scale,y:H*.46+(2.8-y)*scale,s:scale,z:zz};}
-function poly(points,fill,stroke){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=.7;ctx.stroke();}}
-function face(points,c){const p=points.map(v=>project(...v));if(p.some(v=>!v))return;poly(p.map(v=>[v.x,v.y]),c);}
-function box(x,y,z,w,h,d,c='#6b8171'){face([[x-w/2,y,z-d/2],[x+w/2,y,z-d/2],[x+w/2,y+h,z-d/2],[x-w/2,y+h,z-d/2]],c);face([[x+w/2,y,z-d/2],[x+w/2,y,z+d/2],[x+w/2,y+h,z+d/2],[x+w/2,y+h,z-d/2]],'#455e53');face([[x-w/2,y+h,z-d/2],[x+w/2,y+h,z-d/2],[x+w/2,y+h,z+d/2],[x-w/2,y+h,z+d/2]],'#9ba58a');}
-function roof(x,y,z,w,d){face([[x-w*.6,y+.25,z-d*.6],[x,y+1.2,z-d*.6],[x+w*.6,y+.25,z-d*.6],[x+w*.65,y+.6,z-d*.6],[x+w*.5,y-.15,z-d*.6],[x-w*.5,y-.15,z-d*.6],[x-w*.65,y+.6,z-d*.6]],'#253f38');face([[x,y+1.2,z-d*.6],[x,y+1.2,z+d*.6],[x+w*.6,y+.25,z+d*.6],[x+w*.6,y+.25,z-d*.6]],'#456355');for(let j=0;j<5;j++){const yy=y+.2+j*.18;face([[x-w*(.5-j*.085),yy,z-d*.61],[x+w*(.5-j*.085),yy,z-d*.61],[x+w*(.5-j*.085),yy+.035,z-d*.61],[x-w*(.5-j*.085),yy+.035,z-d*.61]],'#b29b62');}}
-function temple(x,z,size=1,levels=2){box(x,0,z,6*size,.5,4*size,'#697f69');for(let j=0;j<levels;j++){const y=.5+j*2.5*size,w=(5-j*.8)*size;box(x,y,z,w,.35*size,3.4*size,'#9b9d77');for(const k of [-1,1]){box(x+k*w*.39,y,z-1.2*size,.28*size,2.2*size,.28*size,'#a99369');box(x+k*w*.39,y,z+1*size,.28*size,2.2*size,.28*size,'#6f7a56');}box(x,y+.3*size,z+.7*size,w*.65,1.5*size,.25*size,'#3a5c50');roof(x,y+2*size,z,w,3.5*size);}const p=project(x,.7,z-1.85*size);if(p){ctx.fillStyle='#7f9871';for(let i=0;i<6;i++){ctx.beginPath();ctx.ellipse(p.x+(i-2.5)*p.s*.6*size,p.y,p.s*.5*size,p.s*.10*size,0,0,Math.PI*2);ctx.fill();}}}
-function arch(x,z){for(const k of [-1,1]){box(x+k*3.4,0,z,1.45,1,2,'#7c8a6d');box(x+k*3.4,1,z,.9,7.2,1.2,'#7b8c70');box(x+k*3.4,3.4,z,1.18,.3,1.5,'#b2a87c');box(x+k*3.4,6.6,z,1.2,.35,1.5,'#b2a87c');}box(x,7.1,z,8.5,.6,1.5,'#a6a27b');box(x,6.1,z,5.9,1.2,.65,'#596e57');roof(x,7.9,z,9.5,2.8);const p=project(x,6.7,z-.8);if(p){ctx.fillStyle='#d6c590';ctx.font=`${Math.max(5,p.s*.42)}px Georgia`;ctx.textAlign='center';ctx.fillText('水  ·  归  ·  生',p.x,p.y);}for(let i=0;i<20;i++){const p=project(x-4.2+i*.44,7.4-Math.sin(i)*.3,z-.85);if(p){ctx.fillStyle=i%3?'#507857':'#9da577';ctx.beginPath();ctx.ellipse(p.x,p.y,p.s*.22,p.s*(.3+(i%4)*.2),.2,0,7);ctx.fill();}}}
-function waterfall(x,z,h,width){const a=project(x,h,z),b=project(x,0,z);if(!a||!b)return;const grad=ctx.createLinearGradient(a.x,a.y,b.x,b.y);grad.addColorStop(0,'#dcece1aa');grad.addColorStop(.65,'#b0ddd3c9');grad.addColorStop(1,'#a2dedb08');ctx.fillStyle=grad;ctx.fillRect(a.x-width*a.s/2,a.y,width*a.s,b.y-a.y);for(let i=0;i<9;i++){const xx=a.x+(i/9-.5)*width*a.s;ctx.strokeStyle=`rgba(225,248,230,${.12+Math.sin(t*.02+i)*.08})`;ctx.lineWidth=1+i%2;ctx.beginPath();ctx.moveTo(xx,a.y);ctx.lineTo(xx+Math.sin(t*.02+i)*2,b.y);ctx.stroke();}ctx.strokeStyle='#d7f7e34a';for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(b.x,b.y+i*4,b.s*width*.9+i*8,3+i*3,0,0,7);ctx.stroke();}}
-function lotus(x,z,s,phase,glowing=false){const p=project(x,0,z);if(!p)return;const r=p.s*s;ctx.fillStyle='#4e8a7080';ctx.beginPath();ctx.ellipse(p.x,p.y+2,r*2.1,r*.55,-.12,0,7);ctx.fill();ctx.strokeStyle='#87b09a66';ctx.beginPath();ctx.ellipse(p.x,p.y+4,r*2.7,r*.66,0,0,7);ctx.stroke();let yy=p.y-r*.9+Math.sin(t*.015+phase)*2;if(glowing){const g=ctx.createRadialGradient(p.x,yy,0,p.x,yy,r*4);g.addColorStop(0,'#77eee688');g.addColorStop(1,'#60e0d900');ctx.fillStyle=g;ctx.fillRect(p.x-r*4,yy-r*4,r*8,r*8);targets.push({kind:'lotus',x:p.x,y:yy,r:Math.max(r*3,35)});}for(let j=0;j<7;j++){let a=(j/6)*Math.PI-Math.PI;ctx.fillStyle=j%2?'#d6b8c2':'#eccdca';ctx.beginPath();ctx.ellipse(p.x+Math.cos(a)*r*.55,yy+Math.sin(a)*r*.35,r*.32,r*.85,a+Math.PI/2,0,7);ctx.fill();}ctx.fillStyle=glowing?'#b5fff0':'#e8d89b';ctx.beginPath();ctx.ellipse(p.x,yy+r*.1,r*.25,r*.15,0,0,7);ctx.fill();}
-function rock(x,z,w,h){box(x,0,z,w,h,w*.7,'#5f7564');box(x-.1,h,z,w*.9,.1,w*.65,'#8b9977');}
-function wheel(){const p=project(4.7,1.8,15);if(!p)return;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(flow?t*.012:0);ctx.strokeStyle='#c7b47c';ctx.lineWidth=p.s*.09;ctx.beginPath();ctx.arc(0,0,p.s*.7,0,7);ctx.stroke();for(let j=0;j<8;j++){ctx.rotate(Math.PI/4);ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(p.s*.7,0);ctx.stroke();}ctx.restore();targets.push({kind:'wheel',x:p.x,y:p.y,r:Math.max(30,p.s)});label(p.x,p.y-p.s,'ANCIENT SLUICE',flow?'Waterway restored':'Redirect water · 3');}
-function label(x,y,title,sub){ctx.textAlign='center';ctx.font='8px sans-serif';ctx.letterSpacing='2px';ctx.fillStyle='#ecedce';ctx.fillText(title,x,y);ctx.letterSpacing='0px';ctx.font='italic 10px Georgia';ctx.fillStyle='#d1dfc4bb';ctx.fillText(sub,x,y+17);}
-function render(){t++;targets.length=0;const speed=.085;if(playing&&!document.querySelector('.modal:not([hidden])')){if(keys.w||keys.arrowup)pz=Math.min(9,pz+speed);if(keys.s||keys.arrowdown)pz=Math.max(-4,pz-speed);if(keys.a)px=Math.max(-7,px-speed);if(keys.d)px=Math.min(7,px+speed);if(keys.arrowleft)yaw=Math.max(-.5,yaw-.009);if(keys.arrowright)yaw=Math.min(.5,yaw+.009);}
-const sky=ctx.createLinearGradient(0,0,0,H*.6);sky.addColorStop(0,'#8ab7b4');sky.addColorStop(.45,'#c6d4b9');sky.addColorStop(1,'#e0dfbc');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);ctx.fillStyle='#f2e5bc';ctx.beginPath();ctx.arc(W*.65-yaw*W*.4,H*.2,W*.045,0,7);ctx.fill();for(let layer=0;layer<3;layer++){for(const m of mountains){const x=(m.x-yaw*.2)*W;poly([[x-m.w*W,H*.48],[x-m.w*W*.6,H*(.46-m.h*.6)+layer*H*.035],[x-m.w*W*.25,H*(.43-m.h)+layer*H*.035],[x+m.w*W*.18,H*(.44-m.h*.9)+layer*H*.035],[x+m.w*W*.7,H*.48]],['#a3b9a0','#839f8f','#6e9386'][layer]);}}
-const water=ctx.createLinearGradient(0,H*.46,0,H);water.addColorStop(0,'#7eafa0');water.addColorStop(.45,'#3f827a');water.addColorStop(1,'#163f40');ctx.fillStyle=water;ctx.fillRect(0,H*.46,W,H*.54);for(let i=0;i<160;i++){const y=H*.47+Math.pow(i/160,1.7)*H*.53;const xx=(Math.sin(i*28.1)*.5+.5)*W;ctx.strokeStyle=`rgba(190,219,182,${.05+(i%7)*.013})`;ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(xx+Math.sin(t*.008+i)*10,y);ctx.lineTo(xx+20+(i/160)*90,y);ctx.stroke();}
-// Distant terraces, shrine silhouettes, and the living water system.
-temple(-13,53,1.9,3);temple(15,58,2,3);box(-5,0,45,12,5,5,'#718e78');waterfall(-5,42,5,2.3);temple(-5,46,1.3,2);box(9,0,37,8,4,3,'#6c856d');waterfall(9,35,4,2);temple(10,40,1.2,3);arch(0,29);temple(-10,24,1.1,2);temple(11,24,1.2,2);
-// Submerged pathway.
-for(let i=9;i>=0;i--){const z=5+i*1.85;box(-.5+Math.sin(i*.5)*.7,-.25,z,2.1,.32,1.4,'#8c9676');}
-rock(4.7,15,2,1);wheel();if(flow){waterfall(3.8,14.8,1.4,1.1);for(let i=0;i<10;i++){const p=project(3.7-i*.55,0,14-i*.5);if(p){ctx.strokeStyle='#8fffe896';ctx.beginPath();ctx.ellipse(p.x,p.y,20+i*2,3,0,0,7);ctx.stroke();}}}
-plants.sort((a,b)=>b.z-a.z);for(const p of plants){if(p.kind>.5)lotus(p.x,p.z,p.s,p.phase);else{const a=project(p.x,0,p.z);if(a){ctx.strokeStyle='#668d64';ctx.lineWidth=Math.max(1,a.s*.025);for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(a.x+i*3,a.y);ctx.quadraticCurveTo(a.x-8+i*6,a.y-a.s*p.s,a.x+Math.sin(i+1)*a.s*p.s,a.y-a.s*p.s*2);ctx.stroke();}}}}
-lotus(-2.9,10,.4,0,true);const lp=project(-2.9,.85,10);if(lp)label(lp.x,lp.y-24,'LUMINOUS LOTUS',photo?'Specimen documented':'Observe with camera · 2');
-if(flow){const p=project(0,2.1,26);if(p){ctx.save();ctx.globalAlpha=.6+Math.sin(t*.03)*.2;ctx.shadowColor='#a1fff2';ctx.shadowBlur=30;ctx.strokeStyle='#b1ffed';ctx.lineWidth=2;ctx.beginPath();ctx.arc(p.x,p.y,p.s*.8,0,7);ctx.stroke();ctx.beginPath();ctx.moveTo(p.x,p.y-p.s*.5);ctx.lineTo(p.x,p.y+p.s*.5);ctx.moveTo(p.x-p.s*.5,p.y);ctx.lineTo(p.x+p.s*.5,p.y);ctx.stroke();ctx.restore();targets.push({kind:'memory',x:p.x,y:p.y,r:Math.max(40,p.s)});label(p.x,p.y-p.s*1.2,'THE SANCTUARY REMEMBERS','Approach the echo · click');}}
-// Near banks frame the water, with trailing leaves.
-rock(-8,5,5,.8);rock(9,5,4,.6);for(let i=0;i<12;i++)lotus(-7+i*.45,5+(i%3),.25,i);for(let i=0;i<16;i++){let x=W*(.77+i*.02);ctx.strokeStyle='#2c5546';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,-10);ctx.quadraticCurveTo(x-50,H*.07,x-30,H*(.04+(i%4)*.025));ctx.stroke();ctx.fillStyle=i%3?'#416a4e':'#728560';for(let j=0;j<4;j++){ctx.beginPath();ctx.ellipse(x-18-j*5,H*.012+j*12,12,4,-.7,0,7);ctx.fill();}}
-for(const m of motes){ctx.fillStyle=`rgba(223,239,174,${.2+Math.sin(t*.02+m.phase)*.2})`;ctx.beginPath();ctx.arc((m.x*W+Math.sin(t*.003+m.phase)*30),m.y*H*.8+Math.cos(t*.005+m.phase)*15,m.s,0,7);ctx.fill();}
-// Staff in the player's hand.
-if(playing&&mode==='staff'){ctx.save();ctx.translate(W*.78,H*.93+Math.sin(t*.03)*3);ctx.rotate(.2);ctx.strokeStyle='#9e8d58';ctx.lineWidth=12;ctx.beginPath();ctx.moveTo(0,100);ctx.lineTo(0,-125);ctx.stroke();ctx.strokeStyle='#cbb782';ctx.lineWidth=5;ctx.beginPath();ctx.arc(0,-150,32,0,7);ctx.stroke();const g=ctx.createRadialGradient(0,-150,1,0,-150,31);g.addColorStop(0,'#e7fff2');g.addColorStop(.3,'#8be7d6');g.addColorStop(1,'#3a9b9c22');ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,-150,27,0,7);ctx.fill();ctx.restore();}
-requestAnimationFrame(render);}render();
-let toastTimer;function toast(msg){const el=document.querySelector('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3800);}
-function start(){if(playing)return;playing=true;document.body.classList.add('playing');document.querySelector('#hint').innerHTML='<span>✧</span> Select the camera and click the luminous lotus';toast('Welcome home, researcher. Use WASD to explore; arrows to look.');}
-function setMode(m){start();mode=m;document.querySelectorAll('.tool').forEach(e=>e.classList.toggle('active',e.id===m));document.querySelector('#camera-frame').hidden=m!=='camera';document.querySelector('#hint').innerHTML='<span>✧</span> '+({explore:'Follow the water. Click a glowing discovery.',camera:'Click the luminous lotus to document its habitat.',staff:'Click the golden sluice wheel to redirect the water.'}[m]||'');}
-function complete(task){document.querySelector(`[data-task="${task}"]`).classList.add('done');document.querySelector(`[data-task="${task}"] i`).textContent='✓';document.querySelector('#progress').textContent=String([photo,flow,remembered].filter(Boolean).length).padStart(2,'0')+' / 03';}
-function interact(kind){if(kind==='lotus'){if(mode!=='camera'){toast('This organism is unfamiliar. Select Camera (2) to study it.');return;}photo=true;complete('photo');document.querySelector('#journal-dot').hidden=false;document.querySelector('#camera-label').textContent='Nymphaea luminosa · documented';toast('Specimen documented. Its light responds to flowing water.');document.querySelector('#journal').hidden=false;}if(kind==='wheel'){if(!photo){toast('Study the luminous lotus first. Observation reveals the way.');return;}if(mode!=='staff'){toast('Select Water staff (3) to turn the ancient sluice.');return;}if(flow){toast('The waterway is flowing. The archive beneath the gate is awake.');return;}flow=true;complete('water');toast('Waterway restored. A memory is stirring beneath the gate.');document.querySelector('#hint').innerHTML='<span>✧</span> Click the luminous echo beneath the sanctuary gate';}if(kind==='memory'){if(!flow)return;remembered=true;complete('memory');document.querySelector('#memory').hidden=false;}}
-canvas.addEventListener('click',e=>{if(!playing){start();return;}let candidates=targets.filter(v=>Math.hypot(v.x-e.clientX,v.y-e.clientY)<v.r);if(candidates.length)interact(candidates[0].kind);else toast(mode==='camera'?'Frame the glowing lotus on the left side of the path.':mode==='staff'?'The golden sluice wheel controls this waterway.':'Look for the luminous lotus, the sluice wheel, or the archive echo.');});
-document.querySelector('#begin').onclick=start;for(const id of ['explore','camera','staff'])document.querySelector('#'+id).onclick=()=>setMode(id);
-document.querySelector('#notes').onclick=()=>{if(!photo){toast('Your journal is empty. Photograph a species to begin.');return;}document.querySelector('#journal').hidden=false;document.querySelector('#journal-dot').hidden=true;};document.querySelector('.close').onclick=()=>document.querySelector('#journal').hidden=true;
-document.querySelectorAll('.choice').forEach(b=>b.onclick=()=>{ending=true;document.querySelector('#memory').hidden=true;document.querySelector('.objective h2').textContent='A new beginning';document.querySelector('.objective p').textContent=b.dataset.choice+'. The sanctuary will remember your choice.';document.querySelector('#hint').innerHTML='<span>✧</span> Chapter complete. A world changed. A home rediscovered.';toast('Choice recorded: '+b.dataset.choice+'. Continue exploring the sanctuary.');});
-addEventListener('keydown',e=>{if(['INPUT','TEXTAREA'].includes(e.target.tagName))return;keys[e.key.toLowerCase()]=true;if(e.key.startsWith('Arrow')||e.key===' ')e.preventDefault();if(e.key==='1')setMode('explore');if(e.key==='2')setMode('camera');if(e.key==='3')setMode('staff');if(e.key.toLowerCase()==='j')document.querySelector('#notes').click();if(e.key==='Escape')document.querySelectorAll('.modal').forEach(m=>m.hidden=true);});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);addEventListener('blur',()=>Object.keys(keys).forEach(k=>keys[k]=false));
-let audio,oscillators=[],sound=false;
-document.querySelector('#sound').onclick=async()=>{
-  const button=document.querySelector('#sound');
-  try {
-    const Audio=window.AudioContext||window.webkitAudioContext;
-    if(!Audio) throw new Error('Audio is unavailable');
-    if(!audio){
-      audio=new Audio();
-      const gain=audio.createGain();gain.gain.value=.025;gain.connect(audio.destination);
-      for(const hz of [130.81,196,261.63]){
-        const o=audio.createOscillator();o.frequency.value=hz;o.type='sine';
-        o.connect(gain);o.start();oscillators.push(o);
+<body data-season="autumn"><div id="load-status" class="load-status" role="status">The river is finding its way…<p>If this message remains, open this file in a browser with JavaScript enabled.</p><noscript>This journey needs JavaScript to run.</noscript></div>
+<canvas id="world" aria-label="A painted landscape. Click or tap the ground to walk, or use WASD and arrow keys."></canvas><div class="paper"></div><div class="camera-vignette" id="camera-vignette"></div><div class="flash-layer" id="flash"></div>
+<svg hidden aria-hidden="true"><defs><symbol id="i-sound" viewBox="0 0 24 24"><path d="M10 5 5 9H2v6h3l5 4zM14 8c3 2 3 6 0 8M17 5c5 4 5 10 0 14"/></symbol><symbol id="i-journal" viewBox="0 0 24 24"><path d="M4 4h13a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2V4Zm0 12h15M8 7h7M8 10h5"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M3 7h4l2-3h6l2 3h4v13H3z"/><circle cx="12" cy="13" r="4"/></symbol><symbol id="i-staff" viewBox="0 0 24 24"><path d="m7 22 6-12"/><circle cx="15" cy="6" r="5"/><path d="M15 3s-4 4 0 5c4-1 0-5 0-5Z"/></symbol><symbol id="i-walk" viewBox="0 0 24 24"><path d="m10 22 2-7-4-4 2-6M5 12l3-1m4-3 4 4h4m-8 3 5 7"/><circle cx="12" cy="3" r="2"/></symbol><symbol id="i-expand" viewBox="0 0 24 24"><path d="M3 9V3h6m6 0h6v6M3 15v6h6m6 0h6v-6"/></symbol><symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/></symbol><symbol id="i-season" viewBox="0 0 24 24"><path d="M19 4C8 3 3 6 5 13s13 5 14-9Zm-1 2L5 20m5-7-1-4m4 1h4"/></symbol></defs></svg>
+<header><a class="wordmark" href="#world" aria-label="There Are Rivers in the Sky"><svg viewBox="0 0 30 34" fill="none" aria-hidden="true"><path d="M15 2 28 9v16l-13 7L2 25V9Z" stroke="currentColor" stroke-width=".8"/><path d="M7 14c5-8 11 8 16 0M7 20c5-8 11 8 16 0" stroke="currentColor" stroke-width="1"/></svg><span>RIVERS<br>IN THE SKY</span></a><div class="chapter-mark">A SMALL JOURNEY THROUGH A CHANGED WORLD</div><nav class="header-actions" aria-label="Journey settings"><button id="season" class="circle-button" aria-label="Change season" title="Change season"><svg><use href="#i-season"/></svg></button><button id="sound" class="circle-button" aria-label="Enable sound" aria-pressed="false" title="Sound · M"><svg><use href="#i-sound"/></svg></button><button id="notes" class="circle-button" aria-label="Open field journal" title="Field journal · J"><svg><use href="#i-journal"/></svg></button><button id="fullscreen" class="circle-button" aria-label="Enter fullscreen" title="Fullscreen"><svg><use href="#i-expand"/></svg></button><button id="about" class="circle-button" aria-label="How to play" title="How to play"><svg><use href="#i-info"/></svg></button></nav></header>
+<main><section class="intro"><div class="eyebrow">AN ECOLOGICAL EXPLORATION</div><h1>There are rivers<span>in the <em>sky.</em></span></h1><p>The world has changed.<br>Perhaps home was never a place to return to,<br>but something to learn again.</p><div class="intro-rule"></div></section><div class="intro-side">WANDER SLOWLY · NOTICE THE SMALL THINGS</div><section class="entry"><button id="begin" class="begin">Follow the water <span>→</span></button><p>A quiet journey. Best experienced with sound.</p></section>
+<div class="play-ui"><aside class="field-note"><div class="eyebrow" id="chapter">I — THE LISTENING GARDEN</div><h2 id="objective">Follow a quiet light.</h2><p id="objective-detail">A lotus glows beside the water.<br>Perhaps it has something to tell you.</p><div class="steps" aria-label="Journey progress"><i id="step-photo"></i><span></span><i id="step-water"></i><span></span><i id="step-memory"></i></div><span id="progress" hidden>0 / 3</span></aside>
+<div id="landmarks"><button class="landmark" id="landmark-lotus" aria-label="Walk to luminous lotus" data-label="A quiet light"></button><button class="landmark" id="landmark-wheel" aria-label="Walk to ancient sluice" data-label="An old waterway"></button><button class="landmark" id="landmark-memory" aria-label="Walk to memory echo" data-label="Something remembers" hidden></button></div><div id="word-motes"></div>
+<div id="poem" class="poem" aria-live="polite"></div><div id="action-area" class="action-area" hidden><button id="interact" class="context-action"><span id="action-label">Observe</span><kbd>E</kbd></button><p id="action-caption" class="action-caption"></p></div>
+<div class="mini-poem"><span id="word-count">0 / 6 WORDS FOUND</span></div><nav class="hud" aria-label="Exploration tools"><button id="explore" class="tool active" aria-pressed="true"><svg><use href="#i-walk"/></svg>Wander <small>1</small></button><button id="camera" class="tool" aria-pressed="false"><svg><use href="#i-camera"/></svg>Camera <small>2</small></button><button id="staff" class="tool" aria-pressed="false"><svg><use href="#i-staff"/></svg>Water staff <small>3</small></button></nav><div class="walk-hint">CLICK & HOLD TO WANDER<br>WASD / ARROWS TO MOVE</div></div>
+<div id="toast" class="toast" role="status"></div><div id="viewfinder" class="viewfinder" hidden><span>FIELD STUDY · NYMPHAEA LUMINOSA</span></div>
+<section id="journal" class="overlay" hidden aria-label="Field journal" role="dialog" aria-modal="true"><article class="panel"><button class="panel-close" aria-label="Close journal">×</button><div class="eyebrow">A RESEARCHER'S FIELD JOURNAL</div><h2 id="journal-title">Every small thing<br>holds a story.</h2><div id="specimen" hidden><svg class="lotus-study" viewBox="0 0 180 110" aria-hidden="true"><ellipse cx="90" cy="90" rx="65" ry="11" fill="#d2dec44a"/><path d="M90 87C54 83 23 63 27 43c29-2 48 11 63 44Z"/><path d="M90 87C53 63 45 27 59 17c24 15 32 36 31 70Z"/><path d="M90 87C74 58 71 18 90 5c19 13 16 53 0 82Z" fill="#f0dfd5"/><path d="M90 87c37-24 45-60 31-70-24 15-32 36-31 70Z"/><path d="M90 87c36-4 67-24 63-44-29-2-48 11-63 44Z"/><ellipse cx="90" cy="83" rx="12" ry="5" fill="#d4c38d"/></svg><h3>Nymphaea luminosa</h3><p>The lotus shelters a luminous colony of cyanobacteria. Its light grows stronger near flowing water. The old channels are a living circulatory system, waiting for a pulse.</p><div class="specimen-label">OBSERVED IN THE FLOODED SANCTUARY · SPECIMEN 001</div></div><p id="journal-empty" class="italic">Nothing recorded, yet.<br>Walk toward the light beside the water.<br>Raise your camera. Take your time.</p><div class="journal-divider"></div><div class="eyebrow">WORDS THE WORLD LEFT BEHIND <span id="journal-count">0 / 6</span></div><div id="journal-words" class="journal-words"></div><p id="journal-poem" class="italic" hidden></p></article></section>
+<section id="memory" class="overlay" hidden aria-label="Sanctuary memory" role="dialog" aria-modal="true"><article class="panel"><button class="panel-close" aria-label="Close memory">×</button><div class="eyebrow">THE SANCTUARY REMEMBERS</div><h2>We did not leave<br>an empty world.</h2><p class="italic">“We built these gardens to hold back the sea.<br>But the water brought a new kind of life.</p><p class="italic">If you come home someday, do not mistake<br>what has changed for what has been lost.”</p><p class="signature">— A voice from the sanctuary archive</p><div class="choice-label">WHAT WILL YOU LEAVE FOR THOSE WHO FOLLOW?</div><button class="choice" data-choice="flourish">Let this new world flourish <span>→</span></button><button class="choice secondary" data-choice="coexist">Find a way to live together <span>→</span></button></article></section>
+<section id="ending" class="overlay" hidden aria-label="Journey complete" role="dialog" aria-modal="true"><article class="panel"><div class="eyebrow">A SMALL JOURNEY. A NEW BEGINNING.</div><h2>The river remembers.</h2><p class="ending-poem">Where the water wanders,<br>the world learns to bloom.<br>And we learn to belong.</p><p id="ending-choice"></p><button class="choice" id="continue">Stay a little longer <span>→</span></button><button class="choice secondary" id="restart">Begin again <span>↺</span></button></article></section>
+<section id="help" class="overlay" hidden aria-label="How to play" role="dialog" aria-modal="true"><article class="panel"><button class="panel-close" aria-label="Close help">×</button><div class="eyebrow">THERE IS NO NEED TO HURRY</div><h2>A world to wander.</h2><p>Follow the lights. Photograph a lotus, return water to an old channel, and discover a memory of the people who came before you. Gather the words drifting through the garden.</p><div class="about-controls"><div><b>WANDER</b>Click or tap the ground.<br>Hold & drag to guide.<br>WASD / arrow keys also work.</div><div><b>NOTICE</b>Click a light to walk to it.<br>E / the action button to interact.<br>1 · Wander, 2 · Camera, 3 · Staff.</div><div><b>REFLECT</b>J · Field journal<br>Escape · Close a page<br>M · Sound on / off</div><div><b>CHANGE</b>The leaf changes the season.<br>Your discoveries bring the<br>garden back into bloom.</div></div><p class="about-credit">An original ecological exploration, with the contemplative spirit of Wayfinder as a design reference. All landscapes, words, and sounds are created for this prototype.</p><button class="choice" id="help-close">Return to the river <span>→</span></button></article></section>
+</main><div class="colophon">A WORLD REBORN <span> / </span> A HOME REDISCOVERED</div><div class="version">THE LOTUS SANCTUARY · 01</div><script id="rivers-game">
+/* Original procedural landscape. No image, font, or network dependencies. */
+(() => {
+  'use strict';
+  window.createRiversScene = function createRiversScene(canvas) {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('Canvas 2D is unavailable');
+    let width = 1, height = 1, scale = 24, camera = {x: -1, z: -2};
+    let lastState = null;
+    const landmarks = {lotus: {x: -11, z: 0, h: .1}, wheel: {x: 7, z: -5, h: 1.1}, memory: {x: 0, z: -15, h: 2}};
+    let seed = 7321;
+    function random() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+    const between = (a,b) => a + (b-a)*random();
+    const foliage = [];
+    const grasses = [];
+    const stones = [];
+    const flecks = [];
+    const trees = [];
+    const clearings = [{x:-11,z:0,r:5.8},{x:7,z:-5,r:4.8},{x:0,z:-15,r:6.3},{x:-6,z:8,r:4}];
+    for (let i=0; i<100; i++) {
+      const x=between(-29,29),z=between(-25,23);
+      if(clearings.some(c=>Math.hypot(x-c.x,(z-c.z)*.8)<c.r)) continue;
+      // Trees follow the edge of the valley, leaving the central paths open.
+      if(Math.abs(x)<9 && z>-12 && z<17) continue;
+      trees.push({x,z,s:between(.75,1.55),seed:random(),lean:between(-.16,.16),kind:random(),dots:Array.from({length:22},()=>({x:between(-1,1),y:between(-1,1),r:between(.13,.38)}))});
+    }
+    for(let i=0;i<620;i++) grasses.push({x:between(-31,31),z:between(-27,25),r:between(.025,.075),a:random(),t:random()});
+    for(let i=0;i<33;i++) stones.push({x:between(-25,25),z:between(-22,23),s:between(.2,.7),r:random()});
+    for(let i=0;i<42;i++) foliage.push({x:between(-31,31),z:between(-28,24),rx:between(2,6),rz:between(1.6,4),tone:random()});
+    for(let i=0;i<34;i++) flecks.push({x:random(),y:random(),phase:between(0,Math.PI*2),size:between(.7,2),speed:between(.3,1)});
+    const texture = document.createElement('canvas'); texture.width=texture.height=256;
+    const tx=texture.getContext('2d');
+    for(let i=0;i<6500;i++){tx.fillStyle=i%2?'rgba(83,68,38,.055)':'rgba(255,255,246,.12)';tx.fillRect(random()*256,random()*256,random()<.8?1:2,1);}
+    const paper = ctx.createPattern(texture,'repeat');
+    const palettes = {
+      spring: {paper:'#eeeedf',land:'#d9dfb9',light:'#e5e8c7',grass:'#a0b37a',tree:['#7b9b71','#a2b684','#b9c99c','#89a381'],accent:'#d9b987',water:'#8bbeb3',deep:'#68a89f',flower:'#d6abb7'},
+      summer: {paper:'#eee9d8',land:'#d8ddb2',light:'#e8e5bc',grass:'#99ac73',tree:['#7d9e71','#9eb385','#bcc79a','#91ab7d'],accent:'#d5b675',water:'#8cbfb2',deep:'#65a69c',flower:'#d5a0a6'},
+      autumn: {paper:'#f1ebdc',land:'#dedbb4',light:'#eee5c6',grass:'#b4b581',tree:['#ada779','#c1b184','#d3bc86','#91a381'],accent:'#cc9b65',water:'#8fb9ac',deep:'#72a69f',flower:'#d7a3ae'}
+    };
+    function resize(){
+      width=canvas.clientWidth||innerWidth||1;height=canvas.clientHeight||innerHeight||1;
+      const ratio=Math.min(window.devicePixelRatio||1,2);
+      canvas.width=Math.round(width*ratio);canvas.height=Math.round(height*ratio);
+      ctx.setTransform(ratio,0,0,ratio,0,0);
+      scale=Math.max(14,Math.min(31,width/(width<600?29:46)));
+    }
+    function worldToScreen(x,z,h=0){return{x:width*.5+(x-camera.x)*scale,y:height*.59+(z-camera.z)*scale*.54-h*scale};}
+    function screenToWorld(x,y){return{x:(x-width*.5)/scale+camera.x,z:(y-height*.59)/(scale*.54)+camera.z};}
+    function worldSpace(fn){ctx.save();const p=worldToScreen(0,0);ctx.translate(p.x,p.y);ctx.scale(scale,scale*.54);fn();ctx.restore();}
+    function smoothPath(points,closed=false){
+      ctx.beginPath();
+      if(closed){const prev=points[points.length-1],first=points[0];ctx.moveTo((prev[0]+first[0])/2,(prev[1]+first[1])/2);points.forEach((p,i)=>{const next=points[(i+1)%points.length];ctx.quadraticCurveTo(p[0],p[1],(p[0]+next[0])/2,(p[1]+next[1])/2);});ctx.closePath();}
+      else {ctx.moveTo(...points[0]);for(let i=1;i<points.length-1;i++){const p=points[i],n=points[i+1];ctx.quadraticCurveTo(p[0],p[1],(p[0]+n[0])/2,(p[1]+n[1])/2);}ctx.lineTo(...points[points.length-1]);}
+    }
+    function ellipse(x,y,rx,ry,color,angle=0){ctx.fillStyle=color;ctx.beginPath();ctx.ellipse(x,y,rx,ry,angle,0,Math.PI*2);ctx.fill();}
+    function softPatch(x,z,rx,rz,color,opacity=1){const p=worldToScreen(x,z);ctx.save();ctx.globalAlpha=opacity;ctx.translate(p.x,p.y);ctx.scale(rx,rz*.54);const g=ctx.createRadialGradient(0,0,0,0,0,scale);g.addColorStop(0,color);g.addColorStop(.65,color);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(-scale,-scale,scale*2,scale*2);ctx.restore();}
+    function ground(p,state){
+      ctx.fillStyle=p.paper;ctx.fillRect(0,0,width,height);
+      // A faint hill wash keeps the field open and papery at the horizon.
+      const haze=ctx.createLinearGradient(0,height*.22,0,height);haze.addColorStop(0,p.paper);haze.addColorStop(1,'#e4dfc8');ctx.fillStyle=haze;ctx.fillRect(0,0,width,height);
+      softPatch(-25,-28,14,7,'#bcc5a6',.38);softPatch(23,-30,15,7,'#c5c5a4',.3);
+      worldSpace(()=>{
+        const boundary=[[-38,18],[-36,-4],[-29,-19],[-15,-27],[4,-29],[24,-23],[35,-7],[39,14],[21,30],[1,33],[-23,29]];
+        smoothPath(boundary,true);ctx.fillStyle='#aeb6a41a';ctx.fill();
+        ctx.save();ctx.translate(0,-.7);smoothPath(boundary,true);ctx.fillStyle=p.land;ctx.fill();ctx.clip();
+        for(const patch of foliage){ctx.globalAlpha=.14;ellipse(patch.x,patch.z,patch.rx,patch.rz,patch.tone>.4?p.light:p.grass,patch.tone);}
+        ctx.globalAlpha=1;
+        // Meandering footpaths are washes rather than sharply outlined roads.
+        smoothPath([[-14,22],[-6,10],[-7,3],[-6,-2],[0,-9],[0,-17]]);ctx.strokeStyle=p.light;ctx.lineWidth=2.8;ctx.lineCap='round';ctx.stroke();
+        smoothPath([[-6,3],[-11,0],[-17,-4]]);ctx.lineWidth=1.5;ctx.stroke();
+        smoothPath([[0,-8],[8,-5],[17,-7]]);ctx.lineWidth=1.6;ctx.stroke();
+        for(const g of grasses){ctx.globalAlpha=.24+g.a*.2;ellipse(g.x,g.z,g.r*1.8,g.r,g.t>.48?p.grass:'#f9efcc');}
+        ctx.restore();
+      });
+      drawWater(p,state);
+      // A loose scattering of wildflowers and grass strokes gives scale to the valley.
+      for(const g of grasses){if(g.t<.77)continue;const s=worldToScreen(g.x,g.z);if(s.x<-10||s.x>width+10||s.y<-10||s.y>height+10)continue;ctx.strokeStyle=g.t>.9?'#97a4757a':'#b6b78488';ctx.lineWidth=.65;ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(s.x+2,s.y-5);ctx.moveTo(s.x+2,s.y-1);ctx.lineTo(s.x+4,s.y-7);ctx.stroke();if(g.a>.65)ellipse(s.x+4,s.y-7,1.4,1.4,p.flower);}
+    }
+    const river=[[-1,-34],[8,-27],[14,-18],[12,-10],[7,-7],[1,-2],[-4,4],[-3,12],[4,19],[9,32]];
+    function drawWater(p,state){
+      worldSpace(()=>{
+        smoothPath(river);ctx.lineCap=ctx.lineJoin='round';ctx.strokeStyle='#d6cdab';ctx.lineWidth=7.8;ctx.stroke();
+        smoothPath(river);ctx.strokeStyle='#b3c4aa';ctx.lineWidth=7.2;ctx.stroke();
+        smoothPath(river);ctx.strokeStyle=p.water;ctx.lineWidth=6.7;ctx.stroke();
+        smoothPath(river);ctx.strokeStyle=state.restored?'#a7d3bc':'#a8c7b5';ctx.lineWidth=3.9;ctx.globalAlpha=.4;ctx.stroke();ctx.globalAlpha=1;
+        const channel=[[-1,-3],[-6,-5],[-10,-3],[-11,0]];
+        smoothPath(channel);ctx.strokeStyle='#c3be99';ctx.lineWidth=1.6;ctx.stroke();
+        smoothPath(channel);ctx.strokeStyle=state.restored?p.water:'#b6c2a5';ctx.lineWidth=1.05;ctx.stroke();
+        ellipse(-11,0,4.1,3.3,'#c5c7a1');ellipse(-11,-.15,3.8,3.05,state.restored?'#9bc8b1':'#a1c0ac');ellipse(-11,-.2,2.9,2.2,'#a8c9b3');
+      });
+      // Small horizontal gleams drift downriver without heavy shader effects.
+      ctx.save();ctx.globalAlpha=.35;ctx.strokeStyle='#e4ead0';ctx.lineWidth=.9;
+      for(let i=0;i<37;i++){
+        const z=-28+((i*1.7+state.time*.14)%58);let x;
+        if(z<-18)x=8+(z+27)*.52;else if(z<-9)x=13;else if(z<3)x=11-(z+9)*1.12;else if(z<12)x=-3;else x=-3+(z-12)*.65;
+        const q=worldToScreen(x+Math.sin(i*7)*1.6,z);ctx.beginPath();ctx.moveTo(q.x-2,q.y);ctx.lineTo(q.x+3+(i%4)*2,q.y);ctx.stroke();
+      }
+      const q=worldToScreen(-11,0);for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(q.x,q.y,(1.8+i*.65)*scale,(.65+i*.3)*scale*.54,0,0,7);ctx.stroke();}ctx.restore();
+    }
+    function shrub(x,z,s,p){const q=worldToScreen(x,z);ellipse(q.x+scale*s*.18,q.y+scale*.13,scale*s*.7,scale*s*.19,'#697c5520');for(let i=0;i<5;i++)ellipse(q.x+Math.sin(i*5)*scale*s*.4,q.y-scale*s*(.13+(i%3)*.16),scale*s*.37,scale*s*.28,p.tree[i%4],i*.2);}
+    function tree(o,p,state){
+      const q=worldToScreen(o.x,o.z),s=scale*o.s;
+      if(q.x<-s*3||q.x>width+s*3||q.y<-s*6||q.y>height+s*4)return;
+      ellipse(q.x+s*.7,q.y+s*.35,s*1.25,s*.34,'#70805c15',-.2);
+      ctx.save();ctx.translate(q.x,q.y);const sway=state.reducedMotion?0:Math.sin(state.time*.65+o.seed*8)*.018;ctx.rotate(o.lean+sway);
+      ctx.strokeStyle='#8b8262';ctx.lineWidth=s*.13;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(-s*.1,-s*2.5);ctx.stroke();
+      ctx.lineWidth=s*.055;ctx.beginPath();ctx.moveTo(0,-s*.9);ctx.lineTo(-s*.65,-s*2.1);ctx.moveTo(-s*.05,-s*1.3);ctx.lineTo(s*.65,-s*2.5);ctx.stroke();
+      const color=p.tree[Math.floor(o.seed*4)];
+      if(o.kind>.77){ // slender cypress forms among the rounded broadleaf trees
+        ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(0,-s*4.4);ctx.bezierCurveTo(-s*1.1,-s*2.7,-s*.85,-s*1.1,0,-s*.9);ctx.bezierCurveTo(s*.8,-s*1.2,s*.95,-s*3,0,-s*4.4);ctx.fill();
+        ellipse(-s*.15,-s*2.5,s*.36,s*1.15,p.tree[(Math.floor(o.seed*4)+1)%4]);
+      }else{
+        ellipse(0,-s*2.3,s*1.12,s*1.4,color);
+        for(const f of o.dots){const dx=f.x*s*.97,dy=-s*2.35+f.y*s*1.17;ellipse(dx,dy,f.r*s*1.4,f.r*s*1.2,p.tree[Math.floor((f.x+1)*1.8)%4]);}
+        // A few dry brush marks break the edge of the canopy.
+        ctx.globalAlpha=.4;for(let i=0;i<10;i++){const f=o.dots[i];ellipse(f.x*s*.86,-s*2.3+f.y*s,f.r*s*.17,f.r*s*.08,'#f0e7be',-.4);}ctx.globalAlpha=1;
+      }
+      ctx.restore();
+    }
+    function polygon(points,color){ctx.fillStyle=color;ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.fill();}
+    function quad(points,color){polygon(points.map(p=>worldToScreen(...p)),color);}
+    function block(x,z,w,d,h,color){
+      quad([[x-w/2,z+d/2,0],[x+w/2,z+d/2,0],[x+w/2,z+d/2,h],[x-w/2,z+d/2,h]],color);
+      quad([[x+w/2,z+d/2,0],[x+w/2,z-d/2,0],[x+w/2,z-d/2,h],[x+w/2,z+d/2,h]],'#9b9f83');
+      quad([[x-w/2,z-d/2,h],[x+w/2,z-d/2,h],[x+w/2,z+d/2,h],[x-w/2,z+d/2,h]],'#c4c1a0');
+    }
+    function ruin(p,state){
+      const q=worldToScreen(0,-15);ellipse(q.x+scale,q.y+scale*.6,scale*4.4,scale*1,'#6c7e5f12');
+      block(0,-15,8,3,.28,'#b3b397');
+      for(const side of [-1,1]){block(side*2.8,-15,1.15,1.2,5.5,'#afb197');block(side*2.8,-14.8,1.5,1.55,.55,'#a9ac8d');block(side*2.8,-15,1.4,1.4,4.6,'#aeb095');}
+      block(0,-15,6.8,1.45,5.7,'#b7b698');
+      // The lintel is drawn as a beam so that the arch remains genuinely open.
+      quad([[-3.4,-14.23,4.65],[3.4,-14.23,4.65],[3.4,-14.23,5.7],[-3.4,-14.23,5.7]],'#b4b395');
+      // Paint over the central block's face with the distant meadow through the opening.
+      // The beam above is intentionally the only filled part between the columns.
+      const left=worldToScreen(-2.2,-14.23,0),right=worldToScreen(2.2,-14.23,0),top=worldToScreen(0,-14.23,4.65);
+      ctx.save();ctx.beginPath();ctx.moveTo(left.x,left.y);ctx.lineTo(left.x,top.y+scale*.8);ctx.quadraticCurveTo(top.x,top.y-scale*.25,right.x,top.y+scale*.8);ctx.lineTo(right.x,right.y);ctx.closePath();ctx.clip();
+      const opening=ctx.createLinearGradient(0,top.y,0,left.y);opening.addColorStop(0,'#d6dbb5');opening.addColorStop(1,'#dce0bb');ctx.fillStyle=opening;ctx.fillRect(left.x,top.y-scale,right.x-left.x,left.y-top.y+scale);ctx.restore();
+      const roofZ=-15;
+      quad([[-4.4,roofZ-1,5.65],[-3.8,roofZ-1,6.1],[0,roofZ-1,6.85],[3.8,roofZ-1,6.1],[4.4,roofZ-1,5.65],[0,roofZ-1,6.15]],'#788c70');
+      quad([[-4.4,roofZ+1.4,5.65],[0,roofZ+1.4,6.15],[4.4,roofZ+1.4,5.65],[3.9,roofZ+1.4,5.4],[-3.9,roofZ+1.4,5.4]],'#879775');
+      quad([[0,roofZ-1,6.85],[3.8,roofZ-1,6.1],[4.4,roofZ+1.4,5.65],[0,roofZ+1.4,6.15]],'#9ca17c');
+      ctx.strokeStyle='#b8ad81';ctx.lineWidth=1;for(let i=0;i<4;i++){const a=worldToScreen(-3.9+i*.15,-13.57,5.55+i*.13),b=worldToScreen(3.9-i*.15,-13.57,5.55+i*.13);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
+      for(let i=0;i<14;i++)shrub(-3.7+i*.54,-15.6, .23+(i%3)*.06,p);
+      for(const side of [-1,1]){const a=worldToScreen(side*3,-14.2,5.2);ctx.strokeStyle='#809467';ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.bezierCurveTo(a.x+side*10,a.y+30,a.x-side*15,a.y+40,a.x+side*5,a.y+scale*3.8);ctx.stroke();for(let i=0;i<7;i++)ellipse(a.x+Math.sin(i*2)*7,a.y+i*scale*.45,4,2.5,p.tree[i%4],i);}
+      if(state.restored){const m=worldToScreen(0,-15,2);const glow=ctx.createRadialGradient(m.x,m.y,0,m.x,m.y,scale*2.8);glow.addColorStop(0,'#fff5c291');glow.addColorStop(1,'#f4e8a900');ctx.fillStyle=glow;ctx.fillRect(m.x-scale*3,m.y-scale*3,scale*6,scale*6);ctx.strokeStyle='#f7f4d5';ctx.lineWidth=1.2;ctx.beginPath();ctx.ellipse(m.x,m.y,scale*.55,scale*.8,0,0,7);ctx.stroke();marker(0,-15,2.1,state.time,true);}
+    }
+    function bridge(p){
+      const a=-5.4,b=3.4,z=1.2;
+      quad([[a,z-.65,.3],[b,z-.65,.3],[b,z+.65,.3],[a,z+.65,.3]],'#bca981');
+      for(let x=a;x<=b;x+=.48){const p1=worldToScreen(x,z-.65,.31),p2=worldToScreen(x,z+.65,.31);ctx.strokeStyle='#8b856780';ctx.lineWidth=.7;ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();}
+      for(const zz of [z-.73,z+.73]){for(let x=a;x<=b;x+=1.5){const p1=worldToScreen(x,zz,0),p2=worldToScreen(x,zz,1.05);ctx.strokeStyle='#9b8e6c';ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();}const p1=worldToScreen(a,zz,.92),p2=worldToScreen(b,zz,.92);ctx.strokeStyle='#ae9d75';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();}
+    }
+    function sluice(p,state){
+      block(7,-5,2.4,1,.6,'#b4ad8b');
+      const q=worldToScreen(7,-5,1.1),r=scale*.7;
+      ctx.save();ctx.translate(q.x,q.y);ctx.rotate(state.restored?state.time*.22:0);ctx.strokeStyle='#a58b59';ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,r,0,7);ctx.stroke();ctx.strokeStyle='#dac58c';ctx.lineWidth=1;ctx.beginPath();ctx.arc(0,0,r*.85,0,7);ctx.stroke();for(let i=0;i<8;i++){ctx.rotate(Math.PI/4);ctx.strokeStyle='#9b855b';ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(r,0);ctx.stroke();}ellipse(0,0,scale*.14,scale*.14,'#d2be83');ctx.restore();
+      if(!state.restored)marker(7,-5,2.3,state.time,false);
+      else{const q=worldToScreen(7,-4.7);ctx.strokeStyle='#e7edcf';ctx.lineWidth=.7;for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(q.x,q.y+i*5,scale*(.6+i*.1),scale*.13,0,0,7);ctx.stroke();}}
+    }
+    function lotusFlower(x,z,size,p,state,glowing=false){
+      const q=worldToScreen(x,z),r=scale*size;
+      ellipse(q.x,q.y,r*1.7,r*.5,'#779f7a',-.2);
+      const py=q.y-r*.4;
+      if(glowing){const g=ctx.createRadialGradient(q.x,py,0,q.x,py,r*5);g.addColorStop(0,'#e8f6ca9c');g.addColorStop(1,'#e6f4c600');ctx.fillStyle=g;ctx.fillRect(q.x-r*5,py-r*5,r*10,r*10);}
+      for(let i=0;i<5;i++){const a=Math.PI+(i/4)*Math.PI;ellipse(q.x+Math.cos(a)*r*.35,py+Math.sin(a)*r*.2,r*.23,r*.61,i%2?'#e7c9c2':p.flower,a+Math.PI/2);}
+      ellipse(q.x,py+r*.1,r*.18,r*.1,'#f3dfb4');
+    }
+    function lotusPool(p,state){
+      for(let i=0;i<9;i++){const a=i*2.399;lotusFlower(-11+Math.cos(a)*(1+i*.17),Math.sin(a)*(1+i*.14),.17+(i%3)*.035,p,state,false);}
+      lotusFlower(-11,0,.38,p,state,true);if(!state.photo)marker(-11,0,1.6,state.time,false);
+    }
+    function marker(x,z,h,time,bright){const q=worldToScreen(x,z,h);ctx.save();ctx.translate(q.x,q.y+Math.sin(time*1.5)*2);ctx.rotate(Math.PI/4);ctx.strokeStyle=bright?'#fffde5':'#f3ead0';ctx.lineWidth=1;ctx.strokeRect(-3,-3,6,6);ctx.restore();}
+    function rock(o){const q=worldToScreen(o.x,o.z);const r=scale*o.s;ellipse(q.x+r*.3,q.y+r*.15,r,r*.28,'#6d7e5b14');polygon([{x:q.x-r*.8,y:q.y},{x:q.x-r*.6,y:q.y-r*.55},{x:q.x+r*.3,y:q.y-r*.65},{x:q.x+r*.8,y:q.y-r*.1},{x:q.x+r*.6,y:q.y+r*.1}],o.r>.4?'#c0bca0':'#acb39b');}
+    function wanderer(player,state){
+      const q=worldToScreen(player.x,player.z),s=scale*.82,walk=player.moving&&!state.reducedMotion?Math.sin(state.time*10):0;
+      ellipse(q.x+s*.15,q.y+s*.06,s*.43,s*.14,'#5d6e4d26',-.1);
+      ctx.save();ctx.translate(q.x,q.y);const facing=typeof player.facing==='number'?player.facing:1;const flip=Math.cos(facing)>=0?1:-1;ctx.scale(flip,1);
+      ctx.strokeStyle='#6c6854';ctx.lineWidth=Math.max(1,s*.085);ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-s*.1,-s*.37);ctx.lineTo(-s*.1+walk*s*.11,-s*.03);ctx.moveTo(s*.1,-s*.37);ctx.lineTo(s*.1-walk*s*.11,-s*.03);ctx.stroke();
+      // Long cloth ribbon trails behind the traveller, moving gently even at rest.
+      ctx.strokeStyle='#bb765e';ctx.lineWidth=s*.12;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-s*.08,-s*1.08);ctx.bezierCurveTo(-s*.55,-s*.9,-s*.75,-s*1.12+Math.sin(state.time*2)*s*.08,-s*1.05,-s*.8+Math.sin(state.time*2+1)*s*.09);ctx.stroke();
+      ctx.fillStyle='#bd8265';ctx.beginPath();ctx.moveTo(-s*.15,-s*1.14);ctx.quadraticCurveTo(-s*.43,-s*.75,-s*.36,-s*.29);ctx.quadraticCurveTo(0,-s*.2,s*.4,-s*.34);ctx.lineTo(s*.23,-s*1.12);ctx.closePath();ctx.fill();
+      ctx.fillStyle='#d9a17d';ctx.beginPath();ctx.moveTo(s*.03,-s*1.1);ctx.lineTo(s*.32,-s*.36);ctx.lineTo(s*.04,-s*.34);ctx.closePath();ctx.fill();
+      ellipse(0,-s*1.35,s*.21,s*.24,'#6c6d5a');ellipse(s*.06,-s*1.3,s*.11,s*.14,'#ddc0a0');
+      ctx.strokeStyle='#b2a67c';ctx.lineWidth=s*.09;ctx.beginPath();ctx.moveTo(s*.4,-s*.74);ctx.lineTo(s*.49,s*.04);ctx.stroke();
+      ellipse(s*.43,-s*.78,s*.09,s*.09,'#e4d8ad');ctx.restore();
+      // Small pale ripples under the traveller keep water traversal legible.
+      if(player.moving && Math.abs(player.x+2)<2 && player.z>0){ctx.strokeStyle='#e4ead078';ctx.lineWidth=.7;ctx.beginPath();ctx.ellipse(q.x,q.y,scale*.5,scale*.13,0,0,7);ctx.stroke();}
+    }
+    function atmosphere(p,state){
+      ctx.save();ctx.globalAlpha=.42;
+      for(const f of flecks){const xx=(f.x*width+Math.sin(state.time*.13+f.phase)*50+width)%width,yy=(f.y*height+state.time*f.speed*2)%height;ctx.fillStyle=f.size>1.4?p.accent:'#fff8da';ctx.beginPath();ctx.ellipse(xx,yy,f.size*1.8,f.size*.65,Math.sin(f.phase+state.time*.2),0,7);ctx.fill();}
+      ctx.restore();
+      // Distant birds make the stillness feel inhabited.
+      ctx.save();ctx.strokeStyle='#7e8d7460';ctx.lineWidth=.8;
+      for(let i=0;i<5;i++){const x=(width*.68+i*22-state.time*2.5+width)%width,y=height*.22+Math.sin(i*3+state.time*.2)*18;ctx.beginPath();ctx.moveTo(x-4,y+1);ctx.quadraticCurveTo(x-2,y-2,x,y+1);ctx.quadraticCurveTo(x+2,y-2,x+4,y);ctx.stroke();}ctx.restore();
+      // Vignette with paper instead of black preserves a watercolor edge.
+      const edge=ctx.createRadialGradient(width*.5,height*.6,Math.min(width,height)*.22,width*.5,height*.6,Math.max(width,height)*.7);edge.addColorStop(0,'#f2ecdc00');edge.addColorStop(.75,'#f2ecdc00');edge.addColorStop(1,p.paper);ctx.fillStyle=edge;ctx.fillRect(0,0,width,height);
+      if(paper){ctx.save();ctx.globalAlpha=.42;ctx.fillStyle=paper;ctx.fillRect(0,0,width,height);ctx.restore();}
+    }
+    function render(state,dt){
+      lastState=state;
+      if(state.reducedMotion)state={...state,time:0};
+      const desired=state.started?{x:state.player.x*.88,z:state.player.z*.88-1}:{x:-1,z:-2};
+      const ease=state.reducedMotion?1:1-Math.exp(-Math.max(0,dt||.016)*2.2);camera.x+=(desired.x-camera.x)*ease;camera.z+=(desired.z-camera.z)*ease;
+      const p=palettes[state.season]||palettes.autumn;
+      ground(p,state);
+      const items=trees.map(o=>({z:o.z,draw:()=>tree(o,p,state)}));
+      for(const stone of stones)items.push({z:stone.z,draw:()=>rock(stone)});
+      items.push({z:-15,draw:()=>ruin(p,state)});
+      items.push({z:-5,draw:()=>sluice(p,state)});
+      items.push({z:0,draw:()=>lotusPool(p,state)});
+      items.push({z:1.2,draw:()=>bridge(p)});
+      items.push({z:state.player.z,draw:()=>wanderer(state.player,state)});
+      items.sort((a,b)=>a.z-b.z).forEach(item=>item.draw());
+      atmosphere(p,state);
+    }
+    function hitTest(x,y){
+      const matches=[];
+      for(const [name,point]of Object.entries(landmarks)){
+        if(name==='memory'&&!lastState?.restored)continue;
+        const q=worldToScreen(point.x,point.z,point.h),dist=Math.hypot(q.x-x,q.y-y);
+        const markerHeight={lotus:1.6,wheel:2.3,memory:2.1}[name];
+        const marker=worldToScreen(point.x,point.z,markerHeight);
+        const markerDistance=Math.hypot(marker.x-x,marker.y-y);
+        if(dist<Math.max(28,scale*(name==='memory'?1.7:1.35))||markerDistance<24)matches.push({name,dist:Math.min(dist,markerDistance)});
+      }
+      matches.sort((a,b)=>a.dist-b.dist);return matches[0]?.name||null;
+    }
+    resize();
+    return {render,worldToScreen,screenToWorld,resize,hitTest};
+  };
+})();
+
+
+/* A small original ecological journey. All progress stays in this session. */
+(() => {
+  'use strict';
+  const $ = selector => document.querySelector(selector);
+  const loadStatus = $('#load-status');
+  const canvas = $('#world');
+  let scene;
+  try { scene = window.createRiversScene(canvas); }
+  catch { loadStatus.textContent = 'This viewer cannot draw the landscape. Open index.html in a browser with Canvas and JavaScript enabled.'; return; }
+
+  const landmarks = {
+    lotus: {x:-11,z:0,h:1.6,name:'the luminous lotus'},
+    wheel: {x:7,z:-5,h:2.3,name:'the ancient sluice'},
+    memory: {x:0,z:-15,h:2.1,name:'the sanctuary echo'}
+  };
+  const words = [
+    {x:-8,z:5,text:'where'}, {x:-14,z:-3,text:'water'},
+    {x:-1,z:1,text:'wanders'}, {x:10,z:-9,text:'world'},
+    {x:3,z:-13,text:'bloom'}, {x:-2,z:-18,text:'belong'}
+  ];
+  const state = {
+    player:{x:-6,z:8,moving:false,facing:0}, time:0,
+    restored:false,photo:false,memory:false,started:false,
+    season:'autumn',pointer:{x:0,y:0},
+    reducedMotion:window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  };
+  let mode='explore',destination=null,pointerDown=false,near=null,chosen=null;
+  let lastFrame=0,contextKey='',toastTimer,poemTimer,lastFocus=null;
+  const keys=new Set(),foundWords=new Set();
+  const wordNodes=words.map((word,i)=>{
+    const button=document.createElement('button');
+    button.className='word-mote';button.textContent=word.text;
+    button.setAttribute('aria-label','Follow the word '+word.text);
+    button.onclick=()=>{if(state.started&&!modalOpen())destination={x:word.x,z:word.z};};
+    $('#word-motes').append(button);return button;
+  });
+
+  function toast(text){
+    $('#toast').textContent=text;$('#toast').classList.add('show');
+    clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),4200);
+  }
+  function showPoem(line){
+    $('#poem').textContent=line;$('#poem').classList.add('visible');
+    clearTimeout(poemTimer);poemTimer=setTimeout(()=>$('#poem').classList.remove('visible'),6000);
+  }
+  function modalOpen(){return $('.overlay:not([hidden])');}
+  function openPanel(id){
+    lastFocus=document.activeElement;
+    clearTimeout(toastTimer);$('#toast').classList.remove('show');
+    document.querySelectorAll('.overlay').forEach(el=>el.hidden=el.id!==id);
+    keys.clear();pointerDown=false;destination=null;
+    const panel=$('#'+id);panel.querySelector('button')?.focus({preventScroll:true});
+  }
+  function closePanels(){
+    document.querySelectorAll('.overlay').forEach(el=>el.hidden=true);
+    if(lastFocus?.isConnected)lastFocus.focus({preventScroll:true});
+    lastFocus=null;
+  }
+  function start(){
+    if(state.started)return;
+    state.started=true;document.body.classList.add('is-playing');
+    $('#begin').tabIndex=-1;
+    toast('Click or tap the ground to wander. Follow a small light.');
+    updateUi();
+  }
+  function setMode(next){
+    if(!state.started)start();
+    mode=next;
+    for(const name of ['explore','camera','staff']){
+      $('#'+name).classList.toggle('active',name===next);
+      $('#'+name).setAttribute('aria-pressed',String(name===next));
+    }
+    $('#camera-vignette').classList.toggle('visible',next==='camera');
+    $('#viewfinder').hidden=next!=='camera';
+    contextKey='';
+  }
+  function goTo(name){
+    if(!state.started||modalOpen()||(name==='memory'&&!state.restored))return;
+    const p=landmarks[name];destination={x:p.x,z:p.z+1.25};
+    if(Math.hypot(state.player.x-p.x,state.player.z-p.z)>2.5)toast('Wandering toward '+p.name+'…');
+  }
+  function updateUi(){
+    const progress=Number(state.photo)+Number(state.restored)+Number(state.memory);
+    $('#progress').textContent=progress+' / 3';
+    document.querySelector('.steps').setAttribute('aria-label',progress+' of 3 discoveries completed');
+    $('#step-photo').classList.toggle('done',state.photo);
+    $('#step-water').classList.toggle('done',state.restored);
+    $('#step-memory').classList.toggle('done',state.memory);
+    $('#landmark-lotus').classList.toggle('visited',state.photo);
+    $('#landmark-wheel').classList.toggle('visited',state.restored);
+    $('#landmark-memory').classList.toggle('visited',state.memory);
+    $('#specimen').hidden=!state.photo;$('#journal-empty').hidden=state.photo;
+    $('#journal-title').innerHTML=state.photo?'A light that learned<br>to live underwater.':'Every small thing<br>holds a story.';
+    $('#journal-poem').hidden=!state.restored;
+    $('#journal-poem').textContent=state.memory?'Where the water wanders, the world learns to bloom. And we learn to belong.':'Where the water wanders, the world learns to bloom.';
+    if(chosen){
+      $('#chapter').textContent='III — A WORLD REBORN';
+      $('#objective').textContent='Stay. Wander. Belong.';
+      $('#objective-detail').textContent='There are still small words to find, and a world to know.';
+    }else if(state.restored){
+      $('#chapter').textContent='III — WHAT THE WATER KEPT';
+      $('#objective').textContent='Something remembers.';
+      $('#objective-detail').textContent='A pale echo has awakened beneath the old sanctuary gate.';
+    }else if(state.photo){
+      $('#chapter').textContent='II — A RIVER INTERRUPTED';
+      $('#objective').textContent='Let the water return.';
+      $('#objective-detail').textContent='The lotus needs moving water. An old sluice waits upstream.';
+    }else{
+      $('#chapter').textContent='I — THE LISTENING GARDEN';
+      $('#objective').textContent='Follow a quiet light.';
+      $('#objective-detail').textContent='A lotus glows beside the water. Perhaps it has something to tell you.';
+    }
+  }
+  function updateContext(){
+    let candidate=null,best=2.8;
+    for(const [name,p]of Object.entries(landmarks)){
+      if(name==='memory'&&!state.restored)continue;
+      const d=Math.hypot(state.player.x-p.x,state.player.z-p.z);
+      if(d<best){best=d;candidate=name;}
+    }
+    near=candidate;
+    const key=[near,mode,state.photo,state.restored,state.memory,state.started,!!modalOpen()].join('|');
+    if(key===contextKey)return;contextKey=key;
+    $('#action-area').hidden=!state.started||!near||!!modalOpen();
+    if(!near)return;
+    const entries={
+      lotus:state.photo?['Read the lotus study','Every small thing holds a story.']:mode==='camera'?['Photograph the lotus','An unfamiliar light, living in the water.']:['Raise your camera','Observe before you change the world.'],
+      wheel:state.restored?['Listen to the water','A small current. A world awakening.']:!state.photo?['Study the waterway','Something living nearby may hold a clue.']:mode==='staff'?['Return water to the garden','Let the current find its way home.']:['Take up the water staff','The old channel is waiting for a pulse.'],
+      memory:['Listen to the memory','Not everything that is lost is gone.']
+    };
+    $('#action-label').textContent=entries[near][0];$('#action-caption').textContent=entries[near][1];
+  }
+  function interact(){
+    if(!state.started||modalOpen()||!near)return;
+    destination=null;
+    if(near==='lotus'){
+      if(state.photo){openPanel('journal');return;}
+      if(mode!=='camera'){setMode('camera');toast('The camera is ready. Photograph the lotus when you are ready.');return;}
+      state.photo=true;updateUi();chime([523.25,659.25,783.99]);
+      $('#flash').classList.remove('flash');void $('#flash').offsetWidth;$('#flash').classList.add('flash');
+      showPoem('Where the water wanders,');openPanel('journal');
+    }else if(near==='wheel'){
+      if(!state.photo){toast('A light lives in the lotus pool. Study it with your camera first.');return;}
+      if(state.restored){showPoem('Even a small current can carry a world.');chime([392,523.25]);return;}
+      if(mode!=='staff'){setMode('staff');toast('The water staff answers. Return the flow when you are ready.');return;}
+      state.restored=true;state.season='spring';document.body.dataset.season='spring';
+      updateUi();showPoem('the world learns to bloom.');chime([392,523.25,659.25]);
+      toast('The garden is flowing again. A memory wakes beneath the sanctuary gate.');
+    }else if(near==='memory'){
+      state.memory=true;updateUi();showPoem('And we learn to belong.');chime([329.63,493.88,659.25]);openPanel('memory');
+    }
+    contextKey='';
+  }
+  function updateWords(){
+    if(!state.started||modalOpen())return;
+    for(let i=0;i<words.length;i++){
+      if(foundWords.has(i))continue;
+      if(Math.hypot(state.player.x-words[i].x,state.player.z-words[i].z)<1.55){
+        foundWords.add(i);wordNodes[i].classList.add('collected');wordNodes[i].disabled=true;
+        $('#word-count').textContent=foundWords.size+' / 6 WORDS FOUND';
+        $('#journal-count').textContent=foundWords.size+' / 6';
+        const tag=document.createElement('span');tag.textContent=words[i].text;$('#journal-words').append(tag);
+        chime([440+i*55]);
+        if(foundWords.size===6)showPoem('The smallest words can hold an entire world.');
       }
     }
-    if(sound) await audio.suspend(); else await audio.resume();
-    sound=audio.state==='running';
-    button.querySelector('span').textContent=sound?'SOUND ON':'SOUND OFF';
-    if(!sound&&audio.state!=='suspended') toast('Sound is unavailable in this preview. You can keep playing silently.');
-  } catch {
-    sound=false;
-    button.querySelector('span').textContent='SOUND UNAVAILABLE';
-    button.disabled=true;
-    toast('Sound is unavailable in this preview. You can keep playing silently.');
   }
-};
-loadStatus.hidden=true;
+  function projectUi(){
+    for(const [name,p]of Object.entries(landmarks)){
+      const el=$('#landmark-'+name),q=scene.worldToScreen(p.x,p.z,p.h);
+      const next=!state.photo?'lotus':!state.restored?'wheel':'memory';
+      const minX=35,maxX=innerWidth-35,minY=100,maxY=Math.max(145,innerHeight-160);
+      const offscreen=q.x<minX||q.x>maxX||q.y<minY||q.y>maxY;
+      const x=Math.max(minX,Math.min(maxX,q.x)),y=Math.max(minY,Math.min(maxY,q.y));
+      el.hidden=!state.started||(name==='memory'&&!state.restored)||(offscreen&&name!==next);
+      el.classList.toggle('offscreen',offscreen);
+      el.dataset.edge=q.x>maxX?'right':q.x<minX?'left':q.y<minY?'top':'bottom';
+      el.dataset.label=offscreen?{lotus:'Toward the quiet light',wheel:'Follow the water upstream',memory:'Toward the sanctuary'}[name]:{lotus:'A quiet light',wheel:'An old waterway',memory:'Something remembers'}[name];
+      el.style.setProperty('--bearing',Math.atan2(q.y-y,q.x-x)+'rad');
+      el.style.left=x+'px';el.style.top=y+'px';
+    }
+    words.forEach((p,i)=>{
+      const q=scene.worldToScreen(p.x,p.z,.25);
+      wordNodes[i].style.left=q.x+'px';wordNodes[i].style.top=(q.y+(state.reducedMotion?0:Math.sin(state.time*.8+i)*3))+'px';
+      wordNodes[i].hidden=!state.started||q.x<20||q.x>innerWidth-20||q.y<82||q.y>innerHeight-75;
+    });
+  }
+  function tick(now){
+    const dt=lastFrame?Math.min(.05,(now-lastFrame)/1000):.016;lastFrame=now;state.time+=dt;
+    state.player.moving=false;
+    if(state.started&&!modalOpen()){
+      let dx=(keys.has('d')||keys.has('arrowright')?1:0)-(keys.has('a')||keys.has('arrowleft')?1:0);
+      let dz=(keys.has('s')||keys.has('arrowdown')?1:0)-(keys.has('w')||keys.has('arrowup')?1:0);
+      if(dx||dz)destination=null;
+      else if(destination){
+        dx=destination.x-state.player.x;dz=destination.z-state.player.z;
+        if(Math.hypot(dx,dz)<.15){dx=dz=0;destination=null;}
+      }
+      const len=Math.hypot(dx,dz);
+      if(len){
+        const speed=Math.min(5.4*dt,len);
+        state.player.x=Math.max(-23,Math.min(23,state.player.x+dx/len*speed));
+        state.player.z=Math.max(-22,Math.min(19,state.player.z+dz/len*speed));
+        state.player.moving=true;state.player.facing=Math.atan2(dz,dx);
+      }
+      updateWords();
+    }
+    scene.render(state,dt);projectUi();updateContext();requestAnimationFrame(tick);
+  }
+  function moveToward(event){
+    const p=scene.screenToWorld(event.clientX,event.clientY);
+    destination={x:Math.max(-23,Math.min(23,p.x)),z:Math.max(-22,Math.min(19,p.z))};
+    state.pointer={x:event.clientX,y:event.clientY};
+  }
+  canvas.addEventListener('pointerdown',event=>{
+    if(event.button!==0||modalOpen())return;
+    if(!state.started){start();return;}
+    const hit=scene.hitTest(event.clientX,event.clientY);
+    if(hit){goTo(hit);return;}
+    pointerDown=true;moveToward(event);
+    try{canvas.setPointerCapture(event.pointerId);}catch{}
+  });
+  canvas.addEventListener('pointermove',event=>{if(pointerDown&&state.started&&!modalOpen())moveToward(event);});
+  for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,()=>pointerDown=false);
+  $('#begin').onclick=start;
+  for(const name of ['explore','camera','staff'])$('#'+name).onclick=()=>setMode(name);
+  for(const name of Object.keys(landmarks))$('#landmark-'+name).onclick=()=>goTo(name);
+  $('#interact').onclick=interact;
+  $('#notes').onclick=()=>openPanel('journal');$('#about').onclick=()=>openPanel('help');
+  $('#help-close').onclick=closePanels;
+  document.querySelectorAll('.panel-close').forEach(el=>el.onclick=closePanels);
+  document.querySelectorAll('.overlay').forEach(el=>el.addEventListener('click',event=>{if(event.target===el&&el.id!=='ending')closePanels();}));
+  document.querySelectorAll('[data-choice]').forEach(el=>el.onclick=()=>{
+    chosen=el.dataset.choice;
+    $('#ending-choice').textContent=chosen==='flourish'?'You chose to protect the life that found its way here. The sanctuary will grow in its own time.':'You chose to listen, learn, and find a place within this changed world. The sanctuary has room for another story.';
+    updateUi();openPanel('ending');setMode('explore');
+  });
+  $('#continue').onclick=()=>{closePanels();showPoem('There is still a world to know.');};
+  $('#restart').onclick=()=>{
+    closePanels();state.player={x:-6,z:8,moving:false,facing:0};state.photo=state.restored=state.memory=false;
+    state.season='autumn';document.body.dataset.season='autumn';chosen=null;destination=null;foundWords.clear();
+    wordNodes.forEach(el=>{el.classList.remove('collected');el.disabled=false;});
+    $('#journal-words').replaceChildren();$('#word-count').textContent='0 / 6 WORDS FOUND';$('#journal-count').textContent='0 / 6';
+    setMode('explore');updateUi();contextKey='';showPoem('Every return is a beginning.');
+  };
+  $('#season').onclick=()=>{
+    const seasons=['autumn','spring','summer'];state.season=seasons[(seasons.indexOf(state.season)+1)%3];
+    document.body.dataset.season=state.season;
+    toast({spring:'Spring. The world opens its hands.',summer:'Summer. Light rests on the water.',autumn:'Autumn. Even the falling leaves belong.'}[state.season]);
+  };
+  $('#fullscreen').onclick=async()=>{
+    try{if(document.fullscreenElement)await document.exitFullscreen();else if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();else throw new Error();}
+    catch{toast('Fullscreen is unavailable in this viewer. You can keep exploring here.');}
+  };
+  $('.wordmark').onclick=event=>{event.preventDefault();openPanel('help');};
+  addEventListener('resize',()=>scene.resize());
+  addEventListener('keydown',event=>{
+    if(event.ctrlKey||event.metaKey||event.altKey||['INPUT','TEXTAREA','SELECT'].includes(event.target.tagName))return;
+    const key=event.key.toLowerCase();
+    if(modalOpen()){
+      if(key==='escape'){event.preventDefault();closePanels();return;}
+      if(key==='tab'){
+        const focusable=[...modalOpen().querySelectorAll('button:not([disabled]),a[href]')];
+        const first=focusable[0],last=focusable[focusable.length-1];
+        if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}
+        else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}
+      }
+      return;
+    }
+    if(key.startsWith('arrow')||key===' ')event.preventDefault();
+    if(['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(key))keys.add(key);
+    if(event.repeat)return;
+    if(key==='1')setMode('explore');if(key==='2')setMode('camera');if(key==='3')setMode('staff');
+    if(key==='e')interact();if(key==='j')openPanel('journal');if(key==='m')toggleSound();
+  });
+  addEventListener('keyup',event=>keys.delete(event.key.toLowerCase()));
+  addEventListener('blur',()=>{keys.clear();pointerDown=false;});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){keys.clear();pointerDown=false;}});
+
+  // Soft wind and a quiet harmonic bed, synthesized locally after a user gesture.
+  let audio=null,master=null,sound=false;
+  async function toggleSound(){
+    try{
+      const Audio=window.AudioContext||window.webkitAudioContext;
+      if(!Audio)throw new Error();
+      if(!audio){
+        audio=new Audio();master=audio.createGain();master.gain.value=.06;master.connect(audio.destination);
+        const buffer=audio.createBuffer(1,audio.sampleRate*4,audio.sampleRate),data=buffer.getChannelData(0);
+        let previous=0,seed=9127;
+        for(let i=0;i<data.length;i++){seed=seed*16807%2147483647;previous=(previous+(seed/2147483647*2-1)*.035)/1.018;data[i]=previous;}
+        const noise=audio.createBufferSource();noise.buffer=buffer;noise.loop=true;
+        const filter=audio.createBiquadFilter();filter.type='lowpass';filter.frequency.value=1100;
+        const noiseGain=audio.createGain();noiseGain.gain.value=.65;noise.connect(filter);filter.connect(noiseGain);noiseGain.connect(master);noise.start();
+        for(const hz of [130.81,196,261.63]){
+          const osc=audio.createOscillator(),gain=audio.createGain();osc.type='sine';osc.frequency.value=hz;gain.gain.value=.12;
+          osc.connect(gain);gain.connect(master);osc.start();
+        }
+      }
+      if(sound)await audio.suspend();else await audio.resume();sound=audio.state==='running';
+      $('#sound').setAttribute('aria-pressed',String(sound));$('#sound').setAttribute('aria-label',sound?'Mute sound':'Enable sound');
+    }catch{sound=false;$('#sound').setAttribute('aria-pressed','false');$('#sound').setAttribute('aria-label','Sound unavailable');toast('This viewer cannot play sound. The river is just as welcoming in silence.');}
+  }
+  function chime(notes){
+    if(!sound||!audio||audio.state!=='running')return;
+    notes.forEach((hz,i)=>{
+      const osc=audio.createOscillator(),gain=audio.createGain(),at=audio.currentTime+i*.12;
+      osc.type='sine';osc.frequency.value=hz;gain.gain.setValueAtTime(0,at);gain.gain.linearRampToValueAtTime(.3,at+.03);gain.gain.exponentialRampToValueAtTime(.001,at+1.4);
+      osc.connect(gain);gain.connect(master);osc.start(at);osc.stop(at+1.5);
+      osc.onended=()=>{osc.disconnect();gain.disconnect();};
+    });
+  }
+  $('#sound').onclick=toggleSound;
+  scene.render(state,.016);projectUi();updateUi();loadStatus.hidden=true;requestAnimationFrame(tick);
 })();
 
 </script></body></html>

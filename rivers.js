@@ -1,83 +1,314 @@
-(()=>{
-'use strict';
-const loadStatus=document.querySelector('#load-status');
-const canvas=document.querySelector('#world');
-let ctx;
-try { ctx=canvas.getContext('2d'); } catch {}
-if(!ctx){
-  loadStatus.textContent='This preview cannot draw the game. Open the page in a browser with Canvas support.';
-  return;
-}
-let W,H,dpr,t=0,mode='explore',playing=false,yaw=0,px=0,pz=0,flow=false,photo=false,remembered=false,ending=false;
-const keys={},targets=[],rand=(a,b)=>a+Math.random()*(b-a);
-let seed=91;function rng(){seed=(seed*16807)%2147483647;return(seed-1)/2147483646;}
-const mountains=Array.from({length:8},(_,i)=>({x:i/7,h:.12+rng()*.19,w:.10+rng()*.12}));
-const plants=Array.from({length:155},()=>({x:(rng()-.5)*42,z:4+rng()*65,s:.15+rng()*.4,kind:rng(),phase:rng()*6}));
-const motes=Array.from({length:45},()=>({x:rng(),y:rng(),s:rng()*1.8,phase:rng()*6}));
-function resize(){W=innerWidth;H=innerHeight;dpr=Math.min(devicePixelRatio||1,2);canvas.width=W*dpr;canvas.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}addEventListener('resize',resize);resize();
-function project(x,y,z){x-=px;z-=pz;let xx=x*Math.cos(yaw)-z*Math.sin(yaw),zz=x*Math.sin(yaw)+z*Math.cos(yaw);if(zz<.8)return null;const scale=W*.8/zz;return{x:W*.53+xx*scale,y:H*.46+(2.8-y)*scale,s:scale,z:zz};}
-function poly(points,fill,stroke){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=.7;ctx.stroke();}}
-function face(points,c){const p=points.map(v=>project(...v));if(p.some(v=>!v))return;poly(p.map(v=>[v.x,v.y]),c);}
-function box(x,y,z,w,h,d,c='#6b8171'){face([[x-w/2,y,z-d/2],[x+w/2,y,z-d/2],[x+w/2,y+h,z-d/2],[x-w/2,y+h,z-d/2]],c);face([[x+w/2,y,z-d/2],[x+w/2,y,z+d/2],[x+w/2,y+h,z+d/2],[x+w/2,y+h,z-d/2]],'#455e53');face([[x-w/2,y+h,z-d/2],[x+w/2,y+h,z-d/2],[x+w/2,y+h,z+d/2],[x-w/2,y+h,z+d/2]],'#9ba58a');}
-function roof(x,y,z,w,d){face([[x-w*.6,y+.25,z-d*.6],[x,y+1.2,z-d*.6],[x+w*.6,y+.25,z-d*.6],[x+w*.65,y+.6,z-d*.6],[x+w*.5,y-.15,z-d*.6],[x-w*.5,y-.15,z-d*.6],[x-w*.65,y+.6,z-d*.6]],'#253f38');face([[x,y+1.2,z-d*.6],[x,y+1.2,z+d*.6],[x+w*.6,y+.25,z+d*.6],[x+w*.6,y+.25,z-d*.6]],'#456355');for(let j=0;j<5;j++){const yy=y+.2+j*.18;face([[x-w*(.5-j*.085),yy,z-d*.61],[x+w*(.5-j*.085),yy,z-d*.61],[x+w*(.5-j*.085),yy+.035,z-d*.61],[x-w*(.5-j*.085),yy+.035,z-d*.61]],'#b29b62');}}
-function temple(x,z,size=1,levels=2){box(x,0,z,6*size,.5,4*size,'#697f69');for(let j=0;j<levels;j++){const y=.5+j*2.5*size,w=(5-j*.8)*size;box(x,y,z,w,.35*size,3.4*size,'#9b9d77');for(const k of [-1,1]){box(x+k*w*.39,y,z-1.2*size,.28*size,2.2*size,.28*size,'#a99369');box(x+k*w*.39,y,z+1*size,.28*size,2.2*size,.28*size,'#6f7a56');}box(x,y+.3*size,z+.7*size,w*.65,1.5*size,.25*size,'#3a5c50');roof(x,y+2*size,z,w,3.5*size);}const p=project(x,.7,z-1.85*size);if(p){ctx.fillStyle='#7f9871';for(let i=0;i<6;i++){ctx.beginPath();ctx.ellipse(p.x+(i-2.5)*p.s*.6*size,p.y,p.s*.5*size,p.s*.10*size,0,0,Math.PI*2);ctx.fill();}}}
-function arch(x,z){for(const k of [-1,1]){box(x+k*3.4,0,z,1.45,1,2,'#7c8a6d');box(x+k*3.4,1,z,.9,7.2,1.2,'#7b8c70');box(x+k*3.4,3.4,z,1.18,.3,1.5,'#b2a87c');box(x+k*3.4,6.6,z,1.2,.35,1.5,'#b2a87c');}box(x,7.1,z,8.5,.6,1.5,'#a6a27b');box(x,6.1,z,5.9,1.2,.65,'#596e57');roof(x,7.9,z,9.5,2.8);const p=project(x,6.7,z-.8);if(p){ctx.fillStyle='#d6c590';ctx.font=`${Math.max(5,p.s*.42)}px Georgia`;ctx.textAlign='center';ctx.fillText('水  ·  归  ·  生',p.x,p.y);}for(let i=0;i<20;i++){const p=project(x-4.2+i*.44,7.4-Math.sin(i)*.3,z-.85);if(p){ctx.fillStyle=i%3?'#507857':'#9da577';ctx.beginPath();ctx.ellipse(p.x,p.y,p.s*.22,p.s*(.3+(i%4)*.2),.2,0,7);ctx.fill();}}}
-function waterfall(x,z,h,width){const a=project(x,h,z),b=project(x,0,z);if(!a||!b)return;const grad=ctx.createLinearGradient(a.x,a.y,b.x,b.y);grad.addColorStop(0,'#dcece1aa');grad.addColorStop(.65,'#b0ddd3c9');grad.addColorStop(1,'#a2dedb08');ctx.fillStyle=grad;ctx.fillRect(a.x-width*a.s/2,a.y,width*a.s,b.y-a.y);for(let i=0;i<9;i++){const xx=a.x+(i/9-.5)*width*a.s;ctx.strokeStyle=`rgba(225,248,230,${.12+Math.sin(t*.02+i)*.08})`;ctx.lineWidth=1+i%2;ctx.beginPath();ctx.moveTo(xx,a.y);ctx.lineTo(xx+Math.sin(t*.02+i)*2,b.y);ctx.stroke();}ctx.strokeStyle='#d7f7e34a';for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(b.x,b.y+i*4,b.s*width*.9+i*8,3+i*3,0,0,7);ctx.stroke();}}
-function lotus(x,z,s,phase,glowing=false){const p=project(x,0,z);if(!p)return;const r=p.s*s;ctx.fillStyle='#4e8a7080';ctx.beginPath();ctx.ellipse(p.x,p.y+2,r*2.1,r*.55,-.12,0,7);ctx.fill();ctx.strokeStyle='#87b09a66';ctx.beginPath();ctx.ellipse(p.x,p.y+4,r*2.7,r*.66,0,0,7);ctx.stroke();let yy=p.y-r*.9+Math.sin(t*.015+phase)*2;if(glowing){const g=ctx.createRadialGradient(p.x,yy,0,p.x,yy,r*4);g.addColorStop(0,'#77eee688');g.addColorStop(1,'#60e0d900');ctx.fillStyle=g;ctx.fillRect(p.x-r*4,yy-r*4,r*8,r*8);targets.push({kind:'lotus',x:p.x,y:yy,r:Math.max(r*3,35)});}for(let j=0;j<7;j++){let a=(j/6)*Math.PI-Math.PI;ctx.fillStyle=j%2?'#d6b8c2':'#eccdca';ctx.beginPath();ctx.ellipse(p.x+Math.cos(a)*r*.55,yy+Math.sin(a)*r*.35,r*.32,r*.85,a+Math.PI/2,0,7);ctx.fill();}ctx.fillStyle=glowing?'#b5fff0':'#e8d89b';ctx.beginPath();ctx.ellipse(p.x,yy+r*.1,r*.25,r*.15,0,0,7);ctx.fill();}
-function rock(x,z,w,h){box(x,0,z,w,h,w*.7,'#5f7564');box(x-.1,h,z,w*.9,.1,w*.65,'#8b9977');}
-function wheel(){const p=project(4.7,1.8,15);if(!p)return;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(flow?t*.012:0);ctx.strokeStyle='#c7b47c';ctx.lineWidth=p.s*.09;ctx.beginPath();ctx.arc(0,0,p.s*.7,0,7);ctx.stroke();for(let j=0;j<8;j++){ctx.rotate(Math.PI/4);ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(p.s*.7,0);ctx.stroke();}ctx.restore();targets.push({kind:'wheel',x:p.x,y:p.y,r:Math.max(30,p.s)});label(p.x,p.y-p.s,'ANCIENT SLUICE',flow?'Waterway restored':'Redirect water · 3');}
-function label(x,y,title,sub){ctx.textAlign='center';ctx.font='8px sans-serif';ctx.letterSpacing='2px';ctx.fillStyle='#ecedce';ctx.fillText(title,x,y);ctx.letterSpacing='0px';ctx.font='italic 10px Georgia';ctx.fillStyle='#d1dfc4bb';ctx.fillText(sub,x,y+17);}
-function render(){t++;targets.length=0;const speed=.085;if(playing&&!document.querySelector('.modal:not([hidden])')){if(keys.w||keys.arrowup)pz=Math.min(9,pz+speed);if(keys.s||keys.arrowdown)pz=Math.max(-4,pz-speed);if(keys.a)px=Math.max(-7,px-speed);if(keys.d)px=Math.min(7,px+speed);if(keys.arrowleft)yaw=Math.max(-.5,yaw-.009);if(keys.arrowright)yaw=Math.min(.5,yaw+.009);}
-const sky=ctx.createLinearGradient(0,0,0,H*.6);sky.addColorStop(0,'#8ab7b4');sky.addColorStop(.45,'#c6d4b9');sky.addColorStop(1,'#e0dfbc');ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);ctx.fillStyle='#f2e5bc';ctx.beginPath();ctx.arc(W*.65-yaw*W*.4,H*.2,W*.045,0,7);ctx.fill();for(let layer=0;layer<3;layer++){for(const m of mountains){const x=(m.x-yaw*.2)*W;poly([[x-m.w*W,H*.48],[x-m.w*W*.6,H*(.46-m.h*.6)+layer*H*.035],[x-m.w*W*.25,H*(.43-m.h)+layer*H*.035],[x+m.w*W*.18,H*(.44-m.h*.9)+layer*H*.035],[x+m.w*W*.7,H*.48]],['#a3b9a0','#839f8f','#6e9386'][layer]);}}
-const water=ctx.createLinearGradient(0,H*.46,0,H);water.addColorStop(0,'#7eafa0');water.addColorStop(.45,'#3f827a');water.addColorStop(1,'#163f40');ctx.fillStyle=water;ctx.fillRect(0,H*.46,W,H*.54);for(let i=0;i<160;i++){const y=H*.47+Math.pow(i/160,1.7)*H*.53;const xx=(Math.sin(i*28.1)*.5+.5)*W;ctx.strokeStyle=`rgba(190,219,182,${.05+(i%7)*.013})`;ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(xx+Math.sin(t*.008+i)*10,y);ctx.lineTo(xx+20+(i/160)*90,y);ctx.stroke();}
-// Distant terraces, shrine silhouettes, and the living water system.
-temple(-13,53,1.9,3);temple(15,58,2,3);box(-5,0,45,12,5,5,'#718e78');waterfall(-5,42,5,2.3);temple(-5,46,1.3,2);box(9,0,37,8,4,3,'#6c856d');waterfall(9,35,4,2);temple(10,40,1.2,3);arch(0,29);temple(-10,24,1.1,2);temple(11,24,1.2,2);
-// Submerged pathway.
-for(let i=9;i>=0;i--){const z=5+i*1.85;box(-.5+Math.sin(i*.5)*.7,-.25,z,2.1,.32,1.4,'#8c9676');}
-rock(4.7,15,2,1);wheel();if(flow){waterfall(3.8,14.8,1.4,1.1);for(let i=0;i<10;i++){const p=project(3.7-i*.55,0,14-i*.5);if(p){ctx.strokeStyle='#8fffe896';ctx.beginPath();ctx.ellipse(p.x,p.y,20+i*2,3,0,0,7);ctx.stroke();}}}
-plants.sort((a,b)=>b.z-a.z);for(const p of plants){if(p.kind>.5)lotus(p.x,p.z,p.s,p.phase);else{const a=project(p.x,0,p.z);if(a){ctx.strokeStyle='#668d64';ctx.lineWidth=Math.max(1,a.s*.025);for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(a.x+i*3,a.y);ctx.quadraticCurveTo(a.x-8+i*6,a.y-a.s*p.s,a.x+Math.sin(i+1)*a.s*p.s,a.y-a.s*p.s*2);ctx.stroke();}}}}
-lotus(-2.9,10,.4,0,true);const lp=project(-2.9,.85,10);if(lp)label(lp.x,lp.y-24,'LUMINOUS LOTUS',photo?'Specimen documented':'Observe with camera · 2');
-if(flow){const p=project(0,2.1,26);if(p){ctx.save();ctx.globalAlpha=.6+Math.sin(t*.03)*.2;ctx.shadowColor='#a1fff2';ctx.shadowBlur=30;ctx.strokeStyle='#b1ffed';ctx.lineWidth=2;ctx.beginPath();ctx.arc(p.x,p.y,p.s*.8,0,7);ctx.stroke();ctx.beginPath();ctx.moveTo(p.x,p.y-p.s*.5);ctx.lineTo(p.x,p.y+p.s*.5);ctx.moveTo(p.x-p.s*.5,p.y);ctx.lineTo(p.x+p.s*.5,p.y);ctx.stroke();ctx.restore();targets.push({kind:'memory',x:p.x,y:p.y,r:Math.max(40,p.s)});label(p.x,p.y-p.s*1.2,'THE SANCTUARY REMEMBERS','Approach the echo · click');}}
-// Near banks frame the water, with trailing leaves.
-rock(-8,5,5,.8);rock(9,5,4,.6);for(let i=0;i<12;i++)lotus(-7+i*.45,5+(i%3),.25,i);for(let i=0;i<16;i++){let x=W*(.77+i*.02);ctx.strokeStyle='#2c5546';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,-10);ctx.quadraticCurveTo(x-50,H*.07,x-30,H*(.04+(i%4)*.025));ctx.stroke();ctx.fillStyle=i%3?'#416a4e':'#728560';for(let j=0;j<4;j++){ctx.beginPath();ctx.ellipse(x-18-j*5,H*.012+j*12,12,4,-.7,0,7);ctx.fill();}}
-for(const m of motes){ctx.fillStyle=`rgba(223,239,174,${.2+Math.sin(t*.02+m.phase)*.2})`;ctx.beginPath();ctx.arc((m.x*W+Math.sin(t*.003+m.phase)*30),m.y*H*.8+Math.cos(t*.005+m.phase)*15,m.s,0,7);ctx.fill();}
-// Staff in the player's hand.
-if(playing&&mode==='staff'){ctx.save();ctx.translate(W*.78,H*.93+Math.sin(t*.03)*3);ctx.rotate(.2);ctx.strokeStyle='#9e8d58';ctx.lineWidth=12;ctx.beginPath();ctx.moveTo(0,100);ctx.lineTo(0,-125);ctx.stroke();ctx.strokeStyle='#cbb782';ctx.lineWidth=5;ctx.beginPath();ctx.arc(0,-150,32,0,7);ctx.stroke();const g=ctx.createRadialGradient(0,-150,1,0,-150,31);g.addColorStop(0,'#e7fff2');g.addColorStop(.3,'#8be7d6');g.addColorStop(1,'#3a9b9c22');ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,-150,27,0,7);ctx.fill();ctx.restore();}
-requestAnimationFrame(render);}render();
-let toastTimer;function toast(msg){const el=document.querySelector('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3800);}
-function start(){if(playing)return;playing=true;document.body.classList.add('playing');document.querySelector('#hint').innerHTML='<span>✧</span> Select the camera and click the luminous lotus';toast('Welcome home, researcher. Use WASD to explore; arrows to look.');}
-function setMode(m){start();mode=m;document.querySelectorAll('.tool').forEach(e=>e.classList.toggle('active',e.id===m));document.querySelector('#camera-frame').hidden=m!=='camera';document.querySelector('#hint').innerHTML='<span>✧</span> '+({explore:'Follow the water. Click a glowing discovery.',camera:'Click the luminous lotus to document its habitat.',staff:'Click the golden sluice wheel to redirect the water.'}[m]||'');}
-function complete(task){document.querySelector(`[data-task="${task}"]`).classList.add('done');document.querySelector(`[data-task="${task}"] i`).textContent='✓';document.querySelector('#progress').textContent=String([photo,flow,remembered].filter(Boolean).length).padStart(2,'0')+' / 03';}
-function interact(kind){if(kind==='lotus'){if(mode!=='camera'){toast('This organism is unfamiliar. Select Camera (2) to study it.');return;}photo=true;complete('photo');document.querySelector('#journal-dot').hidden=false;document.querySelector('#camera-label').textContent='Nymphaea luminosa · documented';toast('Specimen documented. Its light responds to flowing water.');document.querySelector('#journal').hidden=false;}if(kind==='wheel'){if(!photo){toast('Study the luminous lotus first. Observation reveals the way.');return;}if(mode!=='staff'){toast('Select Water staff (3) to turn the ancient sluice.');return;}if(flow){toast('The waterway is flowing. The archive beneath the gate is awake.');return;}flow=true;complete('water');toast('Waterway restored. A memory is stirring beneath the gate.');document.querySelector('#hint').innerHTML='<span>✧</span> Click the luminous echo beneath the sanctuary gate';}if(kind==='memory'){if(!flow)return;remembered=true;complete('memory');document.querySelector('#memory').hidden=false;}}
-canvas.addEventListener('click',e=>{if(!playing){start();return;}let candidates=targets.filter(v=>Math.hypot(v.x-e.clientX,v.y-e.clientY)<v.r);if(candidates.length)interact(candidates[0].kind);else toast(mode==='camera'?'Frame the glowing lotus on the left side of the path.':mode==='staff'?'The golden sluice wheel controls this waterway.':'Look for the luminous lotus, the sluice wheel, or the archive echo.');});
-document.querySelector('#begin').onclick=start;for(const id of ['explore','camera','staff'])document.querySelector('#'+id).onclick=()=>setMode(id);
-document.querySelector('#notes').onclick=()=>{if(!photo){toast('Your journal is empty. Photograph a species to begin.');return;}document.querySelector('#journal').hidden=false;document.querySelector('#journal-dot').hidden=true;};document.querySelector('.close').onclick=()=>document.querySelector('#journal').hidden=true;
-document.querySelectorAll('.choice').forEach(b=>b.onclick=()=>{ending=true;document.querySelector('#memory').hidden=true;document.querySelector('.objective h2').textContent='A new beginning';document.querySelector('.objective p').textContent=b.dataset.choice+'. The sanctuary will remember your choice.';document.querySelector('#hint').innerHTML='<span>✧</span> Chapter complete. A world changed. A home rediscovered.';toast('Choice recorded: '+b.dataset.choice+'. Continue exploring the sanctuary.');});
-addEventListener('keydown',e=>{if(['INPUT','TEXTAREA'].includes(e.target.tagName))return;keys[e.key.toLowerCase()]=true;if(e.key.startsWith('Arrow')||e.key===' ')e.preventDefault();if(e.key==='1')setMode('explore');if(e.key==='2')setMode('camera');if(e.key==='3')setMode('staff');if(e.key.toLowerCase()==='j')document.querySelector('#notes').click();if(e.key==='Escape')document.querySelectorAll('.modal').forEach(m=>m.hidden=true);});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);addEventListener('blur',()=>Object.keys(keys).forEach(k=>keys[k]=false));
-let audio,oscillators=[],sound=false;
-document.querySelector('#sound').onclick=async()=>{
-  const button=document.querySelector('#sound');
-  try {
-    const Audio=window.AudioContext||window.webkitAudioContext;
-    if(!Audio) throw new Error('Audio is unavailable');
-    if(!audio){
-      audio=new Audio();
-      const gain=audio.createGain();gain.gain.value=.025;gain.connect(audio.destination);
-      for(const hz of [130.81,196,261.63]){
-        const o=audio.createOscillator();o.frequency.value=hz;o.type='sine';
-        o.connect(gain);o.start();oscillators.push(o);
+/* A small original ecological journey. All progress stays in this session. */
+(() => {
+  'use strict';
+  const $ = selector => document.querySelector(selector);
+  const loadStatus = $('#load-status');
+  const canvas = $('#world');
+  let scene;
+  try { scene = window.createRiversScene(canvas); }
+  catch { loadStatus.textContent = 'This viewer cannot draw the landscape. Open index.html in a browser with Canvas and JavaScript enabled.'; return; }
+
+  const landmarks = {
+    lotus: {x:-11,z:0,h:1.6,name:'the luminous lotus'},
+    wheel: {x:7,z:-5,h:2.3,name:'the ancient sluice'},
+    memory: {x:0,z:-15,h:2.1,name:'the sanctuary echo'}
+  };
+  const words = [
+    {x:-8,z:5,text:'where'}, {x:-14,z:-3,text:'water'},
+    {x:-1,z:1,text:'wanders'}, {x:10,z:-9,text:'world'},
+    {x:3,z:-13,text:'bloom'}, {x:-2,z:-18,text:'belong'}
+  ];
+  const state = {
+    player:{x:-6,z:8,moving:false,facing:0}, time:0,
+    restored:false,photo:false,memory:false,started:false,
+    season:'autumn',pointer:{x:0,y:0},
+    reducedMotion:window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  };
+  let mode='explore',destination=null,pointerDown=false,near=null,chosen=null;
+  let lastFrame=0,contextKey='',toastTimer,poemTimer,lastFocus=null;
+  const keys=new Set(),foundWords=new Set();
+  const wordNodes=words.map((word,i)=>{
+    const button=document.createElement('button');
+    button.className='word-mote';button.textContent=word.text;
+    button.setAttribute('aria-label','Follow the word '+word.text);
+    button.onclick=()=>{if(state.started&&!modalOpen())destination={x:word.x,z:word.z};};
+    $('#word-motes').append(button);return button;
+  });
+
+  function toast(text){
+    $('#toast').textContent=text;$('#toast').classList.add('show');
+    clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),4200);
+  }
+  function showPoem(line){
+    $('#poem').textContent=line;$('#poem').classList.add('visible');
+    clearTimeout(poemTimer);poemTimer=setTimeout(()=>$('#poem').classList.remove('visible'),6000);
+  }
+  function modalOpen(){return $('.overlay:not([hidden])');}
+  function openPanel(id){
+    lastFocus=document.activeElement;
+    clearTimeout(toastTimer);$('#toast').classList.remove('show');
+    document.querySelectorAll('.overlay').forEach(el=>el.hidden=el.id!==id);
+    keys.clear();pointerDown=false;destination=null;
+    const panel=$('#'+id);panel.querySelector('button')?.focus({preventScroll:true});
+  }
+  function closePanels(){
+    document.querySelectorAll('.overlay').forEach(el=>el.hidden=true);
+    if(lastFocus?.isConnected)lastFocus.focus({preventScroll:true});
+    lastFocus=null;
+  }
+  function start(){
+    if(state.started)return;
+    state.started=true;document.body.classList.add('is-playing');
+    $('#begin').tabIndex=-1;
+    toast('Click or tap the ground to wander. Follow a small light.');
+    updateUi();
+  }
+  function setMode(next){
+    if(!state.started)start();
+    mode=next;
+    for(const name of ['explore','camera','staff']){
+      $('#'+name).classList.toggle('active',name===next);
+      $('#'+name).setAttribute('aria-pressed',String(name===next));
+    }
+    $('#camera-vignette').classList.toggle('visible',next==='camera');
+    $('#viewfinder').hidden=next!=='camera';
+    contextKey='';
+  }
+  function goTo(name){
+    if(!state.started||modalOpen()||(name==='memory'&&!state.restored))return;
+    const p=landmarks[name];destination={x:p.x,z:p.z+1.25};
+    if(Math.hypot(state.player.x-p.x,state.player.z-p.z)>2.5)toast('Wandering toward '+p.name+'…');
+  }
+  function updateUi(){
+    const progress=Number(state.photo)+Number(state.restored)+Number(state.memory);
+    $('#progress').textContent=progress+' / 3';
+    document.querySelector('.steps').setAttribute('aria-label',progress+' of 3 discoveries completed');
+    $('#step-photo').classList.toggle('done',state.photo);
+    $('#step-water').classList.toggle('done',state.restored);
+    $('#step-memory').classList.toggle('done',state.memory);
+    $('#landmark-lotus').classList.toggle('visited',state.photo);
+    $('#landmark-wheel').classList.toggle('visited',state.restored);
+    $('#landmark-memory').classList.toggle('visited',state.memory);
+    $('#specimen').hidden=!state.photo;$('#journal-empty').hidden=state.photo;
+    $('#journal-title').innerHTML=state.photo?'A light that learned<br>to live underwater.':'Every small thing<br>holds a story.';
+    $('#journal-poem').hidden=!state.restored;
+    $('#journal-poem').textContent=state.memory?'Where the water wanders, the world learns to bloom. And we learn to belong.':'Where the water wanders, the world learns to bloom.';
+    if(chosen){
+      $('#chapter').textContent='III — A WORLD REBORN';
+      $('#objective').textContent='Stay. Wander. Belong.';
+      $('#objective-detail').textContent='There are still small words to find, and a world to know.';
+    }else if(state.restored){
+      $('#chapter').textContent='III — WHAT THE WATER KEPT';
+      $('#objective').textContent='Something remembers.';
+      $('#objective-detail').textContent='A pale echo has awakened beneath the old sanctuary gate.';
+    }else if(state.photo){
+      $('#chapter').textContent='II — A RIVER INTERRUPTED';
+      $('#objective').textContent='Let the water return.';
+      $('#objective-detail').textContent='The lotus needs moving water. An old sluice waits upstream.';
+    }else{
+      $('#chapter').textContent='I — THE LISTENING GARDEN';
+      $('#objective').textContent='Follow a quiet light.';
+      $('#objective-detail').textContent='A lotus glows beside the water. Perhaps it has something to tell you.';
+    }
+  }
+  function updateContext(){
+    let candidate=null,best=2.8;
+    for(const [name,p]of Object.entries(landmarks)){
+      if(name==='memory'&&!state.restored)continue;
+      const d=Math.hypot(state.player.x-p.x,state.player.z-p.z);
+      if(d<best){best=d;candidate=name;}
+    }
+    near=candidate;
+    const key=[near,mode,state.photo,state.restored,state.memory,state.started,!!modalOpen()].join('|');
+    if(key===contextKey)return;contextKey=key;
+    $('#action-area').hidden=!state.started||!near||!!modalOpen();
+    if(!near)return;
+    const entries={
+      lotus:state.photo?['Read the lotus study','Every small thing holds a story.']:mode==='camera'?['Photograph the lotus','An unfamiliar light, living in the water.']:['Raise your camera','Observe before you change the world.'],
+      wheel:state.restored?['Listen to the water','A small current. A world awakening.']:!state.photo?['Study the waterway','Something living nearby may hold a clue.']:mode==='staff'?['Return water to the garden','Let the current find its way home.']:['Take up the water staff','The old channel is waiting for a pulse.'],
+      memory:['Listen to the memory','Not everything that is lost is gone.']
+    };
+    $('#action-label').textContent=entries[near][0];$('#action-caption').textContent=entries[near][1];
+  }
+  function interact(){
+    if(!state.started||modalOpen()||!near)return;
+    destination=null;
+    if(near==='lotus'){
+      if(state.photo){openPanel('journal');return;}
+      if(mode!=='camera'){setMode('camera');toast('The camera is ready. Photograph the lotus when you are ready.');return;}
+      state.photo=true;updateUi();chime([523.25,659.25,783.99]);
+      $('#flash').classList.remove('flash');void $('#flash').offsetWidth;$('#flash').classList.add('flash');
+      showPoem('Where the water wanders,');openPanel('journal');
+    }else if(near==='wheel'){
+      if(!state.photo){toast('A light lives in the lotus pool. Study it with your camera first.');return;}
+      if(state.restored){showPoem('Even a small current can carry a world.');chime([392,523.25]);return;}
+      if(mode!=='staff'){setMode('staff');toast('The water staff answers. Return the flow when you are ready.');return;}
+      state.restored=true;state.season='spring';document.body.dataset.season='spring';
+      updateUi();showPoem('the world learns to bloom.');chime([392,523.25,659.25]);
+      toast('The garden is flowing again. A memory wakes beneath the sanctuary gate.');
+    }else if(near==='memory'){
+      state.memory=true;updateUi();showPoem('And we learn to belong.');chime([329.63,493.88,659.25]);openPanel('memory');
+    }
+    contextKey='';
+  }
+  function updateWords(){
+    if(!state.started||modalOpen())return;
+    for(let i=0;i<words.length;i++){
+      if(foundWords.has(i))continue;
+      if(Math.hypot(state.player.x-words[i].x,state.player.z-words[i].z)<1.55){
+        foundWords.add(i);wordNodes[i].classList.add('collected');wordNodes[i].disabled=true;
+        $('#word-count').textContent=foundWords.size+' / 6 WORDS FOUND';
+        $('#journal-count').textContent=foundWords.size+' / 6';
+        const tag=document.createElement('span');tag.textContent=words[i].text;$('#journal-words').append(tag);
+        chime([440+i*55]);
+        if(foundWords.size===6)showPoem('The smallest words can hold an entire world.');
       }
     }
-    if(sound) await audio.suspend(); else await audio.resume();
-    sound=audio.state==='running';
-    button.querySelector('span').textContent=sound?'SOUND ON':'SOUND OFF';
-    if(!sound&&audio.state!=='suspended') toast('Sound is unavailable in this preview. You can keep playing silently.');
-  } catch {
-    sound=false;
-    button.querySelector('span').textContent='SOUND UNAVAILABLE';
-    button.disabled=true;
-    toast('Sound is unavailable in this preview. You can keep playing silently.');
   }
-};
-loadStatus.hidden=true;
+  function projectUi(){
+    for(const [name,p]of Object.entries(landmarks)){
+      const el=$('#landmark-'+name),q=scene.worldToScreen(p.x,p.z,p.h);
+      const next=!state.photo?'lotus':!state.restored?'wheel':'memory';
+      const minX=35,maxX=innerWidth-35,minY=100,maxY=Math.max(145,innerHeight-160);
+      const offscreen=q.x<minX||q.x>maxX||q.y<minY||q.y>maxY;
+      const x=Math.max(minX,Math.min(maxX,q.x)),y=Math.max(minY,Math.min(maxY,q.y));
+      el.hidden=!state.started||(name==='memory'&&!state.restored)||(offscreen&&name!==next);
+      el.classList.toggle('offscreen',offscreen);
+      el.dataset.edge=q.x>maxX?'right':q.x<minX?'left':q.y<minY?'top':'bottom';
+      el.dataset.label=offscreen?{lotus:'Toward the quiet light',wheel:'Follow the water upstream',memory:'Toward the sanctuary'}[name]:{lotus:'A quiet light',wheel:'An old waterway',memory:'Something remembers'}[name];
+      el.style.setProperty('--bearing',Math.atan2(q.y-y,q.x-x)+'rad');
+      el.style.left=x+'px';el.style.top=y+'px';
+    }
+    words.forEach((p,i)=>{
+      const q=scene.worldToScreen(p.x,p.z,.25);
+      wordNodes[i].style.left=q.x+'px';wordNodes[i].style.top=(q.y+(state.reducedMotion?0:Math.sin(state.time*.8+i)*3))+'px';
+      wordNodes[i].hidden=!state.started||q.x<20||q.x>innerWidth-20||q.y<82||q.y>innerHeight-75;
+    });
+  }
+  function tick(now){
+    const dt=lastFrame?Math.min(.05,(now-lastFrame)/1000):.016;lastFrame=now;state.time+=dt;
+    state.player.moving=false;
+    if(state.started&&!modalOpen()){
+      let dx=(keys.has('d')||keys.has('arrowright')?1:0)-(keys.has('a')||keys.has('arrowleft')?1:0);
+      let dz=(keys.has('s')||keys.has('arrowdown')?1:0)-(keys.has('w')||keys.has('arrowup')?1:0);
+      if(dx||dz)destination=null;
+      else if(destination){
+        dx=destination.x-state.player.x;dz=destination.z-state.player.z;
+        if(Math.hypot(dx,dz)<.15){dx=dz=0;destination=null;}
+      }
+      const len=Math.hypot(dx,dz);
+      if(len){
+        const speed=Math.min(5.4*dt,len);
+        state.player.x=Math.max(-23,Math.min(23,state.player.x+dx/len*speed));
+        state.player.z=Math.max(-22,Math.min(19,state.player.z+dz/len*speed));
+        state.player.moving=true;state.player.facing=Math.atan2(dz,dx);
+      }
+      updateWords();
+    }
+    scene.render(state,dt);projectUi();updateContext();requestAnimationFrame(tick);
+  }
+  function moveToward(event){
+    const p=scene.screenToWorld(event.clientX,event.clientY);
+    destination={x:Math.max(-23,Math.min(23,p.x)),z:Math.max(-22,Math.min(19,p.z))};
+    state.pointer={x:event.clientX,y:event.clientY};
+  }
+  canvas.addEventListener('pointerdown',event=>{
+    if(event.button!==0||modalOpen())return;
+    if(!state.started){start();return;}
+    const hit=scene.hitTest(event.clientX,event.clientY);
+    if(hit){goTo(hit);return;}
+    pointerDown=true;moveToward(event);
+    try{canvas.setPointerCapture(event.pointerId);}catch{}
+  });
+  canvas.addEventListener('pointermove',event=>{if(pointerDown&&state.started&&!modalOpen())moveToward(event);});
+  for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,()=>pointerDown=false);
+  $('#begin').onclick=start;
+  for(const name of ['explore','camera','staff'])$('#'+name).onclick=()=>setMode(name);
+  for(const name of Object.keys(landmarks))$('#landmark-'+name).onclick=()=>goTo(name);
+  $('#interact').onclick=interact;
+  $('#notes').onclick=()=>openPanel('journal');$('#about').onclick=()=>openPanel('help');
+  $('#help-close').onclick=closePanels;
+  document.querySelectorAll('.panel-close').forEach(el=>el.onclick=closePanels);
+  document.querySelectorAll('.overlay').forEach(el=>el.addEventListener('click',event=>{if(event.target===el&&el.id!=='ending')closePanels();}));
+  document.querySelectorAll('[data-choice]').forEach(el=>el.onclick=()=>{
+    chosen=el.dataset.choice;
+    $('#ending-choice').textContent=chosen==='flourish'?'You chose to protect the life that found its way here. The sanctuary will grow in its own time.':'You chose to listen, learn, and find a place within this changed world. The sanctuary has room for another story.';
+    updateUi();openPanel('ending');setMode('explore');
+  });
+  $('#continue').onclick=()=>{closePanels();showPoem('There is still a world to know.');};
+  $('#restart').onclick=()=>{
+    closePanels();state.player={x:-6,z:8,moving:false,facing:0};state.photo=state.restored=state.memory=false;
+    state.season='autumn';document.body.dataset.season='autumn';chosen=null;destination=null;foundWords.clear();
+    wordNodes.forEach(el=>{el.classList.remove('collected');el.disabled=false;});
+    $('#journal-words').replaceChildren();$('#word-count').textContent='0 / 6 WORDS FOUND';$('#journal-count').textContent='0 / 6';
+    setMode('explore');updateUi();contextKey='';showPoem('Every return is a beginning.');
+  };
+  $('#season').onclick=()=>{
+    const seasons=['autumn','spring','summer'];state.season=seasons[(seasons.indexOf(state.season)+1)%3];
+    document.body.dataset.season=state.season;
+    toast({spring:'Spring. The world opens its hands.',summer:'Summer. Light rests on the water.',autumn:'Autumn. Even the falling leaves belong.'}[state.season]);
+  };
+  $('#fullscreen').onclick=async()=>{
+    try{if(document.fullscreenElement)await document.exitFullscreen();else if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();else throw new Error();}
+    catch{toast('Fullscreen is unavailable in this viewer. You can keep exploring here.');}
+  };
+  $('.wordmark').onclick=event=>{event.preventDefault();openPanel('help');};
+  addEventListener('resize',()=>scene.resize());
+  addEventListener('keydown',event=>{
+    if(event.ctrlKey||event.metaKey||event.altKey||['INPUT','TEXTAREA','SELECT'].includes(event.target.tagName))return;
+    const key=event.key.toLowerCase();
+    if(modalOpen()){
+      if(key==='escape'){event.preventDefault();closePanels();return;}
+      if(key==='tab'){
+        const focusable=[...modalOpen().querySelectorAll('button:not([disabled]),a[href]')];
+        const first=focusable[0],last=focusable[focusable.length-1];
+        if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}
+        else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}
+      }
+      return;
+    }
+    if(key.startsWith('arrow')||key===' ')event.preventDefault();
+    if(['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(key))keys.add(key);
+    if(event.repeat)return;
+    if(key==='1')setMode('explore');if(key==='2')setMode('camera');if(key==='3')setMode('staff');
+    if(key==='e')interact();if(key==='j')openPanel('journal');if(key==='m')toggleSound();
+  });
+  addEventListener('keyup',event=>keys.delete(event.key.toLowerCase()));
+  addEventListener('blur',()=>{keys.clear();pointerDown=false;});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){keys.clear();pointerDown=false;}});
+
+  // Soft wind and a quiet harmonic bed, synthesized locally after a user gesture.
+  let audio=null,master=null,sound=false;
+  async function toggleSound(){
+    try{
+      const Audio=window.AudioContext||window.webkitAudioContext;
+      if(!Audio)throw new Error();
+      if(!audio){
+        audio=new Audio();master=audio.createGain();master.gain.value=.06;master.connect(audio.destination);
+        const buffer=audio.createBuffer(1,audio.sampleRate*4,audio.sampleRate),data=buffer.getChannelData(0);
+        let previous=0,seed=9127;
+        for(let i=0;i<data.length;i++){seed=seed*16807%2147483647;previous=(previous+(seed/2147483647*2-1)*.035)/1.018;data[i]=previous;}
+        const noise=audio.createBufferSource();noise.buffer=buffer;noise.loop=true;
+        const filter=audio.createBiquadFilter();filter.type='lowpass';filter.frequency.value=1100;
+        const noiseGain=audio.createGain();noiseGain.gain.value=.65;noise.connect(filter);filter.connect(noiseGain);noiseGain.connect(master);noise.start();
+        for(const hz of [130.81,196,261.63]){
+          const osc=audio.createOscillator(),gain=audio.createGain();osc.type='sine';osc.frequency.value=hz;gain.gain.value=.12;
+          osc.connect(gain);gain.connect(master);osc.start();
+        }
+      }
+      if(sound)await audio.suspend();else await audio.resume();sound=audio.state==='running';
+      $('#sound').setAttribute('aria-pressed',String(sound));$('#sound').setAttribute('aria-label',sound?'Mute sound':'Enable sound');
+    }catch{sound=false;$('#sound').setAttribute('aria-pressed','false');$('#sound').setAttribute('aria-label','Sound unavailable');toast('This viewer cannot play sound. The river is just as welcoming in silence.');}
+  }
+  function chime(notes){
+    if(!sound||!audio||audio.state!=='running')return;
+    notes.forEach((hz,i)=>{
+      const osc=audio.createOscillator(),gain=audio.createGain(),at=audio.currentTime+i*.12;
+      osc.type='sine';osc.frequency.value=hz;gain.gain.setValueAtTime(0,at);gain.gain.linearRampToValueAtTime(.3,at+.03);gain.gain.exponentialRampToValueAtTime(.001,at+1.4);
+      osc.connect(gain);gain.connect(master);osc.start(at);osc.stop(at+1.5);
+      osc.onended=()=>{osc.disconnect();gain.disconnect();};
+    });
+  }
+  $('#sound').onclick=toggleSound;
+  scene.render(state,.016);projectUi();updateUi();loadStatus.hidden=true;requestAnimationFrame(tick);
 })();

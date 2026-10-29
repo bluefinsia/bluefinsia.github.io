@@ -1,6 +1,6 @@
 # There Are Rivers in the Sky
 
-A playable, self-contained browser prototype of the Lotus Sanctuary chapter. The landscape uses a procedural Canvas renderer with perspective projection; this is an exploration and interaction prototype, not a full 3D engine.
+A quiet ecological exploration game set in the Lotus Sanctuary. Guide a small wanderer through a painted landscape, gather drifting words, photograph living things, and restore a waterway to awaken a memory.
 
 ## Download
 
@@ -8,7 +8,7 @@ Download the [standalone game ZIP](https://github.com/bluefinsia/bluefinsia.gith
 
 ## Open the game
 
-`index.html` is a standalone game: its styles and JavaScript are embedded, and it makes no external asset requests. You can download the file and open it in a browser with JavaScript enabled. Some file viewers only display HTML and block scripts; use a browser or the local server in that case.
+`index.html` contains the complete game, including its styles, procedural landscape, and game code. It works offline with JavaScript enabled and makes no external asset requests. If a file viewer blocks interactive HTML, download the ZIP, extract it, and open `index.html` in a browser.
 
 For development, run this command from the repository:
 
@@ -16,23 +16,35 @@ For development, run this command from the repository:
 python3 -m http.server 5501 --bind 127.0.0.1
 ```
 
-Open the server's root page in a browser. No package installation is needed. System fonts work offline.
-
-When editing `rivers.css` or `rivers.js`, refresh the embedded assets with `python3 scripts/build_rivers.py`. Commit the updated `index.html` alongside those source files. The build uses only the Python standard library and can be repeated safely.
+Open the server's root page in a browser. No package installation is needed; artwork and sound are generated locally, and text uses system fonts.
 
 ## Play
 
-- Begin your journey. WASD moves; left/right arrows turn the view.
-- Select Camera with 2 or the toolbar, then click the glowing lotus left of the path. Close the specimen journal.
-- Select Water staff with 3, then click the golden sluice wheel right of the path.
-- Click the glowing archive echo under the central gate and choose a response.
-- Use 1 for exploration, J for the journal, and Escape to close an open panel. Touch users can select tools and tap the same discoveries to finish the chapter without moving.
-- The sound button enables a quiet synthesized ambient chord after user interaction.
+- Click or tap the ground to walk; hold and drag to guide the wanderer. WASD and arrow keys also move.
+- Explore and collect the drifting poem fragments.
+- Approach the luminous lotus, select **Camera** (2), then use the contextual action button or **E** to photograph it.
+- Approach the ancient sluice, select **Water staff** (3), and restore the flow with the contextual action.
+- Approach the awakened memory and make a choice about the sanctuary's future.
+- **1** selects Explore, **J** opens the journal, **Escape** closes panels, and **M** toggles optional sound.
 
-## Prototype scope
+## Build and package
 
-One short chapter, one species, one water-restoration puzzle, and a narrative choice. The choice updates the field notes for the current session. No save system, physics, controller/Arduino integration, or downloadable Windows build is included. Reload to begin again. Existing coursework folders are unchanged.
+After editing `rivers.css`, `rivers-scene.js`, or `rivers.js`, refresh the standalone page:
 
-## Preview compatibility
+```sh
+python3 scripts/build_rivers.py
+```
 
-The standalone page was tested in Chromium inside a sandboxed HTML iframe with only `allow-scripts`, and with all network requests blocked. The full photo → waterway → memory → choice chapter completes without sibling files. It was also tested through HTTP with subresource requests blocked. If audio is unavailable, the game stays playable silently; if Canvas is unavailable, it displays an explanatory message.
+To also refresh the downloadable game-only ZIP:
+
+```sh
+python3 scripts/build_rivers.py --package
+```
+
+The helper uses only the Python standard library. It embeds the scene renderer before the game code and produces a repeatable `downloads/rivers-in-the-sky.zip` containing only `index.html` and `PLAY.txt`. Commit the generated HTML and ZIP with their source changes.
+
+## Scope and inspiration
+
+This is one short browser chapter with procedural Canvas artwork, an ecological puzzle, a poem, and a narrative choice. Progress lasts for the current session; reload to begin again. It is not a full 3D engine or a Windows executable. Existing coursework folders are unchanged.
+
+The visual direction is a design study inspired by [Wayfinder](https://wayfinder.nfb.ca): a contemplative landscape with sparse controls, wandering, and words discovered through exploration. The game's artwork, text, and code are original; no Wayfinder assets are included.
