@@ -1,0 +1,14 @@
+{
+  "unity": "2022.3 LTS",
+  "renderPipeline": "Built-in",
+  "target": "Windows x86_64 PC VR / OpenXR",
+  "installViaPackageManager": {
+    "com.unity.xr.interaction.toolkit": "2.5.4",
+    "com.unity.xr.openxr": "1.9.1"
+  },
+  "xriDeclaredDependencies": {
+    "com.unity.inputsystem": "1.7.0",
+    "com.unity.xr.core-utils": "2.2.3"
+  },
+  "note": "Reference data only. This file is not a replacement for your project's Packages/manifest.json."
+}
