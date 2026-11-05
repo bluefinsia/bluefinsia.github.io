@@ -1,0 +1,25 @@
+{
+  "name": "RiversVR.Runtime",
+  "rootNamespace": "RiversVR",
+  "references": [
+    "Unity.InputSystem",
+    "Unity.XR.CoreUtils",
+    "Unity.XR.Interaction.Toolkit",
+    "UnityEngine.UI"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [
+    {
+      "name": "com.unity.xr.interaction.toolkit",
+      "expression": "[3.0.0,4.0.0)",
+      "define": "RIVERS_XRI_3"
+    }
+  ],
+  "noEngineReferences": false
+}

@@ -1,5 +1,8 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+#if RIVERS_XRI_3
+using XRSimpleInteractable = UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable;
+#endif
 
 namespace RiversVR
 {
@@ -21,10 +24,15 @@ namespace RiversVR
 
         private GameProgress owner;
         private XRSimpleInteractable interactable;
+        private Collider[] selectionColliders;
         private Vector3 basePosition, baseScale;
         private bool isCurrent;
 
-        private void Awake() => interactable = GetComponent<XRSimpleInteractable>();
+        private void Awake()
+        {
+            interactable = GetComponent<XRSimpleInteractable>();
+            selectionColliders = GetComponents<Collider>();
+        }
         private void OnEnable() => GetComponent<XRSimpleInteractable>().selectEntered.AddListener(OnSelected);
         private void OnDisable() => GetComponent<XRSimpleInteractable>().selectEntered.RemoveListener(OnSelected);
 
@@ -54,18 +62,32 @@ namespace RiversVR
         {
             isCurrent = current;
             // Later artifacts remain visible but cannot be selected out of order.
-            interactable.enabled = current && !IsResolved;
+            SetSelectionEnabled(current && !IsResolved);
         }
 
         public void Resolve(ArtifactResolution choice)
         {
             IsResolved = true;
             Resolution = choice;
-            interactable.enabled = false;
+            SetSelectionEnabled(false);
             if (visual != null)
                 visual.gameObject.SetActive(false);
             if (restoredVisual != null)
                 restoredVisual.SetActive(choice == ArtifactResolution.RestoreHabitat);
+        }
+
+        private void SetSelectionEnabled(bool enabled)
+        {
+            if (interactable == null)
+                interactable = GetComponent<XRSimpleInteractable>();
+            if (selectionColliders == null)
+                selectionColliders = GetComponents<Collider>();
+            // Disabling an interactable alone leaves its collider in Physics.Raycast.
+            // Remove only hit targets on this stable root; platform terrain is separate.
+            foreach (Collider hitTarget in selectionColliders)
+                if (hitTarget != null)
+                    hitTarget.enabled = enabled;
+            interactable.enabled = enabled;
         }
 
         private void Update()

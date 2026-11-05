@@ -1,6 +1,12 @@
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+#if RIVERS_XRI_3
+using LocomotionMediator = UnityEngine.XR.Interaction.Toolkit.Locomotion.LocomotionMediator;
+using LocomotionProvider = UnityEngine.XR.Interaction.Toolkit.Locomotion.LocomotionProvider;
+using TeleportationProvider = UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation.TeleportationProvider;
+using XRRayInteractor = UnityEngine.XR.Interaction.Toolkit.Interactors.XRRayInteractor;
+#endif
 
 namespace RiversVR
 {
@@ -17,7 +23,11 @@ namespace RiversVR
         public XROrigin xrOrigin;
         public VRInputReader input;
         public GameProgress progress;
+#if RIVERS_XRI_3
+        public LocomotionMediator locomotionMediator;
+#else
         public LocomotionSystem locomotionSystem;
+#endif
         public TeleportationProvider teleportationProvider;
         [Tooltip("Left-hand teleport ray only. The right-hand ray remains active for UI.")]
         public XRRayInteractor teleportRay;
@@ -60,17 +70,29 @@ namespace RiversVR
             // provider reports completion, rather than guessing from transform changes.
             subscribedProvider = teleportationProvider;
             if (subscribedProvider != null)
+#if RIVERS_XRI_3
+                subscribedProvider.locomotionEnded += OnTeleportCompleted;
+#else
                 subscribedProvider.endLocomotion += OnTeleportCompleted;
+#endif
         }
 
         private void OnDisable()
         {
             if (subscribedProvider != null)
+#if RIVERS_XRI_3
+                subscribedProvider.locomotionEnded -= OnTeleportCompleted;
+#else
                 subscribedProvider.endLocomotion -= OnTeleportCompleted;
+#endif
             subscribedProvider = null;
         }
 
+#if RIVERS_XRI_3
+        private void OnTeleportCompleted(LocomotionProvider provider)
+#else
         private void OnTeleportCompleted(LocomotionSystem system)
+#endif
         {
             if (progress != null)
                 progress.CancelInteraction();
@@ -102,7 +124,13 @@ namespace RiversVR
             // A provider with exclusive locomotion access can reposition the origin.
             // Do not apply even gravity during that operation: CharacterController.Move
             // must not compete with XRI teleportation in the same frame.
+#if RIVERS_XRI_3
+            // XRI 3 providers coordinate queued body transformations with a mediator.
+            // This rig has one provider (teleport); let it finish before direct CC motion.
+            if (teleportationProvider != null && teleportationProvider.isLocomotionActive)
+#else
             if (locomotionSystem != null && locomotionSystem.busy)
+#endif
             {
                 ApplySnapTurn(true); // Consume a held turn without changing the origin.
                 return;

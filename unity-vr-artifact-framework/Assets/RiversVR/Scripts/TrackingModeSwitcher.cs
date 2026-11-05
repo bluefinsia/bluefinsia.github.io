@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
+#if RIVERS_XRI_3
+using XRRayInteractor = UnityEngine.XR.Interaction.Toolkit.Interactors.XRRayInteractor;
+#endif
 
 namespace RiversVR
 {

@@ -13,6 +13,16 @@ using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Inputs;
 using UnityEngine.XR.Interaction.Toolkit.UI;
+#if RIVERS_XRI_3
+// XRI 3 moved these types into dedicated namespaces. Explicit aliases avoid
+// accidentally binding to deprecated compatibility types in the root namespace.
+using XRRayInteractor = UnityEngine.XR.Interaction.Toolkit.Interactors.XRRayInteractor;
+using XRInteractorLineVisual = UnityEngine.XR.Interaction.Toolkit.Interactors.Visuals.XRInteractorLineVisual;
+using TeleportationProvider = UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation.TeleportationProvider;
+using XRBodyTransformer = UnityEngine.XR.Interaction.Toolkit.Locomotion.XRBodyTransformer;
+using LocomotionMediator = UnityEngine.XR.Interaction.Toolkit.Locomotion.LocomotionMediator;
+using XRInputButtonReader = UnityEngine.XR.Interaction.Toolkit.Inputs.Readers.XRInputButtonReader;
+#endif
 
 namespace RiversVR.Editor
 {
@@ -141,18 +151,30 @@ namespace RiversVR.Editor
             desktopLook.input = input;
             desktopLook.progress = progress;
 
+#if RIVERS_XRI_3
+            // XRI 3 replaces LocomotionSystem with a mediator and body transformer.
+            // Configure the serialized transformer directly: mediator.xrOrigin delegates
+            // to a component cache populated in Awake, which has not run in this editor menu.
+            XRBodyTransformer bodyTransformer = rig.AddComponent<XRBodyTransformer>();
+            bodyTransformer.xrOrigin = origin;
+            LocomotionMediator locomotion = rig.AddComponent<LocomotionMediator>();
+            TeleportationProvider teleportation = rig.AddComponent<TeleportationProvider>();
+            teleportation.mediator = locomotion;
+            movement.locomotionMediator = locomotion;
+#else
             LocomotionSystem locomotion = rig.AddComponent<LocomotionSystem>();
             locomotion.xrOrigin = origin;
             TeleportationProvider teleportation = rig.AddComponent<TeleportationProvider>();
             teleportation.system = locomotion;
             movement.locomotionSystem = locomotion;
+#endif
             movement.teleportationProvider = teleportation;
 
-            ActionBasedController left = CreateHand(offset.transform, "Left Hand", "LeftHand");
-            ActionBasedController right = CreateHand(offset.transform, "Right Hand", "RightHand");
-            XRRayInteractor artifactRay = CreateRay(right.transform, "Artifact and UI Ray", right, interactionManager, 1, 4f, true);
-            XRRayInteractor teleportRay = CreateRay(left.transform, "Teleport Ray",
-                left, interactionManager, 2, 30f, false);
+            Transform left = CreateHand(offset.transform, "Left Hand", "Left");
+            Transform right = CreateHand(offset.transform, "Right Hand", "Right");
+            XRRayInteractor artifactRay = CreateRay(right, "Artifact and UI Ray", "Right", interactionManager, 1, 4f, true);
+            XRRayInteractor teleportRay = CreateRay(left, "Teleport Ray",
+                "Left", interactionManager, 2, 30f, false);
             // The player's modal-input handling can disable this ray while choices are open.
             // Masks use XRI interaction-layer bits, not Unity physics-layer indices.
             movement.teleportRay = teleportRay;
@@ -199,12 +221,21 @@ namespace RiversVR.Editor
                 "Song text is supplied; assign authorized recordings to the five data assets if desired.");
         }
 
-        private static ActionBasedController CreateHand(Transform parent, string name, string usage)
+        private static Transform CreateHand(Transform parent, string name, string map)
         {
             GameObject hand = new GameObject(name);
             hand.transform.SetParent(parent, false);
+#if RIVERS_XRI_3
+            // Pose driving and interactor input are independent components in XRI 3.
+            // Track directly before rendering; keep action references in the saved asset.
+            TrackedPoseDriver tracking = hand.AddComponent<TrackedPoseDriver>();
+            tracking.trackingType = TrackedPoseDriver.TrackingType.RotationAndPosition;
+            tracking.updateType = TrackedPoseDriver.UpdateType.UpdateAndBeforeRender;
+            tracking.positionInput = Value(map + "/Position");
+            tracking.rotationInput = Value(map + "/Rotation");
+            tracking.trackingStateInput = Value(map + "/TrackingState");
+#else
             ActionBasedController controller = hand.AddComponent<ActionBasedController>();
-            string map = usage == "LeftHand" ? "Left" : "Right";
             controller.enableInputActions = true;
             controller.enableInputTracking = true;
             controller.positionAction = Value(map + "/Position");
@@ -215,16 +246,24 @@ namespace RiversVR.Editor
             controller.selectActionValue = Value(map + "/SelectValue");
             controller.uiPressAction = ButtonAction(map + "/UIPress");
             controller.uiPressActionValue = Value(map + "/UIPressValue");
-            return controller;
+#endif
+            return hand.transform;
         }
 
-        private static XRRayInteractor CreateRay(Transform parent, string name, ActionBasedController controller,
+        private static XRRayInteractor CreateRay(Transform parent, string name, string actionMap,
             XRInteractionManager manager, int interactionMask, float distance, bool uiInteraction)
         {
             GameObject rayObject = new GameObject(name);
             rayObject.transform.SetParent(parent, false);
             XRRayInteractor ray = rayObject.AddComponent<XRRayInteractor>();
-            ray.xrController = controller;
+#if RIVERS_XRI_3
+            // The reader properties replace ActionBasedController's select/UI bindings.
+            // InputActionManager already enables their shared persistent asset.
+            ray.selectInput = ButtonReader(actionMap + "/Select", actionMap + "/SelectValue");
+            ray.uiPressInput = ButtonReader(actionMap + "/UIPress", actionMap + "/UIPressValue");
+#else
+            ray.xrController = parent.GetComponent<ActionBasedController>();
+#endif
             ray.interactionManager = manager;
             ray.interactionLayers = interactionMask;
             ray.lineType = XRRayInteractor.LineType.StraightLine;
@@ -237,6 +276,18 @@ namespace RiversVR.Editor
             line.lineWidth = 0.008f;
             return ray;
         }
+
+#if RIVERS_XRI_3
+        private static XRInputButtonReader ButtonReader(string performedPath, string valuePath)
+        {
+            return new XRInputButtonReader
+            {
+                inputSourceMode = XRInputButtonReader.InputSourceMode.InputActionReference,
+                inputActionReferencePerformed = Reference(performedPath),
+                inputActionReferenceValue = Reference(valuePath)
+            };
+        }
+#endif
 
         private static InputActionProperty Value(string actionPath)
         {

@@ -1,6 +1,6 @@
-# There Are Rivers in the Sky — Unity 2022.3 VR base framework
+# There Are Rivers in the Sky — Unity VR base framework
 
-**Target:** Unity **2022.3 LTS**, **3D Core / Built-in Render Pipeline**, **Windows PC VR with OpenXR**.
+**Target:** Unity **2022.3 LTS or Unity 6**, **Built-in Render Pipeline**, **Windows PC VR with OpenXR**. Source compatibility paths are provided for **XRI 2.5.4** and **XRI 3.5.0**.
 
 The supplied GDD describes a researcher returning to a flooded, post-human Earth: palace ruins, luminous cyanobacteria, lotus gardens, photographs, environmental choices, and clues from **Đi Cấy**. This framework implements that core loop using a generated primitive blockout. The five artifact identities and precise locations below are implementation choices interpreting the GDD, rather than additional claims about the document.
 
@@ -8,17 +8,17 @@ This is a VR replacement for the earlier desktop-only starter. Its scripts live 
 
 ## 1. Create and configure the project
 
-1. Create a **Unity 2022.3 LTS → 3D Core / Built-in Render Pipeline** project. The code and runtime photo camera target Built-in rendering. Unity 6 / XRI 3.x / URP have not been verified for this package.
-2. In **Window → Package Manager**, use **+ → Add package by name** twice:
+1. Create a **Unity 2022.3 LTS or Unity 6 → 3D / Built-in Render Pipeline** project. The code and runtime photo camera target Built-in rendering. URP needs a different photo rendering path/materials.
+2. If you already have **XR Interaction Toolkit 3.5.0**, keep it. The included assembly definitions detect XRI 3 automatically. Let Package Manager resolve its Input System and Core Utils dependencies; do not pin the older transitive versions. For a new Unity 2022.3 project using the older package profile, **Window → Package Manager → + → Add package by name** supports:
 
    | Package name | Version |
    | --- | --- |
    | `com.unity.xr.interaction.toolkit` | `2.5.4` |
    | `com.unity.xr.openxr` | `1.9.1` |
 
-   XRI 2.5.4 declares Input System **1.7.0** and XR Core Utilities **2.2.3** as dependencies. Let Unity resolve the dependencies. No Starter Assets sample import is needed: the scene builder creates a persistent input-action asset and wires its references.
+   XRI 2.5.4 declares Input System **1.7.0** and XR Core Utilities **2.2.3**. XRI 3.5.0 declares Input System **1.8.1** and Core Utils **2.4.0** as minimum dependencies; newer compatible installed versions may be retained by Package Manager. For Unity 6, use the compatible OpenXR version offered by Package Manager rather than forcing the older 1.9.1 profile. No Starter Assets sample import is needed: the scene builder creates a persistent input-action asset and wires its references.
 3. Set **Edit → Project Settings → Player → Other Settings → Active Input Handling → Input System Package (New)**. Accept the editor restart if requested.
-4. In **File → Build Settings**, select **PC, Mac & Linux Standalone**, target **Windows**, architecture **x86_64**. Switch platform if needed.
+4. In **File → Build Settings** (or **Build Profiles** in Unity 6), select the **Windows** standalone target, architecture **x86_64**. Switch platform if needed.
 5. Open **Edit → Project Settings → XR Plug-in Management**. In the Windows/Standalone tab, enable **OpenXR** and **Initialize XR on Startup**.
 6. Open the **OpenXR** settings and add the controller interaction profile for your hardware. For example, use **Oculus Touch Controller Profile** with Quest Link, **Valve Index Controller Profile** with Index, or the matching Vive profile. Resolve applicable errors in **Project Validation**. The default action paths assume a primary 2D axis and primary face button; hardware without those controls needs adjusted bindings in `VRInputReader`.
 7. In your headset's PC software, select the intended active **OpenXR runtime** (for example SteamVR or Meta Quest Link). Connect the headset/controllers. Editor scripts do not install a headset runtime or select one for Windows.
@@ -32,6 +32,18 @@ This is a VR replacement for the earlier desktop-only starter. Its scripts live 
 5. For a Windows player, add the saved scene to **Build Settings → Scenes In Build**, then build/run with the headset's OpenXR runtime active.
 
 If the menu is missing, first inspect the **Console's first red error**. Missing `Unity.XR.CoreUtils`, `UnityEngine.InputSystem`, or XRI types usually indicates that package installation/compilation is incomplete. Keep the helper inside its `Editor` directory.
+
+### Updating an earlier download that shows obsolete-API warnings
+
+The earlier files targeted XRI 2.5.4. Under XRI 3 they selected compatibility classes such as `ActionBasedController` and `LocomotionSystem`, producing CS0618 warnings.
+
+1. Stop Play Mode and save your current scene/assets.
+2. Extract the updated ZIP. Copy the **files inside** `Assets/RiversVR/Scripts` and `Assets/RiversVR/Editor` into the corresponding existing project folders. Overwrite the matching `.cs` files and include **both `.asmdef` files**. Preserve existing `.meta` files, `DemoData` assets, fonts and authored scenes.
+3. Wait for compilation. `RiversVR.Runtime.asmdef` and `RiversVR.Editor.asmdef` set `RIVERS_XRI_3` automatically for XRI 3.x; do not add the symbol manually.
+4. Run **Tools → Rivers VR → Create Demo Scene** again and save the result under a **new scene name**. Existing scenes still contain their previously serialized controller/system components; updating source alone does not rebuild those rigs.
+5. Clear the Console to remove historical warnings, then enter Play in the newly generated scene.
+
+On XRI 3 the builder uses **TrackedPoseDriver + input readers** for hands/rays and **LocomotionMediator + XRBodyTransformer** for locomotion. On XRI 2.5.4 it uses the original APIs. No compiler warnings are suppressed. Resolved/dormant artifact and locked-finale hit colliders also disable correctly, preventing invisible objects from blocking interaction rays.
 
 ## 3. Scripts and GameObject attachments
 
@@ -60,13 +72,14 @@ The rig hierarchy is:
 ```text
 XR Origin - Player
   CharacterController, XROrigin, VRInputReader, VRPlayerController, InputActionManager
-  LocomotionSystem, TeleportationProvider, TrackingModeSwitcher, DesktopInteractor
+  LocomotionMediator + XRBodyTransformer (XRI 3) / LocomotionSystem (XRI 2)
+  TeleportationProvider, TrackingModeSwitcher, DesktopInteractor
   Camera Floor Offset
     Main Camera - Tracked HMD
       Camera, AudioListener, Input System TrackedPoseDriver, DesktopLook
-    Left Hand — ActionBasedController
+    Left Hand — TrackedPoseDriver (XRI 3) / ActionBasedController (XRI 2)
       Teleport Ray — XRRayInteractor + XRInteractorLineVisual
-    Right Hand — ActionBasedController
+    Right Hand — TrackedPoseDriver (XRI 3) / ActionBasedController (XRI 2)
       Artifact and UI Ray — XRRayInteractor + XRInteractorLineVisual
 GameProgress — GameProgress + ResearchCamera
 WorldGenerator — PlatformGenerator
@@ -130,7 +143,7 @@ The photo service writes PNGs to `Application.persistentDataPath/ResearchPhotos`
 - `DemoData/RiversVRInput.asset` is a saved InputActionAsset with Head, Left, Right and Gameplay maps and persistent action references. `InputActionManager` enables the shared asset; gameplay/modal logic never disables its tracking actions. The defaults are authored in the scene builder. For custom controls, assign references from your own authored Input Action Asset to the reader/controllers and include that asset in InputActionManager. Keep referenced actions available. Existing generated bindings are preserved when the scene builder is run again.
 - Artifact/finale hit targets are trigger colliders. Both the right ray and desktop interaction ray explicitly query triggers. Floors have solid colliders and registered `TeleportationArea` components.
 - Left teleport and right interaction use different triggers. The teleport ray is disabled during menus. XRI cancels the selection when disabled; its canceled-select guard prevents a canceled selection from queueing a teleport.
-- `VRPlayerController` respects `LocomotionSystem.busy` and resets falling/jump state on `TeleportationProvider.endLocomotion`. Capsule height/centre follow room-scale head movement; respawn places the tracked head above the checkpoint without overwriting its physical tracking pose.
+- `VRPlayerController` respects the teleport provider's active state and resets falling/jump state on `locomotionEnded` in XRI 3; the XRI 2 path retains `LocomotionSystem.busy` and `endLocomotion`. Capsule height/centre follow room-scale head movement; respawn places the tracked head above the checkpoint without overwriting its physical tracking pose.
 - `VRGameUI` positions the journal once, about 2 m in front of the head, when opened. Closing disables the Canvas root and its raycaster. A trigger-release gate prevents the press that opens choices from also clicking a newly appeared button.
 - `WorldGenerator` should keep rotation zero and scale one. If you move the level vertically, adjust the player's `killY` appropriately.
 - The helper creates/reuses `DemoData/WorldMaterial.mat` and assigns it to the generator. This serialized reference keeps the Standard shader and emission variant in Windows builds. For a manually built scene, assign a Standard material with emission enabled to `materialTemplate`.
@@ -138,9 +151,9 @@ The photo service writes PNGs to `Application.persistentDataPath/ResearchPhotos`
 
 ## 7. What was checked and what to test in Unity
 
-The scripts were reviewed against pinned Input System/XRI/Core Utils source APIs, parsed with a C# syntax parser, and checked for consistent references, sequence indices, default route dimensions and package contents. **Unity Editor compilation, Play Mode, Windows builds and headset tracking/input were not run in the generation environment.** Syntax checks do not verify engine behavior.
+The scripts were reviewed against XRI **2.5.4** and exact **3.5.0** source APIs, with syntax checks of both preprocessed code paths, assembly-definition/version checks and checks for consistent references, sequence indices, route dimensions and package contents. **Unity Editor compilation, Play Mode, Windows builds and headset tracking/input were not run in the generation environment.** Syntax checks do not verify engine behavior.
 
-Run this checklist in Unity 2022.3 with your Windows OpenXR headset:
+Run this checklist in your Unity editor with your Windows OpenXR headset:
 
 1. Install packages, resolve the first Console error if any, create/save the scene, and enter Play. Confirm 13 platforms, five artifacts, and a 0/5 count.
 2. Rotate/move your head with menus open and closed. Tracking should stay immediate. Confirm hands, right UI clicks, left teleport, primary-stick movement and snap turn.

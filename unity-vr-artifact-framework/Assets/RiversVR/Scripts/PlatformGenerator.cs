@@ -1,6 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+#if RIVERS_XRI_3
+using XRSimpleInteractable = UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable;
+using TeleportationProvider = UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation.TeleportationProvider;
+using TeleportationArea = UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation.TeleportationArea;
+using BaseTeleportationInteractable = UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation.BaseTeleportationInteractable;
+#endif
 
 namespace RiversVR
 {
