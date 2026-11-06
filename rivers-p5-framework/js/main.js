@@ -1,4 +1,4 @@
-import {generateWorld} from './platform-generator.js';
+import {generateWorld} from './world-generator.js';
 import {PlayerController} from './player-controller.js';
 import {ArtifactSystem} from './artifact-system.js';
 import {CameraFollow} from './camera-follow.js';
@@ -93,21 +93,22 @@ function dispatch(action) {
 function takePhotograph(artifact) {
   photoBuffer ||= p.createGraphics(800,600,p.WEBGL);
   const g=photoBuffer;g.pixelDensity(1);g._renderer._update();
-  g.perspective(Math.PI/3,4/3,0.05,180);
+  g.perspective(Math.PI/3,4/3,0.05,300);
   const eye=headPoint(),forward=forwardPoint();
   applyDesktopCamera(g,eye,{x:eye.x+forward.x,y:eye.y+forward.y,z:eye.z+forward.z});
   renderWorld(g,world,player,{time:state.time,showPlayer:false,currentIndex:system.foundCount,xr:false});
   return {id:artifact.id,name:artifact.definition.name,url:g.canvas.toDataURL('image/png')};
 }
 
-function platformHit(ray) {
+/** Any point on the continuous garden ground can be a VR teleport destination. */
+function groundHit(ray) {
   if(!ray||ray.direction.y>=-0.001)return null;
   let nearest=null;
-  for(const platform of world.platforms) {
-    const top=platform.y+platform.h/2,t=(top-ray.origin.y)/ray.direction.y;
+  for(const surface of world.surfaces) {
+    const top=surface.y+surface.h/2,t=(top-ray.origin.y)/ray.direction.y;
     if(t<=0||t>30||(nearest&&t>=nearest.t))continue;
     const x=ray.origin.x+ray.direction.x*t,z=ray.origin.z+ray.direction.z*t;
-    if(Math.abs(x-platform.x)<=platform.w/2-0.4&&Math.abs(z-platform.z)<=platform.d/2-0.4)nearest={x,y:top+0.03,z,t};
+    if(Math.abs(x-surface.x)<=surface.w/2-0.4&&Math.abs(z-surface.z)<=surface.d/2-0.4)nearest={x,y:top+0.03,z,t};
   }
   return nearest;
 }
@@ -138,7 +139,7 @@ function update(dt,xrInput=null) {
       }
     }
     if(xrInput.teleportPressed&&!system.isBlocked) {
-      const hit=platformHit(xrInput.leftRay);
+      const hit=groundHit(xrInput.leftRay);
       if(hit){const before=rigSnapshot();player.teleportTo({x:hit.x-xrInput.roomOffset.x,y:hit.y,z:hit.z-xrInput.roomOffset.z});refreshTrackedInput(xrInput,before);}
     }
   } else {
@@ -162,7 +163,7 @@ function drawWorldFrame(xrInfo=null) {
   const panel=state.xr?ui.texture(p,font):null;
   renderWorld(p,world,player,{time:state.time,xr:state.xr,showPlayer:!state.xr,currentIndex:system.foundCount,
     rays:input?{right:input.rightRay,left:input.leftRay}:null,
-    teleportMarker:input&&!system.isBlocked?platformHit(input.leftRay):null,panel});
+    teleportMarker:input&&!system.isBlocked?groundHit(input.leftRay):null,panel});
 }
 
 window.addEventListener('keydown',event=>{
@@ -191,7 +192,7 @@ new p5(instance=>{
     p.pixelDensity(Math.min(window.devicePixelRatio||1,1.5));p.frameRate(30);p.noStroke();
     canvas.elt.addEventListener('contextmenu',event=>event.preventDefault());
     canvas.elt.addEventListener('pointerdown',event=>{if(event.button===2)orbiting=true;});
-    p.perspective(Math.PI/3,p.width/p.height,0.05,180);camera.update(player,0,true);
+    p.perspective(Math.PI/3,p.width/p.height,0.05,300);camera.update(player,0,true);
     bridge=new WebXRBridge(p,{getRig:()=>player,update,render:drawWorldFrame,
       onStateChange:active=>{state.xr=active;state.latestXR=null;state.started=true;keys.clear();if(active)system.openJournal();else system.close();camera.update(player,0,true);ui.sync(near());},
       onError:error=>ui.notify(error.message)});
@@ -205,7 +206,7 @@ new p5(instance=>{
   p.draw=()=>{
     if(bridge?.active)return;
     update(p.deltaTime/1000);
-    p.perspective(Math.PI/3,p.width/p.height,0.05,180);
+    p.perspective(Math.PI/3,p.width/p.height,0.05,300);
     applyDesktopCamera(p,camera.eye,camera.target);drawWorldFrame();
   };
   p.windowResized=()=>{if(!bridge?.active)p.resizeCanvas(window.innerWidth,window.innerHeight);};

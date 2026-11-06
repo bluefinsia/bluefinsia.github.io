@@ -122,7 +122,7 @@ export class WebXRBridge {
       session.updateRenderState({
         baseLayer: layer,
         depthNear: 0.05,
-        depthFar: 180
+        depthFar: 300
       });
       const referenceSpace = await session.requestReferenceSpace('local-floor');
       if (this._session !== session) {

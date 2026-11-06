@@ -1,6 +1,6 @@
-# There Are Rivers in the Sky — p5.js / WebXR framework
+# There Are Rivers in the Sky — open-world p5.js / WebXR framework
 
-A playable **p5.js WEBGL** prototype of the supplied GDD: a researcher returns to a flooded, post-human Earth, follows **Đi Cấy**, resolves five artifacts in order, and discovers a hidden sanctuary. All geometry is procedural. The blockout includes palace ruins, lotus, cyanobacteria, a lamp, rice plots, four figures and a moonlit porch.
+A playable **p5.js WEBGL open-world exploration** prototype of the supplied GDD: a researcher returns to a flooded, post-human Earth, follows **Đi Cấy**, resolves five artifacts in order, and discovers a hidden sanctuary. Explore a continuous 144×144 m palace garden with branching paths, shallow ponds, trees, ruins, lotus, cyanobacteria, rice plots and five separate landmark districts. Every location is reachable on foot; jumping is optional.
 
 This version uses **JavaScript and p5.js**, not Unity or C#. It includes a working desktop game and an optional **native WebXR immersive-vr** path. p5 WEBGL alone is not VR: `webxr-bridge.js` explicitly creates a session, obtains floor/head/controller poses and renders separate eye views.
 
@@ -24,7 +24,7 @@ No npm install, build process, Unity Editor, external models or CDN connection i
 | Action | Control |
 | --- | --- |
 | Move relative to the camera | WASD / arrow keys |
-| Jump, then one further air jump | Space |
+| Optional jump, then one further air jump | Space |
 | Rotate the third-person camera | Hold right mouse and drag |
 | Interact with the next nearby artifact / sanctuary | E or the Interact button |
 | Open/close field journal | J |
@@ -45,13 +45,13 @@ Click **Enter VR** in the browser to request the session. Grant the browser's pe
 | --- | --- |
 | Move | Left stick |
 | Snap turn 45° | Right stick left/right |
-| Teleport to a platform's top surface | Aim left ray, press then release left trigger |
+| Teleport anywhere on the garden ground | Aim left ray, press then release left trigger |
 | Interact / choose a journal button | Aim right ray, press right trigger |
 | Recall/close journal | Left primary face button, commonly X |
 | Jump / double jump | Right primary face button, commonly A, when jumping is enabled |
 | Enable VR jumping / exit session | In-headset journal buttons |
 
-Artificial VR jumping defaults off and can be enabled in the journal or through the desktop checkbox before entering. Teleportation is available without jumping. Controllers without these buttons/axes need a mapping adjustment in `webxr-bridge.js`.
+Artificial VR jumping defaults off and can be enabled in the journal or through the desktop checkbox before entering. The entire region can be explored by ordinary walking or teleportation. Controllers without these buttons/axes need a mapping adjustment in `webxr-bridge.js`.
 
 **Head tracking has no camera-follow delay.** The delayed camera is desktop-only. Menus also render as a world-space p5 texture with ray-hit-tested buttons; the headset does not depend on DOM overlay support. The panel is positioned when opened and remains world anchored. Exit VR returns to the desktop loop.
 
@@ -64,9 +64,9 @@ There are no Unity GameObjects to attach scripts to. `index.html` loads the bund
 | `index.html` | Canvas host, accessible desktop HUD, intro and journal controls. |
 | `styles.css` | Desktop layout and bundled Vietnamese font. |
 | `js/main.js` | p5 sketch setup/draw loop, input/action routing, physics/render coordination and mono photo capture. |
-| `js/player-controller.js` | Feet-based movement, platform side/ceiling/landing collision, ground/air jump, checkpoints, respawn and room-scale offset handling. |
+| `js/player-controller.js` | Feet-based movement, continuous-ground collision, world bounds, optional ground/air jump, checkpoints, respawn and room-scale offset handling. |
 | `js/camera-follow.js` | Smooth desktop chase camera; never applied to a tracked head pose. |
-| `js/platform-generator.js` | Deterministic 13-platform trail with five artifact stations, a safe start and finale. Change seed here/in main. |
+| `js/world-generator.js` | Continuous ground, widely spaced landmark districts, branching paths, shallow ponds and seeded scenery. Change the seed here/in main. |
 | `js/artifact-system.js` | Authoritative ordered progression, confirmation distance checks, choices and sanctuary unlocking. |
 | `js/data.js` | Five artifact definitions, event dialogue, supplied Đi Cấy excerpts, colors and optional audio paths. |
 | `js/scene-renderer.js` | Shared p5 geometry/artwork for desktop, both XR eyes and research photographs. |
@@ -77,7 +77,11 @@ There are no Unity GameObjects to attach scripts to. `index.html` loads the bund
 | `tests/simulation.test.js` | Physics, sequence and state tests using Node's built-in test runner. |
 | `tests/webxr.test.js` | Mocked WebXR lifecycle, stereo-matrix and controller-edge checks. |
 
-All world units are **meters, +Y up, forward −Z**. Player position represents feet; platform `y` represents the center. Decorative scenery has no collision. Solid platforms are 6×0.6×6 m with approximately 1 m edge gaps. Sideways offsets stay within ±0.7 m and vertical offsets within ±0.12 m. Movement speed is 4.6 m/s, jump height 1.6 m and gravity −16 m/s². The second jump offers extra margin; it cannot repeat indefinitely.
+All world units are **meters, +Y up, forward −Z**. Player position represents feet. The garden spans X −72…72 and Z −112…32 with solid ground throughout; world bounds keep the physical VR footprint within the region. Paths suggest routes but you can walk across the grass, take shortcuts or wade through the shallow ornamental ponds. Scenery is a decorative blockout and has no separate tree/ruin collision. Movement speed is 4.6 m/s. Optional jumping retains a 1.6 m jump height, one air jump and gravity −16 m/s².
+
+The open world contains separate districts rather than a prescribed movement route: the lotus pagoda to the west, lamplit dining ruins to the east, rice gardens in the southeast, four figures in the southwest, and a moonlit porch to the north. You can visit any district at any time. Artifact resolution still follows the five-song-clue sequence, and the sanctuary's light appears after the fifth discovery.
+
+When updating an older download, copy the updated `index.html`, `js` and `README.md` files into the extracted game folder and refresh the browser. `world-generator.js` replaces the earlier generator; any old unused `platform-generator.js` file can be removed. Existing vendor/font files are unchanged. Restarting the local Python server is unnecessary when it already serves this folder.
 
 The WebXR bridge intentionally uses a few private p5 renderer fields to set eye matrices/viewports. **Keep p5 pinned to 1.11.3** unless you retest that bridge. The game advances simulation once per XR frame, then draws once per eye. It clears each eye with scissoring so one eye cannot erase the other. Head poses are used directly; artificial rig movement is separate.
 
@@ -108,7 +112,7 @@ With Node installed, run:
 npm test
 ```
 
-No dependencies need installing for these tests. The suite covers 13 simulation cases and mocked XR rendering/input lifecycle checks. Browser validation also exercised start, movement/jumping, journal controls, all five artifacts, actual PNG capture, environmental restoration, sanctuary completion and restart without page errors or failed requests.
+No dependencies need installing for these tests. The suite covers 16 simulation cases and mocked XR rendering/input lifecycle checks, including ground samples across the region, direct walking routes to all five landmarks without jumping, world perimeter/room-scale bounds, artifact progression and optional jump behavior. Browser validation also exercises the open landscape, exploration controls, all five artifacts, PNG capture, environmental restoration, sanctuary completion and restart.
 
 An additional Chromium test used the **real p5 WebGL renderer with an emulated XR runtime** to check stereo views, readable in-world menus, controller ray clicks, snap turning and clean return to desktop. **No physical headset was tested.** Emulation does not establish device/browser compatibility, controller profiles, compositor submission, performance or comfort on target hardware. Test those on your headset before calling a VR build ready.
 

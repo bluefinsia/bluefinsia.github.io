@@ -107,11 +107,11 @@ function drawSky(p, time) {
 
   // The warm moon is far beyond the ruins. Its position does not track the
   // desktop camera, so stereo eyes and photographs share the same composition.
-  orb(p, 17, 22, -91, 5.2, [233, 222, 173]);
+  orb(p, 60, 54, -180, 10, [233, 222, 173]);
   p.push();
-  p.translate(17, 22, -92);
+  p.translate(60, 54, -181);
   glow(p, [67, 107, 112]);
-  p.torus(6.4, 0.035, 32, 4);
+  p.torus(12.4, 0.055, 32, 4);
   p.pop();
 
   // Broad ribbons suggest the GDD's impossible rivers in the sky. Each ribbon
@@ -120,11 +120,11 @@ function drawSky(p, time) {
     glow(p, river === 0 ? [58, 104, 111] : [44, 86, 96]);
     p.beginShape(p.TRIANGLE_STRIP);
     for (let i = 0; i <= 30; i += 1) {
-      const z = 12 - i * 4.6;
-      const x = (river === 0 ? -15 : 19) + Math.sin(i * 0.26 + river) * 5;
-      const y = 15 + Math.cos(i * 0.19 + river) * 3;
-      p.vertex(x - 2.5, y, z);
-      p.vertex(x + 2.5, y + 0.13, z);
+      const z = 45 - i * 8;
+      const x = (river === 0 ? -45 : 55) + Math.sin(i * 0.26 + river) * 12;
+      const y = 29 + Math.cos(i * 0.19 + river) * 6;
+      p.vertex(x - 5, y, z);
+      p.vertex(x + 5, y + 0.13, z);
     }
     p.endShape();
   }
@@ -135,8 +135,8 @@ function drawSky(p, time) {
   p.strokeWeight(0.015);
   p.beginShape(p.POINTS);
   for (let i = 0; i < 44; i += 1) {
-    p.vertex((variation(i + 1) - 0.5) * 105,
-      13 + variation(i + 72) * 28, -45 - variation(i + 140) * 90);
+    p.vertex((variation(i + 1) - 0.5) * 210,
+      26 + variation(i + 72) * 45, -80 - variation(i + 140) * 150);
   }
   p.endShape();
   p.noStroke();
@@ -145,9 +145,9 @@ function drawSky(p, time) {
   // atmospheric-depth cue that also looks consistent in both headset eyes.
   for (let i = 0; i < 8; i += 1) {
     p.push();
-    p.translate((i % 2 ? 1 : -1) * (23 + variation(i) * 15),
-      -3.4, -13 - i * 13);
-    p.scale(9, 2.5 + variation(i + 8) * 3, 6);
+    p.translate((i % 2 ? 1 : -1) * (93 + variation(i) * 20),
+      -3.4, 20 - i * 24);
+    p.scale(18, 8 + variation(i + 8) * 8, 14);
     glow(p, [34, 64, 73]);
     p.sphere(1, 8, 5);
     p.pop();
@@ -155,58 +155,103 @@ function drawSky(p, time) {
   p.pop();
 }
 
-function drawWater(p, world, time) {
-  const waterY = world.waterY ?? -0.9;
-  p.push();
-  p.noStroke();
-  p.translate(0, waterY, -43);
-  p.rotateX(PI / 2);
-  // An opaque surface gives stable stereo depth and avoids sorting a huge
-  // transparent plane against the platforms and world-space UI.
-  p.ambientMaterial(39, 101, 109);
-  p.plane(240, 300);
-  p.pop();
+function groundHeight(world) {
+  const surface = world.surfaces?.[0];
+  return surface ? surface.y + surface.h / 2 : 0.3;
+}
 
-  // A few thin lines and rings read as flowing water without a full-screen
-  // shader or hundreds of moving meshes. Motion is purely cosmetic.
-  p.push();
-  p.stroke(76, 139, 140);
-  p.strokeWeight(0.012);
-  p.noFill();
-  for (let side = -1; side <= 1; side += 2) {
-    for (let row = 0; row < 10; row += 1) {
-      const x = side * (5.6 + variation(row + 15) * 11);
-      const z = 5 - row * 10;
-      p.beginShape();
-      for (let step = 0; step < 7; step += 1) {
-        p.vertex(x + step * 0.7, waterY + 0.015,
-          z + Math.sin(step * 0.7 + time * 0.3 + row) * 0.13);
-      }
-      p.endShape();
-    }
+/** One low-poly, slightly irregular patch, lying directly on the ground. */
+function groundPatch(p, x, y, z, width, depth, seed, color) {
+  stone(p, color);
+  p.beginShape(p.TRIANGLE_FAN);
+  p.normal(0, 1, 0);
+  p.vertex(x, y, z);
+  for (let edge = 0; edge <= 20; edge += 1) {
+    const angle = ((edge % 20) / 20) * TAU;
+    const radius = 0.94 + variation(seed + (edge % 20) * 4) * 0.06;
+    p.vertex(x + Math.cos(angle) * width * 0.5 * radius, y,
+      z + Math.sin(angle) * depth * 0.5 * radius);
   }
-  p.pop();
-  for (let i = 0; i < 7; i += 1) {
-    const radius = 0.4 + ((time * 0.07 + i * 0.17) % 0.65);
-    groundRing(p, (i % 2 ? 1 : -1) * (4.3 + variation(i) * 3),
-      waterY + 0.025, -4 - i * 12, radius, 0.009, [67, 146, 147]);
+  p.endShape();
+}
+
+function drawTerrain(p, world) {
+  const surfaces = world.surfaces ?? [{ x: 0, y: 0, z: -40, w: 144, d: 144, h: 0.6 }];
+  for (const surface of surfaces) {
+    // The single continuous top matches collision. Lawn, paths, and shallow
+    // water are visual treatments of this same surface: walking needs no jumps.
+    block(p, surface.x, surface.y, surface.z, surface.w, surface.h, surface.d,
+      [104, 141, 117]);
+  }
+  const bounds = world.bounds ?? { minX: -72, maxX: 72, minZ: -112, maxZ: 32 };
+  const y = groundHeight(world);
+  for (let patch = 0; patch < 25; patch += 1) {
+    const x = bounds.minX + 6 + variation(patch + 209) * (bounds.maxX - bounds.minX - 12);
+    const z = bounds.minZ + 6 + variation(patch + 309) * (bounds.maxZ - bounds.minZ - 12);
+    groundPatch(p, x, y + 0.003 + (patch % 3) * 0.001, z,
+      9 + variation(patch + 409) * 15, 6 + variation(patch + 509) * 13,
+      patch * 29, patch % 2 ? [94, 133, 111] : [115, 148, 115]);
   }
 }
 
-function drawPlatform(p, platform) {
-  const { x, y, z, w, d, h } = platform;
-  const top = y + h / 2;
-  // Layers imitate eroded bevels with inexpensive boxes; the top exactly
-  // matches the collision surface in world-model.js.
-  block(p, x, y - 0.12, z, w * 0.96, h + 0.16, d * 0.96, COLORS.edge);
-  block(p, x, y + 0.03, z, w, h - 0.04, d, COLORS.stone);
-  block(p, x, top - 0.005, z, w - 0.12, 0.035, d - 0.12, COLORS.stoneTop);
-  block(p, x - w / 2 + 0.1, top + 0.025, z, 0.07, 0.035, d - 0.3, COLORS.dark);
-  block(p, x + w / 2 - 0.1, top + 0.025, z, 0.07, 0.035, d - 0.3, COLORS.dark);
+/** A smooth broad strip. Averaged tangents avoid seams at winding path joins. */
+function pathStrip(p, points, width, y, color) {
+  if (!points || points.length < 2) return;
+  stone(p, color);
+  p.beginShape(p.TRIANGLE_STRIP);
+  p.normal(0, 1, 0);
+  for (let i = 0; i < points.length; i += 1) {
+    const previous = points[Math.max(0, i - 1)];
+    const next = points[Math.min(points.length - 1, i + 1)];
+    const dx = next.x - previous.x;
+    const dz = next.z - previous.z;
+    const length = Math.hypot(dx, dz) || 1;
+    const nx = (dz / length) * width / 2;
+    const nz = (-dx / length) * width / 2;
+    p.vertex(points[i].x + nx, y, points[i].z + nz);
+    p.vertex(points[i].x - nx, y, points[i].z - nz);
+  }
+  p.endShape();
+}
 
-  // A narrow cyan inlay marks the route; the gap between slabs remains visible
-  // so a player can judge the jump (or use comfortable VR teleportation).
-  block(p, x, top + 0.028, z, 0.045, 0.02, d - 0.5, [99, 181, 161]);
+function drawPaths(p, world) {
+  const y = groundHeight(world);
+  for (const path of world.paths ?? []) {
+    // Broad sandstone trails are useful visual suggestions, not rails or
+    // colliders. All the surrounding grass is equally free to explore.
+    pathStrip(p, path.points, (path.width ?? 3) + 0.5, y + 0.012, [135, 157, 122]);
+    pathStrip(p, path.points, path.width ?? 3, y + 0.016, [177, 180, 144]);
+  }
+}
+
+function drawWater(p, world, time) {
+  const waterY = world.waterY ?? groundHeight(world) + 0.04;
+  for (const [index, pond] of (world.ponds ?? []).entries()) {
+    const width = pond.w ?? pond.width ?? 10;
+    const depth = pond.d ?? pond.depth ?? 8;
+    // Flat shallow pools leave the continuous floor intact beneath them. There
+    // is no ocean-sized overlay obscuring paths or turning the park into islands.
+    groundPatch(p, pond.x, waterY - 0.007, pond.z, width + 0.7, depth + 0.7,
+      index * 17, [123, 160, 128]);
+    groundPatch(p, pond.x, waterY, pond.z, width, depth, index * 17, [45, 119, 126]);
+    groundRing(p, pond.x - width * 0.12, waterY + 0.015, pond.z + depth * 0.08,
+      0.65 + ((time * 0.08 + index * 0.19) % 0.6), 0.009, [81, 161, 159]);
+    p.push();
+    p.stroke(84, 154, 150);
+    p.strokeWeight(0.014);
+    p.noFill();
+    p.beginShape();
+    for (let step = 0; step < 7; step += 1) {
+      p.vertex(pond.x + (step - 3) * width * 0.09, waterY + 0.018,
+        pond.z - depth * 0.16 + Math.sin(step * 0.65 + time * 0.3 + index) * 0.1);
+    }
+    p.endShape();
+    p.pop();
+    if (index % 2 === 0) {
+      lotus(p, pond.x + width * 0.24, waterY + 0.035,
+        pond.z - depth * 0.18, 0.9 + variation(index) * 0.4);
+    }
+  }
 }
 
 function drawColumn(p, x, z, height, waterY, broken = false) {
@@ -224,18 +269,69 @@ function drawColumn(p, x, z, height, waterY, broken = false) {
 }
 
 function drawRuins(p, world) {
-  const waterY = world.waterY ?? -0.9;
-  // Outer colonnades frame the playable path, never obstructing it. They are
-  // scenery only; collision/platform generation has a single owner elsewhere.
-  for (let i = 0; i < 7; i += 1) {
-    const z = 1 - i * 14;
-    const height = i % 3 === 1 ? 2.4 : 4.7;
-    drawColumn(p, -5.2, z, height, waterY, i % 3 === 1);
-    drawColumn(p, 5.2, z, i % 3 === 2 ? 3.0 : 4.7, waterY, i % 3 === 2);
-    if (i % 3 === 0) {
-      block(p, -5.2, waterY + 5.15, z - 2.0, 0.9, 0.28, 4.9, COLORS.dark);
-      block(p, 5.2, waterY + 5.15, z - 2.0, 0.9, 0.28, 4.9, COLORS.dark);
+  const y = groundHeight(world);
+  const columns = world.decor?.columns ?? [];
+  // Palace fragments are distributed around the garden perimeter rather than
+  // lining a track. Gaps remain broad and every garden district has free access.
+  for (const [index, column] of columns.entries()) {
+    const height = column.height ?? (column.h ?? 4.5 + variation(index) * 2.5);
+    drawColumn(p, column.x, column.z, height, y - 0.35,
+      column.broken ?? index % 3 === 1);
+  }
+}
+
+function drawGardenDecor(p, world) {
+  const y = groundHeight(world);
+  // Small meadow strokes share one draw call. They add scale and a hand-painted
+  // texture to the lawn without a dense grass mesh or any collision obstacles.
+  const bounds = world.bounds ?? { minX: -72, maxX: 72, minZ: -112, maxZ: 32 };
+  p.push();
+  p.stroke(121, 160, 112);
+  p.strokeWeight(0.025);
+  p.beginShape(p.LINES);
+  for (let tuft = 0; tuft < 150; tuft += 1) {
+    const x = bounds.minX + 3 + variation(tuft + 1109) * (bounds.maxX - bounds.minX - 6);
+    const z = bounds.minZ + 3 + variation(tuft + 1309) * (bounds.maxZ - bounds.minZ - 6);
+    const height = 0.15 + variation(tuft + 1509) * 0.2;
+    p.vertex(x - 0.12, y + 0.01, z);
+    p.vertex(x - 0.22, y + height, z);
+    p.vertex(x, y + 0.01, z);
+    p.vertex(x + 0.05, y + height * 1.2, z + 0.02);
+    p.vertex(x + 0.12, y + 0.01, z);
+    p.vertex(x + 0.23, y + height * 0.8, z - 0.02);
+  }
+  p.endShape();
+  p.pop();
+  for (const [index, tree] of (world.decor?.trees ?? []).entries()) {
+    p.push();
+    p.translate(tree.x, tree.y ?? y, tree.z);
+    p.scale(tree.scale ?? 1);
+    // Soft low-poly crowns give the flooded palace a reclaimed, cozy park
+    // character. Sparse meshes remain inexpensive when rendered for two eyes.
+    p.push();
+    p.translate(0, 1.7, 0);
+    stone(p, [90, 115, 90]);
+    p.cylinder(0.19, 3.4, 7, 1);
+    p.pop();
+    for (let crown = 0; crown < 2; crown += 1) {
+      p.push();
+      p.translate(crown ? 0.7 : -0.3, crown ? 3.8 : 3.2, crown ? -0.2 : 0.2);
+      p.scale(crown ? 1.1 : 1.5, crown ? 1.15 : 1.3, 1.3);
+      stone(p, index % 3 ? [89, 145, 122] : [125, 163, 125]);
+      p.sphere(1, 9, 6);
+      p.pop();
     }
+    p.pop();
+  }
+  for (const [index, rock] of (world.decor?.stones ?? []).entries()) {
+    p.push();
+    p.translate(rock.x, rock.y ?? y, rock.z);
+    const scale = rock.scale ?? 1;
+    p.scale(scale * 1.1, scale * 0.55, scale * 0.8);
+    p.rotateY(index * 0.9);
+    stone(p, index % 2 ? [123, 148, 127] : [105, 137, 123]);
+    p.sphere(0.7, 7, 4);
+    p.pop();
   }
 }
 
@@ -274,9 +370,14 @@ function lantern(p, x, y, z, scale = 1) {
   p.pop();
 }
 
-function drawStationLandmark(p, platform, index) {
+function drawStationLandmark(p, landmark) {
+  const { index } = landmark;
   p.push();
-  p.translate(platform.x, platform.y + platform.h / 2, platform.z);
+  p.translate(landmark.x, landmark.y ?? 0.3, landmark.z);
+  // Landmarks have a large readable silhouette across the open map. Only the
+  // scenery is scaled; interaction distance and the collectible itself stay in
+  // real metres and continue to use their separate artifact positions.
+  p.scale(landmark.scale ?? 1.9);
   if (index === 0) {
     // “Lên chùa bẻ một cành sen” — pagoda roof and a flowering lotus pool.
     for (const x of [-1.35, 1.35]) {
@@ -289,6 +390,10 @@ function drawStationLandmark(p, platform, index) {
     lotus(p, 1.9, 0.12, -0.6, 0.65, [201, 186, 153]);
   } else if (index === 1) {
     // “Ăn cơm bằng đèn” — a modest table, rice bowls and warm lamplight.
+    for (const x of [-2.15, 2.15]) {
+      block(p, x, 1.55, -2.65, 0.14, 3.1, 0.14, COLORS.dark);
+    }
+    roof(p, 0, 3.1, -2.3, 5.1, 2.7, 0.65, [70, 107, 94]);
     block(p, 0, 0.78, -1.9, 2.5, 0.13, 0.9, [100, 123, 104]);
     for (const x of [-0.9, 0.9]) {
       block(p, x, 0.37, -1.9, 0.15, 0.74, 0.65, COLORS.dark);
@@ -296,8 +401,15 @@ function drawStationLandmark(p, platform, index) {
     }
     block(p, 0, 0.34, -2.6, 2.5, 0.15, 0.36, COLORS.dark);
     lantern(p, 0, 1.3, -1.9, 0.85);
+    lantern(p, 0, 2.65, -2.1, 0.7);
   } else if (index === 2) {
     // “Đi cấy sáng trăng” — rice shoots grow in two shallow water trays.
+    block(p, 0, 1.65, -2.9, 0.09, 3.3, 0.09, COLORS.dark);
+    p.push();
+    p.translate(0, 3.45, -2.9);
+    glow(p, [191, 210, 143]);
+    p.torus(0.55, 0.035, 16, 5);
+    p.pop();
     for (const side of [-1, 1]) {
       block(p, side * 1.95, 0.08, -0.6, 1.1, 0.16, 3.0, COLORS.dark);
       block(p, side * 1.95, 0.17, -0.6, 0.96, 0.04, 2.86, [57, 132, 132]);
@@ -512,7 +624,7 @@ function drawPanel(p, panel) {
  * WebXR eyes and research photographs can safely render the same simulation tick.
  *
  * @param {p5|p5.Graphics} p Destination with a WEBGL renderer.
- * @param {object} world Generated platforms, artifacts, water and sanctuary.
+ * @param {object} world Continuous terrain, paths, garden decor and artifacts.
  * @param {object} player Position is the feet, not the head/camera.
  * @param {object} options Time, XR state, active clue, rays and world-space UI.
  */
@@ -527,17 +639,23 @@ export function renderWorld(p, world, player, options = {}) {
 
   // Broad ambient light keeps VR surfaces comfortable to read; two soft
   // directional lights distinguish warm stone from cool water and vegetation.
-  p.ambientLight(105, 130, 128);
-  p.directionalLight(190, 186, 148, -0.45, -0.8, -0.3);
+  p.ambientLight(90, 120, 115);
+  p.directionalLight(150, 150, 120, -0.45, -0.8, -0.3);
   p.directionalLight(55, 113, 132, 0.4, -0.25, 0.65);
   p.shininess(8);
+  drawTerrain(p, world);
+  drawPaths(p, world);
   drawWater(p, world, time);
   drawRuins(p, world);
-  for (const platform of world.platforms ?? []) {
-    drawPlatform(p, platform);
-    if (platform.stationIndex !== null && platform.stationIndex !== undefined) {
-      drawStationLandmark(p, platform, platform.stationIndex);
-    }
+  drawGardenDecor(p, world);
+  const landmarks = world.landmarks ?? (world.artifacts ?? []).map(artifact => ({
+    index: artifact.index,
+    x: artifact.position.x,
+    y: groundHeight(world),
+    z: artifact.position.z,
+  }));
+  for (const landmark of landmarks) {
+    drawStationLandmark(p, landmark);
   }
   for (const artifact of world.artifacts ?? []) {
     drawArtifact(p, artifact, currentIndex, time);

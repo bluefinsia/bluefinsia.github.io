@@ -1,8 +1,8 @@
 {
   "name": "there-are-rivers-p5-framework",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "scripts": { "test": "node tests/simulation.test.js && node tests/webxr.test.js" },
-  "description": "Self-contained p5.js WEBGL game with an optional native WebXR bridge."
+  "description": "Open-world p5.js WEBGL exploration game with an optional native WebXR bridge."
 }
