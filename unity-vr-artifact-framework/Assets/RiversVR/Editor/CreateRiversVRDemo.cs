@@ -383,7 +383,8 @@ namespace RiversVR.Editor
                 inputAsset.AddActionMap(map);
             }
             if (map.FindAction(name) == null)
-                map.AddAction(name, type, binding: binding, expectedControlType: expectedControlType);
+                // This extension uses expectedControlLayout, unlike the InputAction constructor.
+                map.AddAction(name, type, binding: binding, expectedControlLayout: expectedControlType);
         }
 
         private static ArtifactDefinition[] LoadOrCreateDefinitions()
